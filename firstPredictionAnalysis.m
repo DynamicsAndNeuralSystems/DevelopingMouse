@@ -5,7 +5,7 @@ v = v(:,~isMissing);
 fprintf(1,'Filtered %u missing genes\n',sum(isMissing));
 
 % Normalize expression:
-vNorm = BF_NormalizeMatrix(v,'scaledSigmoid');
+vNorm = BF_NormalizeMatrix(v,'zscore');
 
 % Order by hub/nonhub
 [~,ix] = sort(h,'descend');
@@ -32,7 +32,7 @@ imagesc(vNorm(ix,iy))
 %% Machine learning prediction of hub/nonhub:
 %-------------------------------------------------------------------------------
 hLabels = h+1; % hubs are '2', nonhubs are '1'
-numRepeats = 100;
+numRepeats = 200;
 accuracies = zeros(numRepeats,1);
 for i = 1:numRepeats
     [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',vNorm,hLabels,vNorm,hLabels,...
