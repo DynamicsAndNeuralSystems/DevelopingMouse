@@ -1,4 +1,4 @@
-load('matrixData.mat','h','v');
+load('matrixData.mat','h','v','k');
 % Filter out genes with missing data:
 isMissing = sum(isnan(v)) > 0;
 v = v(:,~isMissing);
@@ -14,6 +14,13 @@ vNorm = BF_NormalizeMatrix(v,'zscore');
 f = figure('color','w');
 imagesc(vNorm(ix,:))
 
+% Order by degree
+[~,ixk] = sort(k,'descend')
+
+% Plot normalized, sorted by degree:
+f = figure('color','w');
+imagesc(vNorm(ixk,:))
+
 %% Compute differences:
 numGenes = size(v,2);
 tStats = zeros(numGenes,1);
@@ -28,6 +35,9 @@ end
 f = figure('color','w');
 imagesc(vNorm(ix,iy))
 
+%% Plot normalized, sorted by degree:
+f = figure('color','w');
+imagesc(vNorm(ixk,iy))
 %-------------------------------------------------------------------------------
 %% Machine learning prediction of hub/nonhub:
 %-------------------------------------------------------------------------------
