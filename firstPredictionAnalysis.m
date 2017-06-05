@@ -81,7 +81,7 @@ for i=1:7
     f = figure('color','w');
     imagesc(vNorm{i}(ixk,iyk))
     title('Normalized gene expression sorted by degree in rows and differential expression in columns')
-end
+
 
     %-------------------------------------------------------------------------------
     %% Machine learning prediction of hub/nonhub:
@@ -90,7 +90,7 @@ end
     numRepeats = 200;
     accuracies = zeros(numRepeats,1);
         for m = 1:numRepeats
-            [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',vNorm,hLabels,vNorm,hLabels,...
+            [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',vNorm{i},hLabels,vNorm{i},hLabels,...
                                 2,true,'balancedAcc',true,5);
             accuracies(m) = mean(accuracy);
         end
@@ -101,10 +101,10 @@ end
     zLabel = highDegNode+1; % high degree nodes are '2', low degree nodes are '1'
     numRepeats = 200;
     accuracies = zeros(numRepeats,1);
-        for i = 1:numRepeats
-            [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',vNorm,zLabel,vNorm,zLabel,...
+        for n = 1:numRepeats
+            [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',vNorm{i},zLabel,vNorm{i},zLabel,...
                                 2,true,'balancedAcc',true,3);
-            accuracies(i) = mean(accuracy);
+            accuracies(n) = mean(accuracy);
         end
     fprintf(1,'Balanced classification accuracy = %.1f +/- %.1f%%\n',mean(accuracies),std(accuracies));
-
+end
