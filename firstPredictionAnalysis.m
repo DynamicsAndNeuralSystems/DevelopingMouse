@@ -1,5 +1,8 @@
+cd 'D:\Data\DevelopingAllenMouseAPI-master\Rubinov regions_80 genes'
+
 load('newmatrixData.mat','h','V','k','geneEntrez');
 
+cd 'D:\Data\DevelopingAllenMouseAPI-master\Git'
 %% Set conditions to be used later
 % Order by hub/nonhub
 [~,ix] = sort(h,'descend');
@@ -72,7 +75,7 @@ for i=1:7
     %set(gca,'xtick',gene,'xticklabel',x_labels)
     
     %gene enrichment analysis
-    [GOTable,geneEntrezAnnotations]=SingleEnrichment(tStats,geneEntrezleft{i})
+    [GOTable,geneEntrezAnnotations] = SingleEnrichment(tStats,geneEntrezleft{i})
     GOTableCell{i}=GOTable;
     geneEntrezAnnotationsCell{i}=geneEntrezAnnotations;
       %-------------------------------------------------------------------------------
@@ -90,6 +93,7 @@ for i=1:7
     fprintf(1,'Balanced classification accuracy = %.1f +/- %.1f%%\n',mean(accuracies),std(accuracies));
     accuraciesSvmCell{i}=[mean(accuracies),std(accuracies)];
 end
+cd 'D:\Data\DevelopingAllenMouseAPI-master\Rubinov regions_80 genes'
 save('GOresults.mat','GOTableCell','geneEntrezAnnotationsCell')
 save('SVMaccuracies.mat','accuraciesSvmCell')
 
