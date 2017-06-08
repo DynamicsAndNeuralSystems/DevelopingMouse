@@ -1,3 +1,4 @@
+clear all
 cd 'D:\Data\DevelopingAllenMouseAPI-master\Rubinov regions_80 genes'
 
 % load all gene expression energy data for all structures
@@ -70,6 +71,25 @@ hubindex(6)=find(ismember(structureLabel,'CCx'));
 
 h=zeros(33,1);
 h(hubindex)=1;
+%% Make a new gene coexpression matrix 'cV' with structures combined where necessary (to be compatible with Rubinov's regions)
+% create vectors to index the structures to be combined
+
+a=find(strcmp(structureLabel,'AOV'));
+b=find(strcmp(structureLabel,'AOD'));
+c=find(strcmp(structureLabel,'PMCo'));
+d=find(strcmp(structureLabel,'PLCo'));
+e=find(strcmp(structureLabel,'ACo'));
+indexAON=cat(2,a,b);
+indexCOA=cat(2,c,d,e);
+
+x=mean(V{7}(indexAON,:));
+y=mean(V{7}(indexCOA,:));
+
+cV=[V{7}(1:(a-1),:);x;V{7}((b+1):(c-1),:);y;V{7}((e+1):end,:)];
+%% create new combined structure labels
+cStructureLabel={'CA','DG','POTel','THy','SeSPall','PaSe','PHy','AOB','AON','OB','TTe',...
+    'COA','Pal','ASPall','Stri','is','CbV','r1','CbH','r2','PH','PMH','MH','RSCx',...
+    'Strp','p2','p3','p1','m1','CCx'};
 %%
 %assign degree to the structures (according to data provided by Rubinov)
 k=zeros(33,1);
@@ -113,7 +133,7 @@ load geneEntrez.csv
 % only 80 genes (out of 2107) are downloaded at this time
 geneEntrez=geneEntrez(1:80)
 %% saves the generated variables
-save('newmatrixData.mat','h','V','k','geneEntrez','structureLabel')
+save('newmatrixData.mat','h','V','cV','k','geneEntrez','structureLabel','cStructureLabel')
 
 
 
