@@ -88,7 +88,7 @@ data = adjustEndian(data, meta);
 
 % Reshape and get into MATLAB's order.
 X = reshape(data, dims');
-X = permute(X, [2 1 3]);
+%X = permute(X, [2 1 3]);
 
 
 
