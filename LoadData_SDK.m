@@ -42,7 +42,7 @@ for i = 1:length(expMeasure)
     for j = 1:numStructures
         if ownStructure(j)
             fileName = sprintf('SDK_Expression%s_%s.csv',expMeasure{i},structures{j});
-            Exp.(expMeasure{i}).raw{j} = importData(fileName);
+            Exp.(expMeasure{i}).raw{j} = importfile1(fileName);
         else
             switch structures{j}
             case 'vermis2'

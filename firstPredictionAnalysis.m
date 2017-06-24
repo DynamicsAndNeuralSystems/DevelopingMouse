@@ -124,7 +124,7 @@ for i=1:7
     imagesc(vNorm{i}(ix,iyp3))
     title('sorted p value, 1 tailed t, hypo more in nonhub')
     
-%% Difference in correlation between hubs and nonhub enriched genes 
+% Difference in correlation between hubs and nonhub enriched genes 
     %find the genes that are significantly enriched in hubs and nonhubs
     indexPValHub2=find(pValHub2{i}<0.05);
     indexPValHub3=find(pValHub3{i}<0.05);
@@ -144,12 +144,12 @@ for i=1:7
     else 
         fprintf('In time point %d, there is no difference between the correlation among genes enriched in hubs and those in nonhubs\n', i)
     end
-%% gene enrichment analysis
+% gene enrichment analysis
     [GOTable,geneEntrezAnnotations] = SingleEnrichment(tStats,geneEntrezleft{i}) % is it a good idea to use tStats to do GO?
     GOTableCell{i}=GOTable;
     geneEntrezAnnotationsCell{i}=geneEntrezAnnotations;
     %-------------------------------------------------------------------------------
-    %% Machine learning prediction of hub/nonhub:
+    % Machine learning prediction of hub/nonhub:
     %-------------------------------------------------------------------------------
     hLabels = h+1; % hubs are '2', nonhubs are '1'
     numRepeats = 200;
