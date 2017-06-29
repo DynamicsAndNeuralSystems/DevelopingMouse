@@ -5,12 +5,6 @@ geneEntrezLeft=cell(7,1);
 geneNameLeft=cell(7,1); 
 structuresNeedLeft=cell(7,1); 
 %% Set conditions to be used later
-% % Order by hub/nonhub
-% [~,ix] = sort(h,'descend');
-% Create empty cell array to store gene info strings 
-diffExpSeqHub=cell(7,1);
-% diffExpSeqDeg=cell(7,1);
-
 % Create empty cell to store GOtables
 GOTableCell=cell(7,1);
 % Create empty cell to store Gene Entrez Annotations of the GO tables
@@ -18,20 +12,7 @@ geneEntrezAnnotationsCell=cell(7,1);
 % Create empty cell to store accuracies (mean,1 SD) of SVM prediction 
 accuraciesSvmCell=cell(7,1);
 % Create empty cells/matrices to store the p values
-pValHub=cell(7,1);
 pValHub2=cell(7,1);
-pValHub3=cell(7,1);
-pValCorr=zeros(7,1);
-% Create empty cell to store structure x gene matrices of genes enriched in
-% hubs
-sigPValHub2=cell(7,1);
-sigPValHub3=cell(7,1);
-% % Order by degree
-% [~,ixk] = sort(k,'descend')
-% % Define high-degree nodes (i.e. nodes with a degree at least one standard deviation above the network mean)
-% z=zscore(k);
-% % Create a vector of indices of high-degree nodes
-% highDegNode=z>=1;
 
 %% Loop the analysis through all developmental stages
 %expMeasure = {'Energy','Density'};
@@ -200,87 +181,12 @@ save('GOresults.mat','GOTableCell')
 %     title('sorted p value, 2 tailed t, hypo different')
     
     
-    %%
-    % Compute differences with one-tailed two sample t test (test alternative hypothesis that each gene is more expressed in nonhubs than hubs)
-    tStats3 = zeros(numGenes,1);
-    for j = 1:numGenes
-        [~,p,~,stats] = ttest2(V{i}(h==0,j),V{i}(h==1,j),'Tail','right','Vartype','unequal'); % high t statistic = differentially enriched in non-hubs ?!
-        tStats3(j) = stats.tstat;
-        pValHub3{i}(j)=p;
-    end
-    % Sort by differences:
-    [~,iy3] = sort(tStats3,'descend');
     
-    % Plot normalized, sorted by t statistic:
-    f = figure('color','w');
-    imagesc(vNorm{i}(ix,iy3))
-    title('sorted t statistic, 1 tailed t, hypo more in nonhub')
-    
-    % Sort by differences in p value:
-    [~,iyp3] = sort(pValHub3{i},'ascend');
-    
-    % Plot normalized, sorted by p value:
-    f = figure('color','w');
-    imagesc(vNorm{i}(ix,iyp3))
-    title('sorted p value, 1 tailed t, hypo more in nonhub')
-    
-%% Difference in correlation between hubs and nonhub enriched genes 
-    %find the genes that are significantly enriched in hubs and nonhubs
-    indexPValHub2=find(pValHub2{i}<0.05);
-    indexPValHub3=find(pValHub3{i}<0.05);
-    sigPValHub2{i}=vNorm{i}(:,indexPValHub2);
-    sigPValHub3{i}=vNorm{i}(:,indexPValHub3);
-    % Compute correlation coefficient matrix between genes enriched in hubs and nonhubs
-    corrSigPValHub2=corrcoef(sigPValHub2{i});
-    corrSigPValHub3=corrcoef(sigPValHub3{i});
-    % Extract upper triangular elements of the correlation coefficient matrix and put into a vector    
-    vecCorrSigPValHub2=corrSigPValHub2(find(~tril(ones(size(corrSigPValHub2)))));
-    vecCorrSigPValHub3=corrSigPValHub3(find(~tril(ones(size(corrSigPValHub3)))));
-    % 2 sample t test to compare the two groups
-    [~,p,ci,stats] = ttest2(vecCorrSigPValHub2,vecCorrSigPValHub3,'Vartype','unequal')
-    pValCorr(i)=p;
-    if p<0.05
-        fprintf('In time point %d, there is a significant difference between the correlation among genes enriched in hubs and those in nonhubs\n', i)
-    else 
-        fprintf('In time point %d, there is no difference between the correlation among genes enriched in hubs and those in nonhubs\n', i)
-    end
-
-    %% Machine learning prediction of hub/nonhub:
-    %-------------------------------------------------------------------------------
-    hLabels = h+1; % hubs are '2', nonhubs are '1'
-    numRepeats = 200;
-    accuracies = zeros(numRepeats,1);
-        for m = 1:numRepeats
-            [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',vNorm{i},hLabels,vNorm{i},hLabels,...
-                                2,true,'balancedAcc',true,5);
-            accuracies(m) = mean(accuracy);
-        end
-    
-    fprintf(1,'Balanced classification accuracy = %.1f +/- %.1f%%\n',mean(accuracies),std(accuracies));
-    accuraciesSvmCell{i}=[mean(accuracies),std(accuracies)];
-
-%% Plot SVM accuracies over 7 time points with error bars
-xPlot=[1:7];
-%create vector containing mean accuracies
-yAccuracyPlot=zeros(1,7);
-for i=1:7
-    yAccuracyPlot(i)=accuraciesSvmCell{i}(1);
-end
-%create vector containing errors
-yErrorPlot=zeros(1,7);
-for i=1:7
-    yErrorPlot(i)=accuraciesSvmCell{i}(2);
-end
-% Plot the error bar graph over time
-errorbar(xPlot,yAccuracyPlot,yErrorPlot)
-title('Accuracy of predicting hub status from genes with SVM over time')
-
-%%
-
-cd 'D:\Data\DevelopingAllenMouseAPI-master\Rubinov regions_80 genes'
-save('GOresults.mat','GOTableCell','geneEntrezAnnotationsCell') % GO results
-save('SVMaccuracies.mat','accuraciesSvmCell') % SVM results
-save('HubData.mat','pValHub','pValHub2','pValHub3','pValCorr','sigPValHub2','sigPValHub3') % save t test results
+% %%
+% cd 'D:\Data\DevelopingAllenMouseAPI-master\Rubinov regions_80 genes'
+% save('GOresults.mat','GOTableCell','geneEntrezAnnotationsCell') % GO results
+% save('SVMaccuracies.mat','accuraciesSvmCell') % SVM results
+% save('HubData.mat','pValHub','pValHub2','pValHub3','pValCorr','sigPValHub2','sigPValHub3') % save t test results
 
 %%
     % Print the gene entrez of genes with differential expression between hubs vs nonhubs, from highest to lowest
@@ -347,9 +253,9 @@ save('HubData.mat','pValHub','pValHub2','pValHub3','pValCorr','sigPValHub2','sig
 %         end
 %     fprintf(1,'Balanced classification accuracy = %.1f +/- %.1f%%\n',mean(accuracies),std(accuracies));
 %% troubleshooting
-i=7;
+%i=7;
 % Filter out genes with missing data:
-V=squeeze(matExpEnergy(:,:,i));
+%V=squeeze(matExpEnergy(:,:,i));
 % isMissing = sum(isnan(V)) > 0;
 % V=V(:,~isMissing);
 % geneEntrezleft{i} = geneEntrez(:,~isMissing);
@@ -364,18 +270,93 @@ V=squeeze(matExpEnergy(:,:,i));
     %-------------------------------------------------------------------------------
     % Machine learning prediction of hub/nonhub:
     %-------------------------------------------------------------------------------
-hLabels = h+1; % hubs are '2', nonhubs are '1'
-% filter structures without any gene expression data available
-hLabels=(hLabels(~all(isnan(V),2)))';
-V=V(~all(isnan(V),2),:);
-%%
-numRepeats = 200;
-accuracies = zeros(numRepeats,1);
-for m = 1:numRepeats
-    [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',V,hLabels,V,hLabels,...
-                                2,true,'balancedAcc',true,2);
-     accuracies(m) = mean(accuracy);
-end
-    
-    fprintf(1,'Balanced classification accuracy = %.1f +/- %.1f%%\n',mean(accuracies),std(accuracies));
-   % accuraciesSvmCell{i}=[mean(accuracies),std(accuracies)];
+% hLabels = h+1; % hubs are '2', nonhubs are '1'
+% % filter structures without any gene expression data available
+% hLabels=(hLabels(~all(isnan(V),2)))';
+% V=V(~all(isnan(V),2),:);
+% %%
+% numRepeats = 200;
+% accuracies = zeros(numRepeats,1);
+% for m = 1:numRepeats
+%     [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',V,hLabels,V,hLabels,...
+%                                 2,true,'balancedAcc',true,2);
+%      accuracies(m) = mean(accuracy);
+% end
+%     
+%     fprintf(1,'Balanced classification accuracy = %.1f +/- %.1f%%\n',mean(accuracies),std(accuracies));
+%    % accuraciesSvmCell{i}=[mean(accuracies),std(accuracies)];
+%    
+%    %%
+%     % Compute differences with one-tailed two sample t test (test alternative hypothesis that each gene is more expressed in nonhubs than hubs)
+%     tStats3 = zeros(numGenes,1);
+%     for j = 1:numGenes
+%         [~,p,~,stats] = ttest2(V{i}(h==0,j),V{i}(h==1,j),'Tail','right','Vartype','unequal'); % high t statistic = differentially enriched in non-hubs ?!
+%         tStats3(j) = stats.tstat;
+%         pValHub3{i}(j)=p;
+%     end
+%     % Sort by differences:
+%     [~,iy3] = sort(tStats3,'descend');
+%     
+%     % Plot normalized, sorted by t statistic:
+%     f = figure('color','w');
+%     imagesc(vNorm{i}(ix,iy3))
+%     title('sorted t statistic, 1 tailed t, hypo more in nonhub')
+%     
+%     % Sort by differences in p value:
+%     [~,iyp3] = sort(pValHub3{i},'ascend');
+%     
+%     % Plot normalized, sorted by p value:
+%     f = figure('color','w');
+%     imagesc(vNorm{i}(ix,iyp3))
+%     title('sorted p value, 1 tailed t, hypo more in nonhub')
+%     
+% %% Difference in correlation between hubs and nonhub enriched genes 
+%     %find the genes that are significantly enriched in hubs and nonhubs
+%     indexPValHub2=find(pValHub2{i}<0.05);
+%     indexPValHub3=find(pValHub3{i}<0.05);
+%     sigPValHub2{i}=vNorm{i}(:,indexPValHub2);
+%     sigPValHub3{i}=vNorm{i}(:,indexPValHub3);
+%     % Compute correlation coefficient matrix between genes enriched in hubs and nonhubs
+%     corrSigPValHub2=corrcoef(sigPValHub2{i});
+%     corrSigPValHub3=corrcoef(sigPValHub3{i});
+%     % Extract upper triangular elements of the correlation coefficient matrix and put into a vector    
+%     vecCorrSigPValHub2=corrSigPValHub2(find(~tril(ones(size(corrSigPValHub2)))));
+%     vecCorrSigPValHub3=corrSigPValHub3(find(~tril(ones(size(corrSigPValHub3)))));
+%     % 2 sample t test to compare the two groups
+%     [~,p,ci,stats] = ttest2(vecCorrSigPValHub2,vecCorrSigPValHub3,'Vartype','unequal')
+%     pValCorr(i)=p;
+%     if p<0.05
+%         fprintf('In time point %d, there is a significant difference between the correlation among genes enriched in hubs and those in nonhubs\n', i)
+%     else 
+%         fprintf('In time point %d, there is no difference between the correlation among genes enriched in hubs and those in nonhubs\n', i)
+%     end
+% 
+%     %% Machine learning prediction of hub/nonhub:
+%     %-------------------------------------------------------------------------------
+%     hLabels = h+1; % hubs are '2', nonhubs are '1'
+%     numRepeats = 200;
+%     accuracies = zeros(numRepeats,1);
+%         for m = 1:numRepeats
+%             [accuracy,Mdl,whatLoss] = GiveMeCfn('svm_linear',vNorm{i},hLabels,vNorm{i},hLabels,...
+%                                 2,true,'balancedAcc',true,5);
+%             accuracies(m) = mean(accuracy);
+%         end
+%     
+%     fprintf(1,'Balanced classification accuracy = %.1f +/- %.1f%%\n',mean(accuracies),std(accuracies));
+%     accuraciesSvmCell{i}=[mean(accuracies),std(accuracies)];
+% 
+% %% Plot SVM accuracies over 7 time points with error bars
+% xPlot=[1:7];
+% %create vector containing mean accuracies
+% yAccuracyPlot=zeros(1,7);
+% for i=1:7
+%     yAccuracyPlot(i)=accuraciesSvmCell{i}(1);
+% end
+% %create vector containing errors
+% yErrorPlot=zeros(1,7);
+% for i=1:7
+%     yErrorPlot(i)=accuraciesSvmCell{i}(2);
+% end
+% % Plot the error bar graph over time
+% errorbar(xPlot,yAccuracyPlot,yErrorPlot)
+% title('Accuracy of predicting hub status from genes with SVM over time')

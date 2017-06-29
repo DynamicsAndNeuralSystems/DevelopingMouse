@@ -1,51 +1,44 @@
-%% opening and combining Oh et al data
-centre_Oh_1_1=csvread('centre_Oh_1_1.csv');
-centre_Oh_2_1=csvread('centre_Oh_2_1.csv');
-centre_Oh_3_1=csvread('centre_Oh_3_1.csv');
-centre_Oh_combined_1=vertcat(centre_Oh_1_1,centre_Oh_2_1,centre_Oh_3_1);
-
-ID_Oh_1_1=csvread('ID_Oh_1_1.csv');
-ID_Oh_2_1=csvread('ID_Oh_2_1.csv');
-ID_Oh_3_1=csvread('ID_Oh_3_1.csv');
-ID_Oh_combined_1=vertcat(ID_Oh_1_1,ID_Oh_2_1,ID_Oh_3_1);
-
-fid = fopen('acronym_Oh_1_1.csv','r');
-acronym_Oh_1_1 = textscan(fid,'%s');
-fclose(fid);
-acronym_Oh_1_1 = acronym_Oh_1_1{1};
-
-fid = fopen('acronym_Oh_2_1.csv','r');
-acronym_Oh_2_1 = textscan(fid,'%s');
-fclose(fid);
-acronym_Oh_2_1 = acronym_Oh_2_1{1};
-
-fid = fopen('acronym_Oh_3_1.csv','r');
-acronym_Oh_3_1 = textscan(fid,'%s');
-fclose(fid);
-acronym_Oh_3_1 = acronym_Oh_3_1{1};
-
-acronym_Oh_combined_1=[acronym_Oh_1_1;acronym_Oh_2_1;acronym_Oh_3_1];
-
-coOrds=centre_Oh_combined_1;
-ID=ID_Oh_combined_1;
-
-structAcronyms=acronym_Oh_combined_1;
+%% acronym file opening
+% open acronym file with one word name (if the current acronym file has 2 word names, make them one word by hyphen to avoid error ('acronym_onewordname.csv' is the file with acronyms of all regions downloaded from Allen server with names changed to one word)  
+if exist('acronym_AdultMouse.csv','file')
+    fid = fopen('acronym_AdultMouse.csv','r');
+    structAcronyms = textscan(fid,'%s');
+    fclose(fid);
+    structAcronyms = structAcronyms{1};
+else
+    error('acronym_AdultMouse.csv is missing')
+end
 %%
-coOrds = csvread('coOrds_AdultMouse.csv');
 %fid = fopen('acronym.csv','r');
 %regAcronyms = textscan(fid,'%s');
 %fclose(fid);
 %regAcronyms = regAcronyms{1};
-
 %%
-% import structure IDs
-ID=csvread('ID_AdultMouse.csv');
-
-%% open acronym file with one word name (if the current acronym file has 2 word names, make them one word by hyphen to avoid error ('acronym_onewordname.csv' is the file with acronyms of all regions downloaded from Allen server with names changed to one word)  )
-fid = fopen('acronym_AdultMouse.csv','r');
-structAcronyms = textscan(fid,'%s');
-fclose(fid);
-structAcronyms = structAcronyms{1};
+if exist('coOrds_AdultMouse.csv','file')
+    coOrds = csvread('coOrds_AdultMouse.csv');
+else
+    error('coOrds_AdultMouse.csv is missing')
+%     % opening and combining Oh et al data
+%     centre_Oh_1_1=csvread('centre_Oh_1_1.csv');
+%     centre_Oh_2_1=csvread('centre_Oh_2_1.csv');
+%     centre_Oh_3_1=csvread('centre_Oh_3_1.csv');
+%     centre_Oh_combined_1=vertcat(centre_Oh_1_1,centre_Oh_2_1,centre_Oh_3_1);
+%     coOrds=centre_Oh_combined_1;
+end
+%%
+if exist('ID_AdultMouse.csv','file')
+    % import structure IDs
+    ID=csvread('ID_AdultMouse.csv');
+else
+    error('ID_AdultMouse.csv is missing')
+%     ID_Oh_1_1=csvread('ID_Oh_1_1.csv');
+%     ID_Oh_2_1=csvread('ID_Oh_2_1.csv');
+%     ID_Oh_3_1=csvread('ID_Oh_3_1.csv');
+%     ID_Oh_combined_1=vertcat(ID_Oh_1_1,ID_Oh_2_1,ID_Oh_3_1);
+%     ID=ID_Oh_combined_1;
+end
+    
+    
 %% 
 %find out duplicate rows
 [~,ia,~] = unique(coOrds,'rows','stable');
@@ -67,9 +60,6 @@ for i=1:length(dupIxPairs)
         coOrdsDupID{i}(j)=ID(dupIxPairs{i}(j));
     end
 end
-
-
-
 %%
 % find out duplicate IDs
 [~,ia,~]=unique(ID,'stable');
@@ -110,19 +100,22 @@ coOrds_clean=coOrds_clean(~any(isnan(coOrds_clean),2),:);
 structAcronyms_clean=structAcronyms_clean(~cellfun('isempty',structAcronyms_clean));
 
 %% if no duplicate ID/coords need to be dealt with, proceed from here
-ID_clean=ID;
-structAcronyms_clean=structAcronyms;
-coOrds_clean=coOrds;
+% ID_clean=ID;
+% structAcronyms_clean=structAcronyms;
+% coOrds_clean=coOrds;
 %%
 %-------------------------------------------------------------------------------
 %dataFile = '/Users/benfulcher/GoogleDrive/Work/CurrentProjects/CellTypesMouse/Code/AllenGeneDataset_19419.mat';
 %fprintf(1,'New Allen SDK-data from %s\n',dataFile);
 %load(dataFile,'structInfo');
-
-load('structInfo.mat')
+if exist('structInfo.mat','file')
+    load('structInfo.mat')
+else
+    error('structInfo.mat is missing')
+end
 %%
 % Match:
-[C,ia,ib] = intersect(structInfo.acronym,structAcronyms_clean,'stable');
+[~,ia,ib] = intersect(structInfo.acronym,structAcronyms_clean,'stable');
 %%
 structInfo = structInfo(ia,:);
 coOrds_clean = coOrds_clean(ib,:);
@@ -169,6 +162,8 @@ for i = 1:numDivisions
     text(centrePoint(1),centrePoint(2),char(theDivisions(i)), ...
                 'color','k','FontSize',14,'BackgroundColor',dotColors(find_1,:))
 end
+t=title('API data MDS plot');
+set(t,'Fontsize',18)
 %% scatter3 plot
 coOrds_x=coOrds_clean(:,1);
 coOrds_y=coOrds_clean(:,2);
@@ -197,17 +192,21 @@ for i = 1:numDivisions
     text(centrePoint(1),centrePoint(2),centrePoint(3),char(theDivisions(i)), ...
                 'color','k','FontSize',14,'BackgroundColor',dotColors(find_1,:))
 end
-
+t=title('API data Scatter3 plot');
+set(t,'Fontsize',18)
 %% Plot for Oh et al data
 % import Oh et al labels and matrix
-[~,labels_Oh,~]=xlsread('A mesoscale connectome of the mouse brain supp table 4_ipsi.xlsx',1,'A2:A296');
-distMat_Oh=xlsread('A mesoscale connectome of the mouse brain supp table 4_ipsi.xlsx',1,'B2:KJ296');
+if exist ('A mesoscale connectome of the mouse brain supp table 4_ipsi.xlsx','file')
+    [~,labels_Oh,~]=xlsread('A mesoscale connectome of the mouse brain supp table 4_ipsi.xlsx',1,'A2:A296');
+    distMat_Oh=xlsread('A mesoscale connectome of the mouse brain supp table 4_ipsi.xlsx',1,'B2:KJ296');
+else
+    error('A mesoscale connectome of the mouse brain supp table 4_ipsi.xlsx is missing')
+end
 %%
 % Match:
-load('structInfo.mat')
 [sameLabel,ix,iy]=intersect(labels_Oh,structAcronyms_clean,'stable');
-distMat_new=distMat([iy],[iy]);
-distMat_Oh_new=distMat_Oh([ix],[ix]);
+distMat_new=distMat(iy,iy);
+distMat_Oh_new=distMat_Oh(ix,ix);
 [~,ia,ib] = intersect(structInfo.acronym,labels_Oh(ix),'stable');
 structInfo = structInfo(ia,:);
 %coOrds_clean = coOrds_clean(ib,:);
@@ -250,6 +249,8 @@ for i = 1:numDivisions
     text(centrePoint(1),centrePoint(2),char(theDivisions(i)), ...
                 'color','k','FontSize',14,'BackgroundColor',dotColors(find_1,:))
 end
+t=title('Oh et al data MDS');
+set(t,'Fontsize',18)
 %% Checking the difference between current distance matrix and Oh et al
 
 diffMat=distMat_new-distMat_Oh_new;
@@ -265,13 +266,14 @@ proportion=(nnz(logical(divideMat >=1.05|divideMat <=0.95))-size(divideMat,1))/(
 fprintf('The proportion of entries more than 5 percent different compared to Oh et al is %f \n',proportion)
 
 %%
-save('diffMat_AdultMouse_API.mat','diffMat')
-save('divideMat_AdultMouse_API.mat','divideMat')
+% cd 'D:\Data\DevelopingAllenMouseAPI-master\Allen annotation volume\Reference space\Atlas 2011\Matlab data'
+% save('diffMat_AdultMouse_API.mat','diffMat')
+% save('divideMat_AdultMouse_API.mat','divideMat')
 
 %% Plot % error against Oh distance
 % compute percentage error matrix
 errorMat=zeros(size(distMat_new));
-errorMat(t)= ((distMat_new(t)-distMat_Oh_new(t))./distMat_Oh_new(t))*100
+errorMat(t)= ((distMat_new(t)-distMat_Oh_new(t))./distMat_Oh_new(t))*100;
 %%
 %extract upper triangular part of the errorMat and distMat_Oh_new
 errorMat_triu=errorMat(find(triu(ones(size(errorMat)),1)));
@@ -279,17 +281,20 @@ distMat_Oh_new_triu=distMat_Oh_new(find(triu(ones(size(distMat_Oh_new)),1)));
 %% Actual plotting
 f=figure('color','w');
 scatter(distMat_Oh_new_triu,errorMat_triu)
-xlabel('Distance between structures in Oh et al')
+xlabel('Distance between structures in Oh et al (um)')
 ylabel('% error')
-%% troubleshooting
-% check whether IDs are the same
-original_Oh_ID=csvread('ID_Oh.csv');
-[C,iq,ir]=intersect(original_Oh_ID,ID,'rows','stable');
-
-%% troubleshooting
-centre_Oh_1_original=csvread('centre_Oh_1.csv');
-centre_Oh_1_new=csvread('centre_Oh_1_1.csv');
-[E,ig,ih]=intersect(centre_Oh_1_original,centre_Oh_1_new,'rows','stable');
+t=title('Percentage error against separation distance in Oh et al');
+set(t,'Fontsize',18)
+%%
+% %% troubleshooting
+% % check whether IDs are the same
+% original_Oh_ID=csvread('ID_Oh.csv');
+% [C,iq,ir]=intersect(original_Oh_ID,ID,'rows','stable');
+% 
+% %% troubleshooting
+% centre_Oh_1_original=csvread('centre_Oh_1.csv');
+% centre_Oh_1_new=csvread('centre_Oh_1_1.csv');
+% [E,ig,ih]=intersect(centre_Oh_1_original,centre_Oh_1_new,'rows','stable');
 
 
 %%
@@ -306,6 +311,7 @@ centre_Oh_1_new=csvread('centre_Oh_1_1.csv');
 % %%
 % save('Allen_2011mouse_coords.mat', 'coOrds_clean','ID_clean','structAcronyms_clean')
 %%
-fid=fopen('labels_Oh.csv','wt');
-fprintf(fid,'%s,\n',labels_Oh{:});
-fclose(fid);
+% cd 'D:\Data\DevelopingAllenMouseAPI-master\Allen annotation volume\Reference space\Atlas 2011\Oh et al data\Basal data'
+% fid=fopen('labels_Oh.csv','wt');
+% fprintf(fid,'%s,\n',labels_Oh{:});
+% fclose(fid);

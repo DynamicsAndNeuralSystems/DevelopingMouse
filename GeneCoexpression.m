@@ -155,6 +155,7 @@ hold off
     save('coeffValue_global.mat','coeffValue_global')
 
 %% plot coexpression against distance for each of the 7 time points, and fitting
+load('dataDevMouse.mat')
 for i=1:7 % for each time point
     slice=squeeze(gene3D(i,:,:))'; % makes a matrix of 78 (structure) x 2100 (genes)
     % filter off structures with more than 10% of genes missing
@@ -174,14 +175,17 @@ for i=1:7 % for each time point
     end
 
 
+
     % extract the distances needed
     distanceMat=dataDevMouse.(timePoints{i}).distance(ib,ib);
     distance=distanceMat(find(triu(distanceMat,1)));
+
 
     % extract the colours needed
     dataDevMouse.(timePoints{i}).color=dataDevMouse.(timePoints{i}).color(ib,:);
     colorIndex=zeros(length(distance),1);
     edgeColorIndex=zeros(length(distance),1);
+
 
     for j=1:length(distance) % find indices of extracted entries in the distance matrix
         [iq,ir]=ind2sub4up(j);
@@ -234,6 +238,9 @@ for i=1:7 % for each time point
     xlabel('Separation Distance (um)','FontSize',16)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',16)
     xlim([0 9000])
+    str = sprintf('Developing Mouse %s',timePoints{i});
+    title(str,'Fontsize',19);
+    
     % add major division color legends
     divisionLabels = categorical(dataDevMouse.(timePoints{i}).division);
     theDivisions = unique(divisionLabels);
@@ -265,7 +272,7 @@ end
     save('coeffValue.mat','coeffValue')
     
 %% plot the Degrees of Freedom Adjusted R-Square in different time points, including global
-fitMethods={'linear','exp','exp_1_0','exp1'};
+fitMethods={'linear','exp_1_0','exp1','exp',};
 matAdjRSquare=zeros(length(timePoints)+1,length(fitMethods)); % +1 because of global
 
 for i=1:length(timePoints)
@@ -307,7 +314,7 @@ for i=1:length(timePoints)+1
     end
 end
 %% Plotting each fitting parameter with their confidence intervals , including global
-fitMethods={'linear','exp','exp_1_0','exp1'};
+
 negCell=cell(length(fitMethods),1);
 posCell=cell(length(fitMethods),1);
 for j=1:length(fitMethods)
@@ -401,78 +408,69 @@ for j=1:length(fitMethods)
         end
     hold on
     end
-      
-            
-            
-end
-%% convert the acronymCell_sort into a structure of tables
-coexpressAcronym=struct();
-timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-for i=1:length(timePoints)
-    coexpressAcronym.(timePoints{i})=cell2table(acronymCell_sort{i});
-end
-%% save the coexpress Acronym
-cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
-save('coexpressAcronym.mat','coexpressAcronym')
-%% save the coexpress Acronym as csv file
-cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
-for i=1:length(timePoints) 
-    currentTimePoint=timePoints{i};
-    tableFileName=sprintf('coExpressAcronym_%s.csv',currentTimePoint);
-    writetable(coexpressAcronym.(timePoints{i}),tableFileName)
-end
-%% experimentation (half done)
-[GOTable,geneEntrezAnnotations] = GetFilteredGOData('biological_process',[5,200],geneEntrez);
-% import GO ID related to CNS
-cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables\Others'
-goCatID=xlsread('GO_CNS_related.xlsx',1,'B2:B235');
-isRelated=ismember(GOTable.GOID,goCatID);
-%%
-geneEntrezAnnotationsRelated=geneEntrezAnnotations(isRelated);
-geneEntrezRelated=cell(length(geneEntrezAnnotationsRelated),1); % for each GO group, there are a number of genes
-for i=1:length(geneEntrezAnnotationsRelated)
-    geneEntrezRelated{i}=geneEntrez(ismember(geneEntrez,geneEntrezAnnotationsRelated{i}));
-end
-%%
-% average expression level of each GO group of geneEntrez in each time point
-geneCount=cell(length(timePoints),1);
-geneSlice=cell(length(timePoints),1);
-geneEntrezRelated_clean=cell(length(timePoints),1);
-for i=1:length(timePoints)
-    geneEntrezRelated_clean{i}=geneEntrezRelated; % before filtering, each time point originally full set 
-    %of GO categories with full set of genes in each category
-    for j=1:length(geneEntrezRelated) % for each GO group, count number of available gene
-        geneSlice{i}{j}=cell(length(geneEntrezRelated{j}),1);
-        geneCount{i}{j}=zeros(1,1);
-        for k=1:length(geneEntrezRelated{i})  % for each gene in that GO group (count genes)
-            geneSlice{i}{j}{k}=squeeze(gene3D(:,find(geneEntrezRelated{i}(j)(k)==geneEntrez),:))'; % 78 structures x 7 time points
-            % check that at least 1 gene is available in each GO group
-            % in each gene: only keep structures that have at least half of all structures with data in each
-            %time point
-            isMissing_timePoint=sum(isnan(geneSlice{i}{j}{k}))>(0.5*length(structures));
-            if nnz(isMissing_timePoint)==length(timePoints) % if no time point available, gene not counted
-                continue
-            end
-            geneCount{i}{j}=geneCount{i}{j}+1; 
-        end % if a GO category has no gene available, it is discarded
-        if geneCount{i}{j}==0
-            isMissing_GO
-            geneEntrezRelated_clean{i}=geneEntrezRelated_clean{i};
-          
-    end
-        
-            
-                
-           
-
-    
-
-    end
 end
 
 %%
 % % Below are just some drafts, not implemented (DO NOT DELETE)
+%%
+% %% convert the acronymCell_sort into a structure of tables
+% coexpressAcronym=struct();
+% timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+% for i=1:length(timePoints)
+%     coexpressAcronym.(timePoints{i})=cell2table(acronymCell_sort{i});
+% end
+% %% save the coexpress Acronym
+% cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
+% save('coexpressAcronym.mat','coexpressAcronym')
+% %% save the coexpress Acronym as csv file
+% cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
+% for i=1:length(timePoints) 
+%     currentTimePoint=timePoints{i};
+%     tableFileName=sprintf('coExpressAcronym_%s.csv',currentTimePoint);
+%     writetable(coexpressAcronym.(timePoints{i}),tableFileName)
+% end
 
+%% experimentation (half done)
+% [GOTable,geneEntrezAnnotations] = GetFilteredGOData('biological_process',[5,200],geneEntrez);
+% % import GO ID related to CNS
+% cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables\Others'
+% goCatID=xlsread('GO_CNS_related.xlsx',1,'B2:B235');
+% isRelated=ismember(GOTable.GOID,goCatID);
+% %%
+% geneEntrezAnnotationsRelated=geneEntrezAnnotations(isRelated);
+% geneEntrezRelated=cell(length(geneEntrezAnnotationsRelated),1); % for each GO group, there are a number of genes
+% for i=1:length(geneEntrezAnnotationsRelated)
+%     geneEntrezRelated{i}=geneEntrez(ismember(geneEntrez,geneEntrezAnnotationsRelated{i}));
+% end
+% %%
+% % average expression level of each GO group of geneEntrez in each time point
+% geneCount=cell(length(timePoints),1);
+% geneSlice=cell(length(timePoints),1);
+% geneEntrezRelated_clean=cell(length(timePoints),1);
+% for i=1:length(timePoints)
+%     geneEntrezRelated_clean{i}=geneEntrezRelated; % before filtering, each time point originally full set 
+%     %of GO categories with full set of genes in each category
+%     for j=1:length(geneEntrezRelated) % for each GO group, count number of available gene
+%         geneSlice{i}{j}=cell(length(geneEntrezRelated{j}),1);
+%         geneCount{i}{j}=zeros(1,1);
+%         for k=1:length(geneEntrezRelated{i})  % for each gene in that GO group (count genes)
+%             geneSlice{i}{j}{k}=squeeze(gene3D(:,find(geneEntrezRelated{i}(j)(k)==geneEntrez),:))'; % 78 structures x 7 time points
+%             % check that at least 1 gene is available in each GO group
+%             % in each gene: only keep structures that have at least half of all structures with data in each
+%             %time point
+%             isMissing_timePoint=sum(isnan(geneSlice{i}{j}{k}))>(0.5*length(structures));
+%             if nnz(isMissing_timePoint)==length(timePoints) % if no time point available, gene not counted
+%                 continue
+%             end
+%             geneCount{i}{j}=geneCount{i}{j}+1; 
+%         end % if a GO category has no gene available, it is discarded
+%         if geneCount{i}{j}==0
+%             isMissing_GO
+%             geneEntrezRelated_clean{i}=geneEntrezRelated_clean{i};
+%           
+%     end
+%     end
+% end
 %%
 %     % fit an exponential
 %     x=distance_clean;
