@@ -3,18 +3,18 @@
 load('DevMouseGeneExpression.mat')
 load('dataDevMouse.mat')
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-
-%%  initial conditions
-% specify 7 time points [globalMeasure=0] or all as one (global) [globalMeasure=1]
+fitMethods={'linear','exp','exp_1_0','exp1'};
 globalMeasure=1;
-timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 
+%-------------------------------------------------------------------------------
+%%  initial conditions
+%-------------------------------------------------------------------------------
+% specify 7 time points [globalMeasure=0] or all as one (global) [globalMeasure=1]
 geneCorr=cell(length(timePoints),1);
 residualCorr=cell(length(timePoints),1);
 regionPairs=cell(length(timePoints),1);
 acronymCell_sort=cell(length(timePoints),1);
 % for fitting
-fitMethods={'linear','exp','exp_1_0','exp1'};
 adjRSquare=struct();
 confInt=struct();
 coeffValue=struct();
@@ -68,7 +68,7 @@ for i=1:7 % for each time point
     end
     dotColors=dataDevMouse.(timePoints{i}).color(colorIndex);
     edgeColors=dataDevMouse.(timePoints{i}).color(edgeColorIndex);
-    
+
     %divisions=dataDevMouse.(timePoints{i}).division(colorIndex); % division follows the fill colour (for the time being)
     % check if number of corrCoeff is same as distance
     if length(corrCoeff)~=length(distance)
@@ -90,33 +90,31 @@ for i=1:7 % for each time point
     end
     %divisions_clean=divisions(~isMissing_coexpress);
     %  Plot correlation against distance
-    
+
     % match colors
-    
+
     numRegions=length(distance_clean);
-    
+
     dotColors_use = arrayfun(@(x) rgbconv(dotColors_clean{x})',...
                                         1:numRegions,'UniformOutput',0);
     dotColors_use = [dotColors_use{:}]';
-    
+
     edgeColors_use = arrayfun(@(x) rgbconv(edgeColors_clean{x})',...
                                         1:numRegions,'UniformOutput',0);
     edgeColors_use = [edgeColors_use{:}]';
-    
+
     divisionColor= arrayfun(@(x) rgbconv(dataDevMouse.(timePoints{i}).division_color{x})',...
         1:length(dataDevMouse.(timePoints{i}).division_color),'UniformOutput',0);
-    divisionColor=[divisionColor{:}]';    
-    
+    divisionColor=[divisionColor{:}]';
+
     nodeSize = 50;
 %     g=figure('color','w');
     %symbol='diamond';
     for k=1:length(distance_clean) % plot the dots one by one
         f=scatter(distance_clean(k),corrCoeff_clean(k),nodeSize,dotColors_use(k,:),symbol{i},'filled','MarkerEdgeColor',...
-            edgeColors_use(k,:),'LineWidth',2);                        
+            edgeColors_use(k,:),'LineWidth',2);
         hold on
     end
-
-
 
     %scatter(distance_clean,corrCoeff_clean,nodeSize,dotColors_use,'filled','MarkerEdgeColor','k','LineWidth',0.5)
     xlabel('Separation Distance (um)','FontSize',16)
@@ -138,21 +136,22 @@ for i=1:7 % for each time point
     end
 
      str = sprintf('Developing Mouse over all time points');
-     title(str,'FontSize', 19);
+     title(str,'FontSize',19);
 end
 hold off
+
 %% fitting for global
-    for j=1:length(fitMethods)
-        [~,Stats,c] = GiveMeFit(distanceGlobal,corrCoeffGlobal,fitMethods{j},true);
-        adjRSquare_global.(fitMethods{j})=Stats.adjrsquare;
-        confInt_global.(fitMethods{j})=confint(c,0.95);
-        coeffValue_global.(fitMethods{j})=coeffvalues(c);
-    end
-    %% save global fitting info
-    cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
-    save('confInt_global.mat','confInt_global')
-    save('adjRSquare_global.mat','adjRSquare_global')
-    save('coeffValue_global.mat','coeffValue_global')
+for j=1:length(fitMethods)
+    [~,Stats,c] = GiveMeFit(distanceGlobal,corrCoeffGlobal,fitMethods{j},true);
+    adjRSquare_global.(fitMethods{j})=Stats.adjrsquare;
+    confInt_global.(fitMethods{j})=confint(c,0.95);
+    coeffValue_global.(fitMethods{j})=coeffvalues(c);
+end
+%% save global fitting info
+cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
+save('confInt_global.mat','confInt_global')
+save('adjRSquare_global.mat','adjRSquare_global')
+save('coeffValue_global.mat','coeffValue_global')
 
 %% plot coexpression against distance for each of the 7 time points, and fitting
 load('dataDevMouse.mat')
@@ -174,8 +173,6 @@ for i=1:7 % for each time point
         corrCoeff=[corrCoeff;geneCorr{i}(1:(j-1),j)];
     end
 
-
-
     % extract the distances needed
     distanceMat=dataDevMouse.(timePoints{i}).distance(ib,ib);
     distance=distanceMat(find(triu(distanceMat,1)));
@@ -194,7 +191,7 @@ for i=1:7 % for each time point
     end
     dotColors=dataDevMouse.(timePoints{i}).color(colorIndex);
     edgeColors=dataDevMouse.(timePoints{i}).color(edgeColorIndex);
-    
+
     %divisions=dataDevMouse.(timePoints{i}).division(colorIndex); % division follows the fill colour (for the time being)
     % check if number of corrCoeff is same as distance
     if length(corrCoeff)~=length(distance)
@@ -212,21 +209,21 @@ for i=1:7 % for each time point
 
     g=figure('color','w');
     % match colors
-    
+
     numRegions=length(distance_clean);
-    
+
     dotColors_use = arrayfun(@(x) rgbconv(dotColors_clean{x})',...
                                         1:numRegions,'UniformOutput',0);
     dotColors_use = [dotColors_use{:}]';
-    
+
     edgeColors_use = arrayfun(@(x) rgbconv(edgeColors_clean{x})',...
                                         1:numRegions,'UniformOutput',0);
     edgeColors_use = [edgeColors_use{:}]';
-    
+
     divisionColor= arrayfun(@(x) rgbconv(dataDevMouse.(timePoints{i}).division_color{x})',...
         1:length(dataDevMouse.(timePoints{i}).division_color),'UniformOutput',0);
-    divisionColor=[divisionColor{:}]';    
-    
+    divisionColor=[divisionColor{:}]';
+
     nodeSize = 50;
     for k=1:length(distance_clean) % plot the dots one by one
         scatter(distance_clean(k),corrCoeff_clean(k),nodeSize,dotColors_use(k,:),'filled','MarkerEdgeColor',...
@@ -240,7 +237,7 @@ for i=1:7 % for each time point
     xlim([0 9000])
     str = sprintf('Developing Mouse %s',timePoints{i});
     title(str,'Fontsize',19);
-    
+
     % add major division color legends
     divisionLabels = categorical(dataDevMouse.(timePoints{i}).division);
     theDivisions = unique(divisionLabels);
@@ -256,8 +253,7 @@ for i=1:7 % for each time point
         t.Position=[1 yPosition(j)];
     end
 
-
-    % fitting 
+    % fitting
     for j=1:length(fitMethods)
         [~,Stats,c] = GiveMeFit(distance_clean,corrCoeff_clean,fitMethods{j},true);
         adjRSquare.(fitMethods{j}){i}=Stats.adjrsquare;
@@ -265,12 +261,14 @@ for i=1:7 % for each time point
         coeffValue.(fitMethods{j}){i}=coeffvalues(c);
     end
 end
-    %% save fitting info for the 7 time points
-    cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
-    save('confInt.mat','confInt')
-    save('adjRSquare.mat','adjRSquare')
-    save('coeffValue.mat','coeffValue')
-    
+
+%% save fitting info for the 7 time points
+cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
+save('confInt.mat','confInt')
+save('adjRSquare.mat','adjRSquare')
+save('coeffValue.mat','coeffValue')
+
+
 %% plot the Degrees of Freedom Adjusted R-Square in different time points, including global
 fitMethods={'linear','exp_1_0','exp1','exp',};
 matAdjRSquare=zeros(length(timePoints)+1,length(fitMethods)); % +1 because of global
@@ -297,23 +295,26 @@ Title=title('Degree of freedom adjusted R-square');
 set(Title, 'FontSize', 16)
 
 L = cell(1,4);
-L{1}='linear'; 
-L{2}='1 parameter exponential'; 
-L{3}='2 parameter exponential'; 
-L{4}='3 parameter exponential';  
+L{1}='linear';
+L{2}='1 parameter exponential';
+L{3}='2 parameter exponential';
+L{4}='3 parameter exponential';
 legend(BarChart,L,'Location','southwest')
 hold on
 
 xPosition=linspace(-0.3,0.3,4);
 for i=1:length(timePoints)+1
     for j=1:4 % for each fitting method
-        t=text(xt(i)+xPosition(j),matAdjRSquare(i,j),num2str(round(matAdjRSquare(i,j),2)),'HorizontalAlignment','center',... 
+        t=text(xt(i)+xPosition(j),matAdjRSquare(i,j),num2str(round(matAdjRSquare(i,j),2)),'HorizontalAlignment','center',...
         'VerticalAlignment','bottom');
         t.Units='normalized';
         t.FontSize=8;
     end
 end
+
+%-------------------------------------------------------------------------------
 %% Plotting each fitting parameter with their confidence intervals , including global
+%-------------------------------------------------------------------------------
 
 negCell=cell(length(fitMethods),1);
 posCell=cell(length(fitMethods),1);
@@ -331,6 +332,7 @@ end
 matCoeffValue=cell(length(fitMethods),1);
 matUpConfInt=cell(length(fitMethods),1);
 matDownConfInt=cell(length(fitMethods),1);
+
 %%
 for j=1:length(fitMethods)
     for i=1:length(timePoints) % +1 for global
@@ -339,6 +341,8 @@ for j=1:length(fitMethods)
         matDownConfInt{j}=zeros(length(timePoints)+1,length(coeffValue.(fitMethods{j}){i})+1);
     end
 end
+
+%-------------------------------------------------------------------------------
 %%
 for j=1:length(fitMethods)
     for i=1:length(timePoints)
@@ -353,21 +357,21 @@ for j=1:length(fitMethods)
             matDownConfInt{j}(8,k)=confInt_global.(fitMethods{j})(2,k);
         end
     end
-      
-            
+
+
     f=figure('color','w');
     hBar=bar(1:length(timePoints)+1,matCoeffValue{j});
     set(gca, 'XTickLabel', {'E11.5','E13.5','E15.5','E18.5','P4','P14','P28','Global'})
     xlabel('Developmental time points')
     ylabel('Fitting parameter(s) value(s)')
 %     hold on
-% %     
+% %
 % %     ofst = get(hBar,'XOffset');
 %     for k1 = 1:size(matCoeffValue{j},2)
 %         ctr(k1,:) = bsxfun(@plus, hBar(1).XData, [hBar(k1).XOffset]');
 %         ydt(k1,:) = hBar(k1).YData;
 %     end
-%  
+%
 %     hold on
 %     errorbar(1:length(timePoints),matCoeffValue{j},matCoeffValue{j}-matDownConfInt{j},...
 %          matUpConfInt{j}-matCoeffValue{j});
@@ -378,18 +382,18 @@ for j=1:length(fitMethods)
     title(string)
     hold on
     xt=1:8;
-    
+
     for i=1:length(timePoints)+1
         for k=1:length(coeffValue.(fitMethods{j}){1})
             xPosition=linspace(-0.08*length(coeffValue.(fitMethods{j}){1}),0.08*length(coeffValue.(fitMethods{j}){1}),...
                 length(coeffValue.(fitMethods{j}){1}));
-            t=text(xt(i)+xPosition(k),matCoeffValue{j}(i,k),num2str(round(matCoeffValue{j}(i,k),3)),'HorizontalAlignment','center',... 
+            t=text(xt(i)+xPosition(k),matCoeffValue{j}(i,k),num2str(round(matCoeffValue{j}(i,k),3)),'HorizontalAlignment','center',...
             'VerticalAlignment','bottom');
             t.Units='normalized';
             t.FontSize=8;
 %             % set things for global separately
 %             xPosition=linspace(-0.3,0.3,length(coeffValue.(fitMethods{j}){1}));
-%             t=text(xt(i)+xPosition(k),matCoeffValue{j}(i,k),num2str(round(matCoeffValue{j}(i,k),3)),'HorizontalAlignment','center',... 
+%             t=text(xt(i)+xPosition(k),matCoeffValue{j}(i,k),num2str(round(matCoeffValue{j}(i,k),3)),'HorizontalAlignment','center',...
 %             'VerticalAlignment','bottom');
 %             t.Units='normalized';
 %             t.FontSize=8;
@@ -424,7 +428,7 @@ end
 % save('coexpressAcronym.mat','coexpressAcronym')
 % %% save the coexpress Acronym as csv file
 % cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
-% for i=1:length(timePoints) 
+% for i=1:length(timePoints)
 %     currentTimePoint=timePoints{i};
 %     tableFileName=sprintf('coExpressAcronym_%s.csv',currentTimePoint);
 %     writetable(coexpressAcronym.(timePoints{i}),tableFileName)
@@ -448,7 +452,7 @@ end
 % geneSlice=cell(length(timePoints),1);
 % geneEntrezRelated_clean=cell(length(timePoints),1);
 % for i=1:length(timePoints)
-%     geneEntrezRelated_clean{i}=geneEntrezRelated; % before filtering, each time point originally full set 
+%     geneEntrezRelated_clean{i}=geneEntrezRelated; % before filtering, each time point originally full set
 %     %of GO categories with full set of genes in each category
 %     for j=1:length(geneEntrezRelated) % for each GO group, count number of available gene
 %         geneSlice{i}{j}=cell(length(geneEntrezRelated{j}),1);
@@ -462,12 +466,12 @@ end
 %             if nnz(isMissing_timePoint)==length(timePoints) % if no time point available, gene not counted
 %                 continue
 %             end
-%             geneCount{i}{j}=geneCount{i}{j}+1; 
+%             geneCount{i}{j}=geneCount{i}{j}+1;
 %         end % if a GO category has no gene available, it is discarded
 %         if geneCount{i}{j}==0
 %             isMissing_GO
 %             geneEntrezRelated_clean{i}=geneEntrezRelated_clean{i};
-%           
+%
 %     end
 %     end
 % end
@@ -496,15 +500,15 @@ end
 %     file_name=sprintf('GeneCoexpress_%s_2TermExpo.jpg',currentTimePoint);
 %     cd 'D:\Data\DevelopingAllenMouseAPI-master\Figures\DevMouse_Level5_GeneCoexpression\2TermExponential'
 %     saveas(gcf,file_name)
-    
-    
+
+
 %     %retain the residuals
 %      fitCoeff=coeffvalues(f2);
 %      residualCorr{i}=zeros(length(distance_clean),1);
 %      for k=1:length(distance_clean)
 %          residualCorr{i}(k)=corrCoeff_clean(k)-fitCoeff(1)*exp(fitCoeff(2)*corrCoeff_clean(k));
 %      end
-%      
+%
 %     % rank regions pairs based on magnitude of gene coexpression after spatial correction
 %     regionPairs{i}=cell(length(distance_clean),1); % create empty cell array of region pairs for current time point
 %     % create acronym cell array for ease of coding
@@ -525,10 +529,10 @@ end
 %     acronymCell_sort{i}=acronymPair(ix);
 
 
-% 
+%
 % end
 % %%
-% 
+%
 % %% troubleshooting
 % for i=7:7 % for each time point
 %     slice=squeeze(gene3D(i,:,:))'; % makes a matrix of 78 (structure) x 2100 (genes)
@@ -597,7 +601,7 @@ end
 %     % sorting label pairs according to magnitude of spatially-corrected gene coexpression
 %     [~,ix] = sort(residualCorr{i},'descend') ;
 %     acronymCell_sort{i}=acronymCell([ix]);
-%  
+%
 % %%
 % corrCoeff=[];
 %     for j=2:size(geneCorr{i},2)
