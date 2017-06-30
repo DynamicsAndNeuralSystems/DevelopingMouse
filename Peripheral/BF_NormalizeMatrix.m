@@ -67,6 +67,10 @@ numFeatures = size(dataMatrix,2);
 dataMatrixNorm = zeros(size(dataMatrix));
 
 switch normMethod
+    case 'log2'
+        % take log2 of the matrix
+        dataMatrixNorm = log2(dataMatrix);
+        
     case 'subtractMean'
         % Subtract the mean:
         dataMatrixNorm = bsxfun(@minus,dataMatrix,mean(dataMatrix));

@@ -13,6 +13,11 @@ gene3D=MakeMatrix(Exp.Energy.norm);
 % plot coexpression against distance for each of the 7 time points, and fitting
 fHandles=cell(length(timePoints),1);
 fitObjects=cell(length(timePoints),1);
+
+% fHandles_mm=cell(length(timePoints),1);
+% fitObjects_mm=cell(length(timePoints),1);
+
+maxDistance=cell(length(timePoints),1);
 %b=figure('color','w');
 for i=1:7
     slice=squeeze(gene3D(i,:,:))'; % makes a matrix of 78 (structure) x 2100 (genes)
@@ -47,6 +52,7 @@ for i=1:7
     isMissing_coexpress=isnan(corrCoeff);
     corrCoeff_clean=(corrCoeff(~isMissing_coexpress));
     distance_clean=distance(~isMissing_coexpress);
+    maxDistance{i}=max(distance_clean(:));
 
     %divisions_clean=divisions(~isMissing_coexpress);
      %Plot correlation against distance
@@ -59,7 +65,36 @@ for i=1:7
      [f_handle,~,c] = GiveMeFit(distance_clean,corrCoeff_clean,'exp',1);
      fHandles{i}=f_handle;
      fitObjects{i}=c;
+     
+%      % exponential fitting
+%      [f_handle,~,c] = GiveMeFit(distance_clean/1000,corrCoeff_clean,'exp',1);
+%      fHandles_mm{i}=f_handle;
+%      fitObjects_mm{i}=c;
 end    
+% %% Plotting the exponential decay constant against max distance
+% f=figure('color','w');
+% for i=1:length(timePoints)
+%     c=fitObjects{i};
+%     plot(maxDistance{i},c.n,'-o')
+%     hold on
+% end
+% title('c.n against maximum distance')
+% xlabel('Maximum distance (um)')
+% ylabel('Exponential decay constant (absolute value)')
+% 
+% f=figure('color','w');
+% for i=1:length(timePoints)
+%     c=fitObjects{i};
+%     plot(maxDistance{i},(c.n/maxDistance{i}),'-o')
+%     hold on
+% end
+% title('(c.n/maximum distance) against maximum distance')
+% xlabel('Maximum distance (um)')
+% ylabel('Exponential decay constant (absolute value)/max distance')
+%% save the max distance variable
+cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
+save('maxDistance.mat','maxDistance')
+
 %% [Binning and exponential] Plotting each time point as one colour
 % first, get the colours needed
 cmapOut = BF_getcmap('dark2',7,0,0);

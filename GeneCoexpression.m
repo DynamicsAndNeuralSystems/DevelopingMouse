@@ -1,11 +1,27 @@
 
 %%
-load('DevMouseGeneExpression.mat')
-load('dataDevMouse.mat')
-timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-fitMethods={'linear','exp','exp_1_0','exp1'};
-globalMeasure=1;
+% User input; must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
+whatNorm='log2';
+% User input: which field from DevMouseGeneExpression you want to use: 'norm' or normStructure';
+% 'norm' is normalized across genes using a method specified in file name,
+% or otherwise ScaledSigmoid; if normStructure is chosen, it doesn't matter
+% what "whatNorm" is as long as the DevMouseGeneExpression.mat is up to
+% date (i.e. contains the field "normStructure") [at the moment, only whatNorm='log2' is up to date]
+whichField={'normStructure'};
+% User input: Choose whether to plot the graph, which takes much longer running time) (plot=1;no plot=0)
+plotGraph=0;
 
+if whatNorm==' '
+    genefile=sprintf('DevMouseGeneExpression.mat');
+else
+    genefile=sprintf('DevMouseGeneExpression%s.mat',strcat('_',whatNorm));
+end
+
+load(genefile)
+load('dataDevMouse.mat')
+load('maxDistance.mat')
+timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+fitMethods={'linear','exp_1_0','exp1','exp',};
 %-------------------------------------------------------------------------------
 %%  initial conditions
 %-------------------------------------------------------------------------------
@@ -30,14 +46,19 @@ for j=1:length(fitMethods)
     coeffValue_global.(fitMethods{j})=cell(1,1);
 end
 
-gene3D=MakeMatrix(Exp.Energy.norm);
+for i=1
+    gene3D=MakeMatrix(Exp.Energy.(whichField{i}));
+end
 
 %% plot global coexpression against distance
+load('dataDevMouse.mat')
 symbol={'o','^','<','v','^','square','diamond'};
 % make empty matrices to store the distances and correlations
 distanceGlobal=[];
 corrCoeffGlobal=[];
-f=figure('color','w'); hold on
+if plotGraph==1
+    f=figure('color','w'); hold on
+end
 for i=1:7 % for each time point
     slice=squeeze(gene3D(i,:,:))'; % makes a matrix of 78 (structure) x 2100 (genes)
     % filter off structures with more than 10% of genes missing
@@ -92,53 +113,55 @@ for i=1:7 % for each time point
     %  Plot correlation against distance
 
     % match colors
+    if plotGraph==1
 
-    numRegions=length(distance_clean);
+        numRegions=length(distance_clean);
 
-    dotColors_use = arrayfun(@(x) rgbconv(dotColors_clean{x})',...
-                                        1:numRegions,'UniformOutput',0);
-    dotColors_use = [dotColors_use{:}]';
+        dotColors_use = arrayfun(@(x) rgbconv(dotColors_clean{x})',...
+                                            1:numRegions,'UniformOutput',0);
+        dotColors_use = [dotColors_use{:}]';
 
-    edgeColors_use = arrayfun(@(x) rgbconv(edgeColors_clean{x})',...
-                                        1:numRegions,'UniformOutput',0);
-    edgeColors_use = [edgeColors_use{:}]';
+        edgeColors_use = arrayfun(@(x) rgbconv(edgeColors_clean{x})',...
+                                            1:numRegions,'UniformOutput',0);
+        edgeColors_use = [edgeColors_use{:}]';
 
-    divisionColor= arrayfun(@(x) rgbconv(dataDevMouse.(timePoints{i}).division_color{x})',...
-        1:length(dataDevMouse.(timePoints{i}).division_color),'UniformOutput',0);
-    divisionColor=[divisionColor{:}]';
+        divisionColor= arrayfun(@(x) rgbconv(dataDevMouse.(timePoints{i}).division_color{x})',...
+            1:length(dataDevMouse.(timePoints{i}).division_color),'UniformOutput',0);
+        divisionColor=[divisionColor{:}]';
 
-    nodeSize = 50;
-%     g=figure('color','w');
-    %symbol='diamond';
-    for k=1:length(distance_clean) % plot the dots one by one
-        f=scatter(distance_clean(k),corrCoeff_clean(k),nodeSize,dotColors_use(k,:),symbol{i},'filled','MarkerEdgeColor',...
-            edgeColors_use(k,:),'LineWidth',2);
-        hold on
+        nodeSize = 50;
+    %     g=figure('color','w');
+        %symbol='diamond';
+        for k=1:length(distance_clean) % plot the dots one by one
+            f=scatter(distance_clean(k),corrCoeff_clean(k),nodeSize,dotColors_use(k,:),symbol{i},'filled','MarkerEdgeColor',...
+                edgeColors_use(k,:),'LineWidth',2);
+            hold on
+        end
+
+        %scatter(distance_clean,corrCoeff_clean,nodeSize,dotColors_use,'filled','MarkerEdgeColor','k','LineWidth',0.5)
+        xlabel('Separation Distance (um)','FontSize',16)
+        ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',16)
+        xlim([0 9000])
+        % add major division color legends
+        divisionLabels = categorical(dataDevMouse.(timePoints{i}).division);
+        theDivisions = unique(divisionLabels);
+        numDivisions = length(theDivisions);
+        yPosition=linspace(1,0,numDivisions);
+        for j = 1:numDivisions
+            find_1 = find(divisionLabels==theDivisions(j),1); % find an index of the correct color
+            %text(char(theDivisions(i)),'color','k','FontSize',14,'BackgroundColor',dotColors_use(find_1,:))
+            %t=textLoc(char(theDivisions(j)),'NorthEast','color','k','FontSize',14,'BackgroundColor',dotColors_use(find_1,:));
+            t=text(0.5,0.5,char(theDivisions(j)),'color','k','FontSize',14,'BackgroundColor',...
+                divisionColor(find_1,:));
+            t.Units='normalized';
+            t.Position=[1 yPosition(j)];
+        end
+
+         str = sprintf('Developing Mouse over all time points');
+         title(str,'FontSize',19);
     end
-
-    %scatter(distance_clean,corrCoeff_clean,nodeSize,dotColors_use,'filled','MarkerEdgeColor','k','LineWidth',0.5)
-    xlabel('Separation Distance (um)','FontSize',16)
-    ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',16)
-    xlim([0 9000])
-    % add major division color legends
-    divisionLabels = categorical(dataDevMouse.(timePoints{i}).division);
-    theDivisions = unique(divisionLabels);
-    numDivisions = length(theDivisions);
-    yPosition=linspace(1,0,numDivisions);
-    for j = 1:numDivisions
-        find_1 = find(divisionLabels==theDivisions(j),1); % find an index of the correct color
-        %text(char(theDivisions(i)),'color','k','FontSize',14,'BackgroundColor',dotColors_use(find_1,:))
-        %t=textLoc(char(theDivisions(j)),'NorthEast','color','k','FontSize',14,'BackgroundColor',dotColors_use(find_1,:));
-        t=text(0.5,0.5,char(theDivisions(j)),'color','k','FontSize',14,'BackgroundColor',...
-            divisionColor(find_1,:));
-        t.Units='normalized';
-        t.Position=[1 yPosition(j)];
-    end
-
-     str = sprintf('Developing Mouse over all time points');
-     title(str,'FontSize',19);
 end
-hold off
+% hold off
 
 %% fitting for global
 for j=1:length(fitMethods)
@@ -149,9 +172,29 @@ for j=1:length(fitMethods)
 end
 %% save global fitting info
 cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
-save('confInt_global.mat','confInt_global')
-save('adjRSquare_global.mat','adjRSquare_global')
-save('coeffValue_global.mat','coeffValue_global')
+if strcmp(whichField{1},'normStructure')
+    filename=sprintf('confInt_global%s.mat',strcat('_',whichField{1}));
+    save(filename,'confInt_global')
+    filename=sprintf('adjRSquare_global%s.mat',strcat('_',whichField{1}));
+    save(filename,'adjRSquare_global')
+    filename=sprintf('coeffValue_global%s.mat',strcat('_',whichField{1}));
+    save(filename,'coeffValue_global')
+elseif whatNorm==' '
+    filename=sprintf('confInt_global.mat');
+    save(filename,'confInt_global')
+    filename=sprintf('adjRSquare_global.mat');
+    save(filename,'adjRSquare_global')
+    filename=sprintf('coeffValue_global.mat');
+    save(filename,'coeffValue_global')
+else
+    filename=sprintf('confInt_global%s.mat',strcat('_',whatNorm));
+    save(filename,'confInt_global')
+    filename=sprintf('adjRSquare_global%s.mat',strcat('_',whatNorm));
+    save(filename,'adjRSquare_global')
+    filename=sprintf('coeffValue_global%s.mat',strcat('_',whatNorm));
+    save(filename,'coeffValue_global')
+end
+
 
 %% plot coexpression against distance for each of the 7 time points, and fitting
 load('dataDevMouse.mat')
@@ -207,50 +250,52 @@ for i=1:7 % for each time point
     %divisions_clean=divisions(~isMissing_coexpress);
     %  Plot correlation against distance
 
-    g=figure('color','w');
-    % match colors
+    if plotGraph==1
+        g=figure('color','w');
+        % match colors
 
-    numRegions=length(distance_clean);
+        numRegions=length(distance_clean);
 
-    dotColors_use = arrayfun(@(x) rgbconv(dotColors_clean{x})',...
-                                        1:numRegions,'UniformOutput',0);
-    dotColors_use = [dotColors_use{:}]';
+        dotColors_use = arrayfun(@(x) rgbconv(dotColors_clean{x})',...
+                                            1:numRegions,'UniformOutput',0);
+        dotColors_use = [dotColors_use{:}]';
 
-    edgeColors_use = arrayfun(@(x) rgbconv(edgeColors_clean{x})',...
-                                        1:numRegions,'UniformOutput',0);
-    edgeColors_use = [edgeColors_use{:}]';
+        edgeColors_use = arrayfun(@(x) rgbconv(edgeColors_clean{x})',...
+                                            1:numRegions,'UniformOutput',0);
+        edgeColors_use = [edgeColors_use{:}]';
 
-    divisionColor= arrayfun(@(x) rgbconv(dataDevMouse.(timePoints{i}).division_color{x})',...
-        1:length(dataDevMouse.(timePoints{i}).division_color),'UniformOutput',0);
-    divisionColor=[divisionColor{:}]';
+        divisionColor= arrayfun(@(x) rgbconv(dataDevMouse.(timePoints{i}).division_color{x})',...
+            1:length(dataDevMouse.(timePoints{i}).division_color),'UniformOutput',0);
+        divisionColor=[divisionColor{:}]';
 
-    nodeSize = 50;
-    for k=1:length(distance_clean) % plot the dots one by one
-        scatter(distance_clean(k),corrCoeff_clean(k),nodeSize,dotColors_use(k,:),'filled','MarkerEdgeColor',...
-            edgeColors_use(k,:),'LineWidth',2)
-        hold on
-    end
+        nodeSize = 50;
+        for k=1:length(distance_clean) % plot the dots one by one
+            scatter(distance_clean(k),corrCoeff_clean(k),nodeSize,dotColors_use(k,:),'filled','MarkerEdgeColor',...
+                edgeColors_use(k,:),'LineWidth',2)
+            hold on
+        end
 
-    %scatter(distance_clean,corrCoeff_clean,nodeSize,dotColors_use,'filled','MarkerEdgeColor','k','LineWidth',0.5)
-    xlabel('Separation Distance (um)','FontSize',16)
-    ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',16)
-    xlim([0 9000])
-    str = sprintf('Developing Mouse %s',timePoints{i});
-    title(str,'Fontsize',19);
+        %scatter(distance_clean,corrCoeff_clean,nodeSize,dotColors_use,'filled','MarkerEdgeColor','k','LineWidth',0.5)
+        xlabel('Separation Distance (um)','FontSize',16)
+        ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',16)
+        xlim([0 9000])
+        str = sprintf('Developing Mouse %s',timePoints{i});
+        title(str,'Fontsize',19);
 
-    % add major division color legends
-    divisionLabels = categorical(dataDevMouse.(timePoints{i}).division);
-    theDivisions = unique(divisionLabels);
-    numDivisions = length(theDivisions);
-    yPosition=linspace(1,0,numDivisions);
-    for j = 1:numDivisions
-        find_1 = find(divisionLabels==theDivisions(j),1); % find an index of the correct color
-        %text(char(theDivisions(i)),'color','k','FontSize',14,'BackgroundColor',dotColors_use(find_1,:))
-        %t=textLoc(char(theDivisions(j)),'NorthEast','color','k','FontSize',14,'BackgroundColor',dotColors_use(find_1,:));
-        t=text(0.5,0.5,char(theDivisions(j)),'color','k','FontSize',14,'BackgroundColor',...
-            divisionColor(find_1,:));
-        t.Units='normalized';
-        t.Position=[1 yPosition(j)];
+        % add major division color legends
+        divisionLabels = categorical(dataDevMouse.(timePoints{i}).division);
+        theDivisions = unique(divisionLabels);
+        numDivisions = length(theDivisions);
+        yPosition=linspace(1,0,numDivisions);
+        for j = 1:numDivisions
+            find_1 = find(divisionLabels==theDivisions(j),1); % find an index of the correct color
+            %text(char(theDivisions(i)),'color','k','FontSize',14,'BackgroundColor',dotColors_use(find_1,:))
+            %t=textLoc(char(theDivisions(j)),'NorthEast','color','k','FontSize',14,'BackgroundColor',dotColors_use(find_1,:));
+            t=text(0.5,0.5,char(theDivisions(j)),'color','k','FontSize',14,'BackgroundColor',...
+                divisionColor(find_1,:));
+            t.Units='normalized';
+            t.Position=[1 yPosition(j)];
+        end
     end
 
     % fitting
@@ -264,11 +309,30 @@ end
 
 %% save fitting info for the 7 time points
 cd 'D:\Data\DevelopingAllenMouseAPI-master\Matlab variables'
-save('confInt.mat','confInt')
-save('adjRSquare.mat','adjRSquare')
-save('coeffValue.mat','coeffValue')
 
-
+if strcmp(whichField{1},'normStructure')
+    filename=sprintf('confInt%s.mat',strcat('_',whichField{1}));
+    save(filename,'confInt')
+    filename=sprintf('adjRSquare%s.mat',strcat('_',whichField{1}));
+    save(filename,'adjRSquare')
+    filename=sprintf('coeffValue%s.mat',strcat('_',whichField{1}));
+    save(filename,'coeffValue')
+    
+elseif whatNorm==' ';
+    filename=sprintf('confInt.mat');
+    save(filename,'confInt')
+    filename=sprintf('adjRSquare.mat');
+    save(filename,'adjRSquare')
+    filename=sprintf('coeffValue.mat');
+    save(filename,'coeffValue')
+else    
+    filename=sprintf('confInt%s.mat',strcat('_',whatNorm));
+    save(filename,'confInt')
+    filename=sprintf('adjRSquare%s.mat',strcat('_',whatNorm));
+    save(filename,'adjRSquare')
+    filename=sprintf('coeffValue%s.mat',strcat('_',whatNorm));
+    save(filename,'coeffValue')
+end
 %% plot the Degrees of Freedom Adjusted R-Square in different time points, including global
 fitMethods={'linear','exp_1_0','exp1','exp',};
 matAdjRSquare=zeros(length(timePoints)+1,length(fitMethods)); % +1 because of global
@@ -291,7 +355,14 @@ ax = gca;
 ax.XTick=[1 2 3 4 5 6 7 8];
 ax.XTickLabel={'E11.5','E13.5','E15.5','E18.5','P4','P14','P28','Global'};
 xt=[1 2 3 4 5 6 7 8];
-Title=title('Degree of freedom adjusted R-square');
+if strcmp(whichField{1},'normStructure')
+    str=sprintf('Degree of freedom adjusted R-square, z score norm across structure');
+elseif whatNorm==' ';
+    str=sprintf('Degree of freedom adjusted R-square, scaled sigmoid');
+else
+    str=sprintf('Degree of freedom adjusted R-square, %s',whatNorm);
+end
+Title=title(str);
 set(Title, 'FontSize', 16)
 
 L = cell(1,4);
@@ -299,7 +370,7 @@ L{1}='linear';
 L{2}='1 parameter exponential';
 L{3}='2 parameter exponential';
 L{4}='3 parameter exponential';
-legend(BarChart,L,'Location','southwest')
+legend(BarChart,L,'Location','northeast')
 hold on
 
 xPosition=linspace(-0.3,0.3,4);

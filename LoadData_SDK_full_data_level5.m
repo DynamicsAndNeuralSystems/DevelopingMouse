@@ -121,6 +121,30 @@ for g = 1:length(expMeasure)
     % <<NOT IMPLEMENTED YET; always done as above>>
 end
 
+%----Save as normStructure field for each gene separately (z score normalized across structures)
+% 7 or 8 (with P56) [time] x 2104 [gene] x 5 [structure]
+% allRawData = MakeMatrix(Exp.(expMeasure{g}).raw);
+allRawData_structure = MakeMatrix(Exp.Energy.raw); 
+meanStructure = nanmean(allRawData_structure,3); % take mean across structure
+stdStructure = zeros(size(Exp.Energy.raw{1}));
+
+for i=1:length(timePoints)
+    timeSlice=squeeze(allRawData_structure(i,:,:))'; % this is 2100 (genes) x 78 (structure)
+    stdStructure(i,:)=nanstd(timeSlice); 
+end
+
+for g = 1:length(expMeasure)
+    Exp.(expMeasure{g}).normStructure = cell(numStructures,1);
+    for i = 1:numStructures
+        Exp.(expMeasure{g}).normStructure{i}=(Exp.(expMeasure{g}).raw{i}-meanStructure)./stdStructure;
+
+    end
+
+    % Add the vermis as the mean across r1R,isA,isR
+    % <<NOT IMPLEMENTED YET; always done as above>>
+end
+
+
 %-------------------------------------------------------------------------------
 function matrixMean = MeanCellMatrices(Xcell) % mean the 3D matrix across the third dimension
     Xmatrix = MakeMatrix(Xcell);
