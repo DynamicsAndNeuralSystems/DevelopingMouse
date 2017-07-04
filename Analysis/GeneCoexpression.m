@@ -305,6 +305,7 @@ for i=1:7 % for each time point
         confInt.(fitMethods{j}){i}=confint(c,0.95);
         coeffValue.(fitMethods{j}){i}=coeffvalues(c);
     end
+   
 end
 
 %% save fitting info for the 7 time points

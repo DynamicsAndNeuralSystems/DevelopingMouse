@@ -295,129 +295,136 @@ end
 [~,color_level3,~]=xlsread('structureData_level3_clean.csv',1,'D2:D20');
 %% Import coordinates from Structure Center
 coOrds=csvread('structureCenters_level5.csv',1,4,[1,4,805,6]);
+%%
+% User input; must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
+whatNorm='log2';
+% User input: which field from DevMouseGeneExpression you want to use: 'norm' or normStructure';
+% 'norm' is normalized across genes using a method specified in file name,
+% or otherwise ScaledSigmoid; if normStructure is chosen, it doesn't matter
+% what "whatNorm" is as long as the DevMouseGeneExpression.mat is up to
+% date (i.e. contains the field "normStructure") [at the moment, only whatNorm='log2' is up to date]
+whichField={'normStructure'};
+% User input: Choose whether to plot the graph, which takes much longer running time) (plot=1;no plot=0)
+plotGraph=0;
 
-%% sort the coordinates into different developmental time points
-is1=(reference_space_id==1);
-is2=(reference_space_id==2);
-is3=(reference_space_id==3);
-is5=(reference_space_id==5);
-is6=(reference_space_id==6);
-is7=(reference_space_id==7);
-is8=(reference_space_id==8);
-is9=(reference_space_id==9);
+if whatNorm==' '
+    genefile=sprintf('DevMouseGeneExpression.mat');
+else
+    genefile=sprintf('DevMouseGeneExpression%s.mat',strcat('_',whatNorm));
+end
 
-coOrds_E11pt5=coOrds(is1,:);
-coOrds_E13pt5=coOrds(is2,:);
-coOrds_E15pt5=coOrds(is3,:);
+load(genefile)
+load('dataDevMouse.mat')
 
-coOrds_E18pt5=coOrds(is5,:);
-coOrds_P4=coOrds(is6,:);
-coOrds_P14=coOrds(is7,:);
-coOrds_P28=coOrds(is8,:);
-coOrds_P56=coOrds(is9,:);
-%% 
+timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+for i=1
+    gene3D=MakeMatrix(Exp.Energy.(whichField{i}));
+end
+geneCorr=cell(length(timePoints),1);
+
 % sort the acronym path cell into the correct order
-[~,iq,ir]=intersect(char(acronym),acronymPathlevel5clean(:,1),'stable');
-acronymPathlevel5clean=acronymPathlevel5clean(ir,:);
-% extract the acronym of the major division 
-acronymPath=acronymPathlevel5clean(:,2);
-% break each row into separate words and extract the needed one
-divisionLabel=cell(length(acronymPath),1);
-divisionColorLabel=cell(length(acronymPath),1);
-for i=1:length(acronymPath)
-    x=strsplit(acronymPath{i},',');
-    divisionLabel{i}=x{ismember(x,char(acronym_level3))};
-    divisionColorLabel{i}=color_level3{ismember(char(acronym_level3),divisionLabel{i},'rows')};
-end
-% extract level 3 colors and sort in correct order
-%[T,~,iv]=intersect(char(divisionLabel),char(acronym_level3),'rows','stable');
-%color_level3=color_level3(iv);
-%%
-%match the coordinates with acronym, ID and color
-logicalCell={is1,is2,is3,is5,is6,is7,is8,is9};
-timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28','P56'};
-dataDevMouse=struct();
-columnNames={'ID','Acronym','Color','Division','Dvision_Color','Coordinates'};
-coOrds_filtered=cell(length(timePoints),1);
-% first, match coordinates with the 78 level 5 ID
-for i=1:length(timePoints)
-    [C,ia,ib]=intersect(id,structure_id(logicalCell{i}),'stable');
-    coOrds_filtered{i}=coOrds(logicalCell{i},:);
-% extract coordinates,id,acronym and color of structures with matching level 5 ID
-    dataDevMouse.(timePoints{i}).coOrd=coOrds_filtered{i}(ib,:);
-    dataDevMouse.(timePoints{i}).id=id(ia);
-    dataDevMouse.(timePoints{i}).acronym=acronym(ia);
-    dataDevMouse.(timePoints{i}).division=divisionLabel(ia);
-    dataDevMouse.(timePoints{i}).division_color=divisionColorLabel(ia);
-    dataDevMouse.(timePoints{i}).color=color_hex_triplet(ia,:);
-    dataDevMouse.(timePoints{i}).info=table(dataDevMouse.(timePoints{i}).id,...
-        dataDevMouse.(timePoints{i}).acronym,dataDevMouse.(timePoints{i}).color,...
-        dataDevMouse.(timePoints{i}).division,dataDevMouse.(timePoints{i}).division_color,...
-        dataDevMouse.(timePoints{i}).coOrd,'VariableNames',columnNames);
-    dataDevMouse.(timePoints{i}).distance=squareform(pdist(coOrds_filtered{i}(ib,:),'euclidean'));
-end
+% [~,iq,ir]=intersect(char(acronym),acronymPathlevel5clean(:,1),'stable');
+% acronymPathlevel5clean=acronymPathlevel5clean(ir,:);
+% % extract the acronym path 
+% acronymPath=acronymPathlevel5clean(:,2);
+% break each row into separate words and save each separately to a cell
+% inside a brain structure field in a matlab structure)
 
-%%
-%% MDS
-for i=1:length(timePoints)
-    distMat = dataDevMouse.(timePoints{i}).distance;
-    score = mdscale(distMat,2);
-    xData = score(:,1);
-    yData = score(:,2);
-    numRegions=height(dataDevMouse.(timePoints{i}).info);
-
-%-------------------------------------------------------------------------------
-% Plot
-%-------------------------------------------------------------------------------
-    f = figure('color','w');
-    dotColors = arrayfun(@(x) rgbconv(dataDevMouse.(timePoints{i}).color{x})',...
-                                        1:numRegions,'UniformOutput',0);
-    dotColors = [dotColors{:}]';
-
-    nodeSize = 50;
-    scatter(xData,yData,nodeSize,dotColors,'fill','MarkerEdgeColor','k')
-    str=sprintf('Developing Mouse %s MDS',timePoints{i});
-    t=title(str);
-    set(t,'Fontsize',18)
-
-    % Add labels:
-    xDataRange = range(xData);
-    for j = 1:numRegions
-        text(xData(j)+0.04*xDataRange,yData(j),dataDevMouse.(timePoints{i}).acronym{j},...
-                        'color',brighten(dotColors(j,:),-0.3))
+for i=1:length(timePoints) % for each time point
+    slice=squeeze(gene3D(i,:,:))'; % makes a matrix of 78 (structure) x 2100 (genes)
+    % filter off structures with more than 10% of genes missing
+    isMissing=(sum(~isnan(slice),2) <= 0.1*length(geneList));
+    slice_clean=slice(~isMissing,:);
+    % only structures with available gene expression are kept
+    [~,ia,ib]=intersect(char(structures(~isMissing)),acronymPathlevel5clean(:,1),'stable');
+    slice_clean=slice_clean(ia,:);
+    % compute correlation coefficient between region pairs
+    geneCorr{i} = corrcoef(slice_clean','rows','pairwise');
+    % extract the correlation coefficients
+    corrCoeff=[];
+    for j=2:size(geneCorr{i},2)
+        corrCoeff=[corrCoeff;geneCorr{i}(1:(j-1),j)];
     end
-end
-
-%% Scatter3 plot
-for i=1:length(timePoints)
-    coOrds_x=dataDevMouse.(timePoints{i}).coOrd(:,1);
-    coOrds_y=dataDevMouse.(timePoints{i}).coOrd(:,2);
-    coOrds_z=dataDevMouse.(timePoints{i}).coOrd(:,3);
-    numRegions=height(dataDevMouse.(timePoints{i}).info);
     
-    f1 = figure('color','w');
-    dotColors = arrayfun(@(x) rgbconv(dataDevMouse.(timePoints{i}).color{x})',...
-                                        1:numRegions,'UniformOutput',0);
-    dotColors = [dotColors{:}]';
-    
-    nodeSize = 50;
-    scatter3(coOrds_x,coOrds_y,coOrds_z,nodeSize,dotColors,'fill','MarkerEdgeColor','k');
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
-    str=sprintf('Developing Mouse %s Scatter3 Plot',timePoints{i});
-    t=title(str);
-    set(t,'Fontsize',18)
-
-    % Add labels:
-    xCoordRange = range(coOrds_x);
-    for j = 1:numRegions
-        text(coOrds_x(j)+0.04*xCoordRange,coOrds_y(j),coOrds_z(j),dataDevMouse.(timePoints{i}).acronym{j},...
-                        'color',brighten(dotColors(j,:),-0.3))
+    y=acronymPathlevel5clean(:,2); 
+    acronymPath=y(ib); % these are the acronym paths needed
+ 
+    for j=1:length(acronymPath)
+        [iq,ir]=ind2sub4up(j);
+        pairsIx{j}=[iq,ir];
     end
+    
+    
+
+    % remove the curly brackets
+
+    for j=1:length(acronymPath)
+        acronymPath{j}=acronymPath{j}(2:end-1);
+    end
+    % make a cell containing each structure as a row of cell
+    acronymPathCell=cell(length(acronymPath),1);
+    % fill up with the acronym path components
+    for j=1:length(acronymPath)
+        x=strsplit(acronymPath{j},',');
+        acronymPathCell{j}=x;
+    end
+    pairsIx=cell(length(corrCoeff),1);
+    for j=1:length(corrCoeff)
+        [iq,ir]=ind2sub4up(j);
+        pairsIx{j}=[iq,ir];
+    end
+    % compare acronym paths
+    ontoDist=zeros(length(pairsIx),1);
+    for j=1:length(pairsIx)
+        commonOnes=nnz(ismember(acronymPathCell{pairsIx{j}(1)},acronymPathCell{pairsIx{j}(2)}));
+        ontoDist(j)=(length(acronymPathCell{pairsIx{j}(1)})-commonOnes)...
+            +(length(acronymPathCell{pairsIx{j}(2)})-commonOnes);
+    % arrayfun(@(i1)all(ismember(A(i1,:),B,'rows','stable'),(1:size(A,1))');
+    end
+    
+    % filter off data points with no coexpression data available
+    isMissing_coexpress=isnan(corrCoeff);
+    corrCoeff_clean=corrCoeff(~isMissing_coexpress);
+    ontoDist_clean=ontoDist(~isMissing_coexpress);
+    %acronymPath_clean=acronymPath(~isMissing_coexpress);
+    
+    %Plot gene coexpression against ontological distance
+    f=figure('color','w','units','normalized','outerposition',[0 0 1 1]);
+    scatter(ontoDist_clean,corrCoeff_clean)
+    ylim([-0.6 1])
+    str=sprintf('Developing Mouse %s',timePoints{i});
+    title(str)
+    xlabel('Ontological distance')
+    ylabel('Gene coexpression (correlation coefficient)')
+    hold on
+    uniqueOntoDist=unique(ontoDist_clean);
+    % mean of gene coexpression at each ontological distance
+    meanCoexpress=zeros(length(uniqueOntoDist),1);
+    sdCoexpress=zeros(length(uniqueOntoDist),1);
+    range=zeros(length(uniqueOntoDist),1);
+    for j=1:length(uniqueOntoDist)
+        isRight=(ontoDist_clean==uniqueOntoDist(j));
+        meanCoexpress(j)=mean(corrCoeff_clean(isRight));
+        sdCoexpress(j)=std(corrCoeff_clean(isRight));
+        range(j)=max(corrCoeff_clean(isRight))-min(corrCoeff_clean(isRight));
+    end
+    for j=1:length(uniqueOntoDist)
+        text(uniqueOntoDist(j),meanCoexpress(j),strcat('mean=',num2str(meanCoexpress(j))))
+        text(uniqueOntoDist(j),meanCoexpress(j)-0.1*range(j),strcat('SD=',num2str(sdCoexpress(j))))
+        hold on
+    end
+    cd 'D:\Data\DevelopingAllenMouseAPI-master\Figures\DevMouse_Level5_GeneCoexpression\Ontological distance'
+    fileName=sprintf('OntoDistance_DevMouse%s.jpg',timePoints{i});
+    saveas(gcf,fileName)
 end
+    
 
-%% save
-cd 'D:\Data\DevelopingAllenMouseAPI-master\API data'
-save('dataDevMouse.mat','dataDevMouse')
 
+
+
+
+
+
+
+
+    
