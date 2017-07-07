@@ -321,15 +321,7 @@ for i=1
     gene3D=MakeMatrix(Exp.Energy.(whichField{i}));
 end
 geneCorr=cell(length(timePoints),1);
-
-% sort the acronym path cell into the correct order
-% [~,iq,ir]=intersect(char(acronym),acronymPathlevel5clean(:,1),'stable');
-% acronymPathlevel5clean=acronymPathlevel5clean(ir,:);
-% % extract the acronym path 
-% acronymPath=acronymPathlevel5clean(:,2);
-% break each row into separate words and save each separately to a cell
-% inside a brain structure field in a matlab structure)
-
+corrCoeffCell=cell(length(timePoints),1);
 for i=1:length(timePoints) % for each time point
     slice=squeeze(gene3D(i,:,:))'; % makes a matrix of 78 (structure) x 2100 (genes)
     % filter off structures with more than 10% of genes missing
@@ -353,9 +345,7 @@ for i=1:length(timePoints) % for each time point
         [iq,ir]=ind2sub4up(j);
         pairsIx{j}=[iq,ir];
     end
-    
-    
-
+ 
     % remove the curly brackets
 
     for j=1:length(acronymPath)
@@ -386,7 +376,6 @@ for i=1:length(timePoints) % for each time point
     isMissing_coexpress=isnan(corrCoeff);
     corrCoeff_clean=corrCoeff(~isMissing_coexpress);
     ontoDist_clean=ontoDist(~isMissing_coexpress);
-    %acronymPath_clean=acronymPath(~isMissing_coexpress);
     
     %Plot gene coexpression against ontological distance
     f=figure('color','w','units','normalized','outerposition',[0 0 1 1]);
@@ -398,12 +387,17 @@ for i=1:length(timePoints) % for each time point
     ylabel('Gene coexpression (correlation coefficient)')
     hold on
     uniqueOntoDist=unique(ontoDist_clean);
+    
+    % prepare to collect the coexpression data for later use
+    corrCoeffCell{i}=cell(length(uniqueOntoDist),1);
+    
     % mean of gene coexpression at each ontological distance
     meanCoexpress=zeros(length(uniqueOntoDist),1);
     sdCoexpress=zeros(length(uniqueOntoDist),1);
     range=zeros(length(uniqueOntoDist),1);
     for j=1:length(uniqueOntoDist)
         isRight=(ontoDist_clean==uniqueOntoDist(j));
+        corrCoeffCell{i}{j}=corrCoeff_clean(isRight);
         meanCoexpress(j)=mean(corrCoeff_clean(isRight));
         sdCoexpress(j)=std(corrCoeff_clean(isRight));
         range(j)=max(corrCoeff_clean(isRight))-min(corrCoeff_clean(isRight));
@@ -417,14 +411,19 @@ for i=1:length(timePoints) % for each time point
     fileName=sprintf('OntoDistance_DevMouse%s.jpg',timePoints{i});
     saveas(gcf,fileName)
 end
-    
 
-
-
-
-
-
-
-
-
-    
+%% Plot jitter scatter for each time point
+for i=1:length(timePoints)
+    BF_JitteredParallelScatter(corrCoeffCell{i})
+    hold on 
+    str=sprintf('Developing Mouse %s',timePoints{i});
+    title(str)
+    xlabel('Ontological distance')
+    ylabel('Gene coexpression (correlation coefficient)')
+    ax = gca;
+    ax.XTick=[1 2 3 4 5];
+    ax.XTickLabel=num2str(uniqueOntoDist);
+    cd 'D:\Data\DevelopingAllenMouseAPI-master\Figures\DevMouse_Level5_GeneCoexpression\Ontological distance'
+    fileName=sprintf('OntoDistanceJitter_DevMouse%s.jpg',timePoints{i});
+    saveas(gcf,fileName)
+end
