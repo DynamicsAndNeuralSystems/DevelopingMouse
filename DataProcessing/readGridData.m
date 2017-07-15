@@ -32,11 +32,46 @@ end
 % temporary, for shorter running time
 numVoxel=10000;
 %geneIDInfo=geneIDInfo(1:100);
-ind=1:numVoxel;
+ind=50001:60000; % temp changes
 [xCoOrd,yCoOrd,zCoOrd]=ind2sub(sizeGrid,ind);
 coOrds=zeros(numVoxel,3);
 for i=1:numVoxel
     coOrds(i,:)=[xCoOrd(i),yCoOrd(i),zCoOrd(i)];
+end
+%% method 2: extract voxels with good data, screening in voxel batches of 10000
+countVoxel=1;
+countLoop=1;
+isGoodVoxel=zeros(sizeGrid(1)*sizeGrid(2)*sizeGrid(3),1);
+
+while countVoxel < numVoxel 
+    coOrdsLowRange=countVoxel;
+    if (numVoxel-countVoxel)>10000
+        coOrdsUpRange=(countVoxel-1)+10000;
+    else
+        coOrdsUpRange=numVoxel;
+    end
+    for i=1:length
+    isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1)
+
+% create matrix of voxel x gene expression
+    geneMat{countLoop}=zeros(10000,length(geneIDInfo)); 
+%     geneMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
+%     distMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
+    h = waitbar(0,'Computing voxel x gene expression matrix...');
+    steps=length(geneIDInfo);
+    for j=1:length(geneIDInfo) % for each gene (i.e. each 3D grid)
+        for k=1:10000 % for each voxel
+            % replace negative gene expression values with NaN (because -1 indicate absent data)
+            isAbsent=(energyGrids{j}(coOrdsLowRange+(k-1))<0);
+            if isAbsent
+                geneMat{countLoop}(k,j)=NaN;
+            else
+                geneMat{countLoop}(k,j)=energyGrids{j}(coOrdsLowRange+(k-1));
+            end
+        end
+        waitbar(j/steps)
+    end
+    close(h)
 end
 %% compute everything in voxel batches of 10000 to avoid crashes
 tic
