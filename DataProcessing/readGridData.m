@@ -28,31 +28,33 @@ for i=1:length(A)
     geneIDInfo(i)=str2double(infoStr{2});
 end
 %% make a distance matrix
-%numVoxel=sizeGrid(1)*sizeGrid(2)*sizeGrid(3);
+numVoxel=sizeGrid(1)*sizeGrid(2)*sizeGrid(3);
 % temporary, for shorter running time
-numVoxel=10000;
+%numVoxel=10000;
 %geneIDInfo=geneIDInfo(1:100);
-ind=50001:60000; % temp changes
+%ind=50001:60000; % temp changes
+ind=1:numVoxel;
 [xCoOrd,yCoOrd,zCoOrd]=ind2sub(sizeGrid,ind);
 coOrds=zeros(numVoxel,3);
 for i=1:numVoxel
     coOrds(i,:)=[xCoOrd(i),yCoOrd(i),zCoOrd(i)];
 end
 %% method 2: extract voxels with good data, screening in voxel batches of 10000
+numVoxel=sizeGrid(1)*sizeGrid(2)*sizeGrid(3);
 countVoxel=1;
 countLoop=1;
-isGoodVoxel=zeros(sizeGrid(1)*sizeGrid(2)*sizeGrid(3),1);
+isGoodVoxel=zeros(numVoxel,1);
 
+numLoop=ceil(numVoxel/10000);
+geneMat=cell(numLoop,1);
+tic
 while countVoxel < numVoxel 
     coOrdsLowRange=countVoxel;
-    if (numVoxel-countVoxel)>10000
+    if (numVoxel-countVoxel+1)>10000 % if no. of remaining voxel>10000
         coOrdsUpRange=(countVoxel-1)+10000;
     else
         coOrdsUpRange=numVoxel;
     end
-    for i=1:length
-    isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1)
-
 % create matrix of voxel x gene expression
     geneMat{countLoop}=zeros(10000,length(geneIDInfo)); 
 %     geneMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
@@ -72,7 +74,132 @@ while countVoxel < numVoxel
         waitbar(j/steps)
     end
     close(h)
+
+% GoodVoxel=voxels that have less than 30% of genes absent
+    isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1)=(sum(isnan(geneMat{countLoop}),2) < 0.3*length(geneIDInfo));
+    if nnz(isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1))==0
+        fprintf('Batch %d has no good voxels\n',countLoop)
+    end
+    countVoxel=countVoxel+10000;
+    countLoop=countLoop+1;
 end
+toc
+%% calculate gene coexpression of good voxels
+% create matrix of good voxel x gene
+geneMatAll=vertcat(geneMat{1:numLoop});
+%%
+% only keep good voxel rows
+isGoodVoxel=logical(isGoodVoxel);
+geneMatAll_clean=geneMatAll(isGoodVoxel,:);
+% normalize
+geneMatAll_clean=BF_NormalizeMatrix(geneMatAll_clean,'scaledSigmoid');
+%% calculate gene coexpression 
+% analyze a submatrix of geneMatAll_clean (due to memory problem)
+tic
+geneCorr=corrcoef((geneMatAll_clean(1:1000,:))','rows','pairwise');
+toc
+%% find out coordinates of the good voxels
+ind=find(isGoodVoxel);
+[xCoOrd,yCoOrd,zCoOrd]=ind2sub(sizeGrid,ind);
+coOrds=zeros(numVoxel,3);
+for i=1:nnz(ind)
+    coOrds(i,:)=[xCoOrd(i),yCoOrd(i),zCoOrd(i)];
+end
+% select a subset for analysis (due to memory problem)
+distMat=squareform(pdist(coOrds(1:1000,:),'euclidean')*resolutionGrid);
+%%
+% extract the correlation coefficients
+corrCoeff=[];
+h = waitbar(0,'Extracting correlation coefficients...');
+steps=size(geneCorr,2)-1;
+for g=2:size(geneCorr,2)
+    corrCoeff=[corrCoeff;geneCorr(1:(g-1),g)];
+    waitbar((g-1)/steps)
+end
+close(h)
+% extract the distances
+distance=distMat(find(triu(distMat,1)));
+%% plot coexpression against distance
+f=figure('color','w');
+scatter(distance,corrCoeff,'.')
+xlabel('Separation Distance (um)','FontSize',16)
+ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',16)
+str = sprintf('Developing Mouse %s',timePoints{1});
+title(str,'Fontsize',19);
+
+%% fitting
+adjRSquare=struct();
+confInt=struct();
+coeffValue=struct();
+
+fitMethods={'linear','exp_1_0','exp1','exp',};
+
+for j=1:length(fitMethods)
+    [~,Stats,c] = GiveMeFit(distance,corrCoeff,fitMethods{j},true);
+    adjRSquare.(fitMethods{j})=Stats.adjrsquare;
+    confInt.(fitMethods{j})=confint(c,0.95);
+    coeffValue.(fitMethods{j})=coeffvalues(c);
+end
+    
+%%
+timePoints={'E11pt5'};
+matAdjRSquare=zeros(length(timePoints),length(fitMethods)); % +1 because of global
+%%
+for i=1:length(timePoints)
+    for j=1:length(fitMethods)
+        matAdjRSquare(i,j)=adjRSquare.(fitMethods{j})(i);
+    end
+end
+
+%%
+% User input; must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
+whatNorm=' ';
+% User input: which field from DevMouseGeneExpression you want to use: 'norm' or normStructure';
+% 'norm' is normalized across genes using a method specified in file name,
+% or otherwise ScaledSigmoid; if normStructure is chosen, it doesn't matter
+% what "whatNorm" is as long as the DevMouseGeneExpression.mat is up to
+% date (i.e. contains the field "normStructure") [at the moment, only whatNorm='log2' is up to date]
+% User input: Choose whether to plot the graph, which takes much longer running time) (plot=1;no plot=0)
+plotGraph=0;
+
+
+g=figure('color','w');
+xAxis=[1:length(timePoints)];
+%BarChart=bar(matAdjRSquare,'grouped');
+BarChart=bar(vertcat(matAdjRSquare,nan(size(matAdjRSquare))));
+
+BarChat.BarWidth = 0.4;
+ax = gca;
+
+ax.XTick=[1];
+ax.XTickLabel=timePoints;
+
+xt=[1];
+
+if whatNorm==' ';
+    str=sprintf('Degree of freedom adjusted R-square, scaled sigmoid');
+else
+    str=sprintf('Degree of freedom adjusted R-square, %s',whatNorm);
+end
+Title=title(str);
+set(Title, 'FontSize', 16)
+grid on
+grid minor
+
+L = cell(1,4);
+L{1}='linear';
+L{2}='1 parameter exponential';
+L{3}='2 parameter exponential';
+L{4}='3 parameter exponential';
+legend(BarChart,L,'Location','northeast')
+hold on
+
+%%
+% isGoodBatch=zeros(numLoop,1);
+% for i=1:length(isGoodBatch)
+%     isGoodBatch(i)=nnz((sum(isnan(geneMat{i}),2) < 0.3*length(geneIDInfo)))~=0;
+%     
+% end
 %% compute everything in voxel batches of 10000 to avoid crashes
 tic
 countVoxel=1;
