@@ -9,7 +9,7 @@ timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 %  grid volume size
 sizeGrid = [70,75,40];
 resolutionGrid=80;
-A=dir('D:\Data\DevelopingAllenMouseAPI-master\API data\GridData');
+A=dir('D:\Data\DevelopingAllenMouseAPI-master\API data\GridDataOthers\E11.5_first download');
 % remove hidden files
 A=A(arrayfun(@(A) A.name(1), A) ~= '.');
 % initialize
@@ -201,82 +201,82 @@ hold on
 %     
 % end
 %% compute everything in voxel batches of 10000 to avoid crashes
-tic
-countVoxel=1;
-countLoop=1;
-distMat={};
-geneMat={};
-geneMat_clean=cell(1,1);
-distMat_clean=cell(1,1);
-geneCorr={};
-corrCoeffAll=[];
-distanceAll=[];
-while countVoxel < numVoxel 
-    coOrdsLowRange=countVoxel;
-    if (numVoxel-countVoxel)>10000
-        coOrdsUpRange=(countVoxel-1)+10000;
-    else
-        coOrdsUpRange=numVoxel;
-    end
-    distMat{countLoop}=squareform(pdist(coOrds(coOrdsLowRange:coOrdsUpRange,:),'euclidean')...
-        *resolutionGrid);
-
-    % create matrix of voxel x gene expression
-    geneMat{countLoop}=zeros(10000,length(geneIDInfo)); 
-%     geneMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
-%     distMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
-    h = waitbar(0,'Computing voxel x gene expression matrix...');
-    steps=length(geneIDInfo);
-    for j=1:length(geneIDInfo) % for each gene (i.e. each 3D grid)
-        for k=1:10000 % for each voxel
-            % replace negative gene expression values with NaN (because -1 indicate absent data)
-            isAbsent=(energyGrids{j}(coOrdsLowRange+(k-1))<0);
-            if isAbsent
-                geneMat{countLoop}(k,j)=NaN;
-            else
-                geneMat{countLoop}(k,j)=energyGrids{j}(coOrdsLowRange+(k-1));
-            end
-        end
-        waitbar(j/steps)
-    end
-    close(h)
-    % filter off voxels with more than 90% gene missing
-    geneMissing=(sum(~isnan(geneMat{countLoop}),2) <= 0.9*length(geneIDInfo));
-    if nnz(geneMissing)>0.95*numVoxel
-        error('More than 95% of the voxels have more than 90% gene missing, cannot proceed')
-    end
-    geneMat_clean{countLoop}=geneMat{countLoop}(~isMissing,:);
-    distMat_clean{countLoop}=distMat{countLoop}(~isMissing,:);
-    % compute the gene coexpression between voxels
-    geneCorr{countLoop}=corrcoef((geneMat_clean{countLoop})','rows','pairwise');
-    
-    % extract the correlation coefficients
-    corrCoeff=[];
-    h = waitbar(0,'Extracting correlation coefficients...');
-    steps=size(geneCorr{countLoop},2)-1;
-    for g=2:size(geneCorr{countLoop},2)
-        corrCoeff=[corrCoeff;geneCorr{countLoop}(1:(g-1),g)];
-        waitbar((g-1)/steps)
-    end
-    close(h)
-    % extract the distances
-    distance=distMat_clean{countLoop}(find(triu(distMat_clean{countLoop},1)));
-
-    % filter off data points with NaN in gene coexpression
-    isMissing=isnan(corrCoeff);
-    corrCoeff_clean=corrCoeff(~isMissing);
-    distance_clean=distance(~isMissing);
-    
-    corrCoeffAll=[corrCoeffAll;corrCoeff_clean];
-    distanceAll=[distanceAll;distance_clean];
-    % increment the counting variables   
-    countVoxel=countVoxel+10000;
-    countLoop=countLoop+1;
-end
-toc    
-%%
-f=figure('color','w');
-scatter(distance_clean,corrCoeff_clean,'.')
+% tic
+% countVoxel=1;
+% countLoop=1;
+% distMat={};
+% geneMat={};
+% geneMat_clean=cell(1,1);
+% distMat_clean=cell(1,1);
+% geneCorr={};
+% corrCoeffAll=[];
+% distanceAll=[];
+% while countVoxel < numVoxel 
+%     coOrdsLowRange=countVoxel;
+%     if (numVoxel-countVoxel)>10000
+%         coOrdsUpRange=(countVoxel-1)+10000;
+%     else
+%         coOrdsUpRange=numVoxel;
+%     end
+%     distMat{countLoop}=squareform(pdist(coOrds(coOrdsLowRange:coOrdsUpRange,:),'euclidean')...
+%         *resolutionGrid);
+% 
+%     % create matrix of voxel x gene expression
+%     geneMat{countLoop}=zeros(10000,length(geneIDInfo)); 
+% %     geneMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
+% %     distMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
+%     h = waitbar(0,'Computing voxel x gene expression matrix...');
+%     steps=length(geneIDInfo);
+%     for j=1:length(geneIDInfo) % for each gene (i.e. each 3D grid)
+%         for k=1:10000 % for each voxel
+%             % replace negative gene expression values with NaN (because -1 indicate absent data)
+%             isAbsent=(energyGrids{j}(coOrdsLowRange+(k-1))<0);
+%             if isAbsent
+%                 geneMat{countLoop}(k,j)=NaN;
+%             else
+%                 geneMat{countLoop}(k,j)=energyGrids{j}(coOrdsLowRange+(k-1));
+%             end
+%         end
+%         waitbar(j/steps)
+%     end
+%     close(h)
+%     % filter off voxels with more than 90% gene missing
+%     geneMissing=(sum(~isnan(geneMat{countLoop}),2) <= 0.9*length(geneIDInfo));
+%     if nnz(geneMissing)>0.95*numVoxel
+%         error('More than 95% of the voxels have more than 90% gene missing, cannot proceed')
+%     end
+%     geneMat_clean{countLoop}=geneMat{countLoop}(~isMissing,:);
+%     distMat_clean{countLoop}=distMat{countLoop}(~isMissing,:);
+%     % compute the gene coexpression between voxels
+%     geneCorr{countLoop}=corrcoef((geneMat_clean{countLoop})','rows','pairwise');
+%     
+%     % extract the correlation coefficients
+%     corrCoeff=[];
+%     h = waitbar(0,'Extracting correlation coefficients...');
+%     steps=size(geneCorr{countLoop},2)-1;
+%     for g=2:size(geneCorr{countLoop},2)
+%         corrCoeff=[corrCoeff;geneCorr{countLoop}(1:(g-1),g)];
+%         waitbar((g-1)/steps)
+%     end
+%     close(h)
+%     % extract the distances
+%     distance=distMat_clean{countLoop}(find(triu(distMat_clean{countLoop},1)));
+% 
+%     % filter off data points with NaN in gene coexpression
+%     isMissing=isnan(corrCoeff);
+%     corrCoeff_clean=corrCoeff(~isMissing);
+%     distance_clean=distance(~isMissing);
+%     
+%     corrCoeffAll=[corrCoeffAll;corrCoeff_clean];
+%     distanceAll=[distanceAll;distance_clean];
+%     % increment the counting variables   
+%     countVoxel=countVoxel+10000;
+%     countLoop=countLoop+1;
+% end
+% toc    
+% %%
+% f=figure('color','w');
+% scatter(distance_clean,corrCoeff_clean,'.')
 
 %     h = waitbar(0,'Extracting distances...');
 %     steps=size(distMat{countLoop},2)-1;
