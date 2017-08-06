@@ -1,0 +1,177 @@
+%% load the files
+whatData={'energy'};
+% obtin the timepoint names
+A=dir('/home/hyglau/kg98/Gladys/API data/GridData');
+A=A(arrayfun(@(A) A.name(1), A) ~= '.'); % don't keep hidden files
+% sort file names in correct time point order
+names=cell(length(A),1);
+for k=1:length(A)
+    names{k}=A(k).name;
+end
+[~,nameOrder]=sort_nat(names);
+A=A(nameOrder);
+
+sizeGrids=struct('E11pt5',[70,75,40],'E13pt5',[89,109,69],'E15pt5',[94,132,65],'E18pt5',[67,43,40],'P4',[77,43,50],...
+    'P14',[68,40,50],'P28',[73,41,53]);
+timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+%%
+% initialize
+energyGrids=cell(length(A),1);
+
+timePointInfo=cell(length(A),1);
+geneIDInfo=cell(length(A),1);
+annotationGrids=cell(length(A),1);
+tic
+h=waitbar(0,'Computing time point data...');
+steps=length(A);
+
+for i=1:length(A) % for each time point%
+%     folderDir=dir(strcat('/home/hyglau/kg98/Gladys/API data/GridData/',A(i).name));
+%     folderDir=folderDir(arrayfun(@(folderDir) folderDir.name(1), folderDir) ~= '.');
+%     timePointInfo{i}=cell(length(folderDir),1);
+%     geneIDInfo{i}=cell(length(folderDir),1);
+%     energyGrids{i}=cell(length(folderDir),1);
+    % load the grid annotation for the timepoint
+    gridFileStr=strcat('/home/hyglau/kg98/Gladys/API data/LinkDownload/',timePoints{i},...
+        '_DevMouse2012_gridAnnotation/gridAnnotation.raw');
+    fid = fopen(gridFileStr, 'r', 'l' );
+    annotationGrids{i} = fread( fid, prod(sizeGrids.(timePoints{i})), 'uint32' );
+    fclose( fid );
+    annotationGrids{i} = reshape(annotationGrids{i},sizeGrids.(timePoints{i}));
+    isNotAnno=annotationGrids{i}==0;
+
+    % only annotated voxels are kept
+%     for j=1:length(folderDir) % for each datagrid
+%         fileStr=strcat(folderDir(j).name,'/',whatData,'.','raw');
+%         % ENERGY = 3-D matrix of expression energy grid volume
+%         fid = fopen(fileStr{1}, 'r', 'l' );
+%         energyGrids{i}{j} = fread( fid, prod(sizeGrids.(timePoints{i})), 'float' );
+%         fclose( fid );
+%         energyGrids{i}{j} = reshape(energyGrids{i}{j},sizeGrids.(timePoints{i}));
+%         % filter out voxels that are not annotated
+%         energyGrids{i}{j}=energyGrids{i}{j}(~isNotAnno);
+%         infoStr=strsplit(folderDir(j).name,'_');
+%         timePointInfo{i}{j}=infoStr{1};
+%         geneIDInfo{i}{j}=str2double(infoStr{2});
+%     end
+
+%     waitbar(j/steps)
+end
+toc
+
+
+%% save variables
+cd '/scratch/kg98/Gladys'
+
+% save('energyGrids.mat','energyGrids','-v7.3')
+% save('timePointInfo.mat','timePointInfo')
+% save('geneIDInfo.mat','geneIDInfo')
+save('annotationGrids.mat','annotationGrids')
+% save('A.mat','A')
+% save('distance.mat','distance')
+% save('corrCoeff.mat','corrCoeff')
+
+%% drafts
+% %% make a distance matrix
+% numVoxel=sizeGrid(1)*sizeGrid(2)*sizeGrid(3);
+% 
+% % temporary, for shorter running time
+% %numVoxel=10000;
+% %geneIDInfo=geneIDInfo(1:100);
+% %ind=50001:60000; % temp changes
+% ind=1:numVoxel;
+% [xCoOrd,yCoOrd,zCoOrd]=ind2sub(sizeGrid,ind);
+% coOrds=zeros(numVoxel,3);
+% for i=1:numVoxel
+%     coOrds(i,:)=[xCoOrd(i),yCoOrd(i),zCoOrd(i)];
+% end
+% %% method 2: extract voxels with good data, screening in voxel batches of 10000
+% numVoxel=sizeGrid(1)*sizeGrid(2)*sizeGrid(3);
+% countVoxel=1;
+% countLoop=1;
+% isGoodVoxel=zeros(numVoxel,1);
+% goodBatch=[];
+% 
+% numLoop=ceil(numVoxel/10000);
+% geneMat=cell(numLoop,1);
+% tic
+% while countVoxel < numVoxel 
+%     coOrdsLowRange=countVoxel;
+%     if (numVoxel-countVoxel+1)>10000 % if no. of remaining voxel>10000
+%         coOrdsUpRange=(countVoxel-1)+10000;
+%     else
+%         coOrdsUpRange=numVoxel;
+%     end
+% % create matrix of voxel x gene expression
+%     geneMat{countLoop}=zeros(10000,length(geneIDInfo)); 
+% %     geneMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
+% %     distMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
+%     h = waitbar(0,'Computing voxel x gene expression matrix...');
+%     steps=length(geneIDInfo);
+%     for j=1:length(geneIDInfo) % for each gene (i.e. each 3D grid)
+%         for k=1:10000 % for each voxel
+%             % replace negative gene expression values with NaN (because -1 indicate absent data)
+%             isAbsent=(energyGrids{j}(coOrdsLowRange+(k-1))<0);
+%             if isAbsent
+%                 geneMat{countLoop}(k,j)=NaN;
+%             else
+%                 geneMat{countLoop}(k,j)=energyGrids{j}(coOrdsLowRange+(k-1));
+%             end
+%         end
+%         waitbar(j/steps)
+%     end
+%     close(h)
+% 
+% % GoodVoxel=voxels that have less than 30% of genes absent
+%     isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1)=(sum(isnan(geneMat{countLoop}),2) < 0.3*length(geneIDInfo));
+%     if nnz(isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1))==0
+%         fprintf('Batch %d has no good voxels\n',countLoop)
+%     else
+%         geneMatNow=geneMat{countLoop};
+%         geneMat{countLoop}=geneMatNow(logical(isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1)),:);
+%         goodBatch=vertcat(goodBatch,countLoop);
+%     end
+% 
+%     countVoxel=countVoxel+10000;
+%     countLoop=countLoop+1;
+% end
+% toc
+% clear energyGrids
+% %% calculate gene coexpression of good voxels
+% % create matrix of good voxel x gene
+% 
+% geneMatAll=vertcat(geneMat{goodBatch});
+% %%
+% % only keep good voxel rows
+% isGoodVoxel=logical(isGoodVoxel);
+% %deleted: geneMatAll_clean=geneMatAll(isGoodVoxel,:);
+% % normalize
+% geneMatAll=BF_NormalizeMatrix(geneMatAll,'scaledSigmoid');
+% %% calculate gene coexpression 
+% % analyze a submatrix of geneMatAll_clean (due to memory problem)
+% tic
+% geneCorr=corrcoef((geneMatAll(1:5000,:))','rows','pairwise');
+% toc
+% %% find out coordinates of the good voxels
+% ind=find(isGoodVoxel);
+% [xCoOrd,yCoOrd,zCoOrd]=ind2sub(sizeGrid,ind);
+% coOrds=zeros(numVoxel,3);
+% for i=1:nnz(ind)
+%     coOrds(i,:)=[xCoOrd(i),yCoOrd(i),zCoOrd(i)];
+% end
+% % select a subset for analysis (due to memory problem)
+% distMat=squareform(pdist(coOrds(1:5000,:),'euclidean')*resolutionGrid);
+% %%
+% % extract the correlation coefficients
+% corrCoeff=[];
+% h = waitbar(0,'Extracting correlation coefficients...');
+% steps=size(geneCorr,2)-1;
+% for g=2:size(geneCorr,2)
+%     corrCoeff=[corrCoeff;geneCorr(1:(g-1),g)];
+%     waitbar((g-1)/steps)
+% end
+% close(h)
+% 
+% %%
+% % extract the distances
+% distance=distMat(find(triu(distMat,1)));

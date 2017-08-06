@@ -81,7 +81,9 @@ while countVoxel < numVoxel
     h = waitbar(0,'Computing voxel x gene expression matrix...');
     steps=length(geneIDInfo);
     for j=1:length(geneIDInfo) % for each gene (i.e. each 3D grid)
-        for k=1:size(geneMat{countLoop},1) % for each voxel
+        if (numVoxel-countVoxel+1)>10000
+            
+        for k=1:10000 % for each voxel
             % replace negative gene expression values with NaN (because -1 indicate absent data)
             isAbsent=(energyGrids{j}(coOrdsLowRange+(k-1))<0);
             if isAbsent
@@ -141,7 +143,7 @@ tic
 if numData>size(geneMatAll_new,1)
     error('number of data analyzed cannot be larger than number of available voxels')
 end
-[dataIndSelect,~]=datasample([1:size(geneMatAll_new,1)],numData,'replace',false);
+[dataIndSelect,~]=datasample([1:size(voxGeneMat,1)],numData,'replace',false);
 geneCorr=corrcoef((geneMatAll_new(dataIndSelect,:))','rows','pairwise');
 toc
 %% find out coordinates of the good voxels
