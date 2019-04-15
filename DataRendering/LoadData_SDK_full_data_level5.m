@@ -16,12 +16,19 @@ if nargin < 2
     whatNorm = 'scaledSigmoid'; % 'maxmin', 'scaledSigmoid'
 end
 
-cd 'D:\Data\DevelopingAllenMouseAPI-master\API data\Unionizes'
 %-------------------------------------------------------------------------------
 % Specify structures:
 %-------------------------------------------------------------------------------
 
-structures={'r4B','POR','r3F','r10F','THyA','r1R','p2R','r4F','r7B','p1R','p1A','r1B','m1B','m2B','p3F','r5F','isA','r9F','p1B','r3R','m2F','r10B','r6R','r9A','r9R','r10R','POA','p3R','r6A','r4A','isB','m2R','p1F','m2A','r9B','r7R','isF','r8R','r6B','r8F','r8A','r4R','p2A','p3A','r3A','PHyB','m1R','r3B','THyF','p2F','THyB','p2B','r7F','r11R','r1A','r5B','p3B','r2A','r11A','r11B','isR','r7A','r2R','r6F','r11F','PHyA','r2F','r5A','r5R','r8B','r10A','TelA','m1F','r1F','PHyF','m1A','r2B','TelR'};
+structures = {'r4B','POR','r3F','r10F','THyA','r1R','p2R','r4F','r7B','p1R',...
+                'p1A','r1B','m1B','m2B','p3F','r5F','isA','r9F','p1B','r3R',...
+                'm2F','r10B','r6R','r9A','r9R','r10R','POA','p3R','r6A','r4A',...
+                'isB','m2R','p1F','m2A','r9B','r7R','isF','r8R','r6B','r8F','r8A',...
+                'r4R','p2A','p3A','r3A','PHyB','m1R','r3B','THyF','p2F','THyB',...
+                'p2B','r7F','r11R','r1A','r5B','p3B','r2A','r11A','r11B','isR',...
+                'r7A','r2R','r6F','r11F','PHyA','r2F','r5A','r5R','r8B','r10A',...
+                'TelA','m1F','r1F','PHyF','m1A','r2B','TelR'};
+
 %ownStructure = [ones(1,34),0,0]; % specifies if each structure is it's own entity (AON and COA consists of several structures)
 % (needs to have all ones first)
 numStructures = length(structures);
@@ -73,7 +80,7 @@ geneList = geneList(hasData);
 geneEntrez = geneEntrez(hasData);
 numGenes = length(geneList);
 
-for i = 1:length(expMeasure) 
+for i = 1:length(expMeasure)
     fieldName = expMeasure{i};
     for j = 1:numStructures
         Exp.(fieldName).raw{j} = Exp.(fieldName).raw{j}(:,hasData); % only retain genes fulfilling criteria
@@ -124,13 +131,13 @@ end
 %----Save as normStructure field for each gene separately (z score normalized across structures)
 % 7 or 8 (with P56) [time] x 2104 [gene] x 5 [structure]
 % allRawData = MakeMatrix(Exp.(expMeasure{g}).raw);
-allRawData_structure = MakeMatrix(Exp.Energy.raw); 
+allRawData_structure = MakeMatrix(Exp.Energy.raw);
 meanStructure = nanmean(allRawData_structure,3); % take mean across structure
 stdStructure = zeros(size(Exp.Energy.raw{1}));
 
 for i=1:length(timePoints)
     timeSlice=squeeze(allRawData_structure(i,:,:))'; % this is 2100 (genes) x 78 (structure)
-    stdStructure(i,:)=nanstd(timeSlice); 
+    stdStructure(i,:)=nanstd(timeSlice);
 end
 
 for g = 1:length(expMeasure)
