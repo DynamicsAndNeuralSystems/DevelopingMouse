@@ -54,7 +54,6 @@ geneEntrez = xlsread('SDK_geneEntrez.csv');
 
 numGenes = length(geneList);
 
-
 %-------------------------------------------------------------------------------
 % Filter on expression energy
 %-------------------------------------------------------------------------------
@@ -75,7 +74,8 @@ end
 hasData = (sum(hasData,2) > 0); % returns a logical column vector, 1=gene has at least 1 structure fulfilling the criteria
 
 % Now filter gene list based on these criteria (for all structures)
-fprintf(1, 'Filtering gene list from %u down to %u using ''%s''\n',numGenes,sum(hasData),filterHow);
+fprintf(1, 'Filtering gene list from %u down to %u using ''%s''\n',...
+                numGenes,sum(hasData),filterHow);
 geneList = geneList(hasData);
 geneEntrez = geneEntrez(hasData);
 numGenes = length(geneList);
