@@ -1,7 +1,7 @@
-function makeAnnotationGrid()
-%% user input 
+function makeAnnotationGrids()
+%% user input
 % user input folder location of annotation files downloaded from API
-gridAnno_loc=fullfile('Data','API','GridData');
+gridAnno_loc=fullfile('Data','API','AnnotationData');
 % user input folder location of gene expression data downloaded from API
 % expression_loc=fullfile('Data','API','AnnotationData');
 
@@ -27,7 +27,7 @@ timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 %%
 % initialize
 % energyGrids=cell(length(timePoints),1);
-% 
+%
 % timePointInfo=cell(length(timePoints),1);
 % geneIDInfo=cell(length(timePoints),1);
 annotationGrids=cell(length(timePoints),1);
