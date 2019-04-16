@@ -5,6 +5,9 @@ gridAnno_loc=fullfile('Data','API','AnnotationData');
 % user input folder location of gene expression data downloaded from API
 % expression_loc=fullfile('Data','API','AnnotationData');
 
+% Folder to save the created matlab variables
+folder_save=fullfile('Data','Matlab_variables');
+
 %% load the files
 %dataType=whatData; % energy originally
 % obtain the timepoint names
@@ -39,6 +42,6 @@ for i=1:length(timePoints) % for each time point%
 %     isNotAnno=annotationGrids{i}==0;
 end
 %% save variables
-str=fullfile('Data','Matlab_variables','annotationGrids.mat');
+str=strcat(folder_save,'\','annotationGrids.mat');
 save(str,'annotationGrids')
 end
