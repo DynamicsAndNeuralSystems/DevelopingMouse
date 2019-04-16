@@ -1,7 +1,6 @@
-function readGridData(whatTimePointNow)
-%% load the files
-tic
 
+function readGridData(whatTimePointNow)
+%% 
 timePointNow=whatTimePointNow;
 % Location of saved API gene expression data
 expression_loc=fullfile('Data','API','GridData');
@@ -31,6 +30,7 @@ steps=length(A);
 for j=1:length(A)
     fileStr=strcat(strcat(expression_loc,'\',fileTimePoints{i}),'\',A(j).name,'\','energy.raw');
     % ENERGY = 3-D matrix of expression energy grid volume
+    % load files
     fid = fopen(fileStr, 'r', 'l' );
     energyGrids{j} = fread( fid, prod(sizeGrids.(timePoints{i})), 'float' );
     fclose( fid );
@@ -48,5 +48,4 @@ str=strcat(folder_save,'\','timePointInfo_',timePoints{i},'.mat');
 save(str,'timePointInfo')
 str=strcat(folder_save,'\','geneIDInfo_',timePoints{i},'.mat');
 save(str,'geneIDInfo')
-
-toc
+end
