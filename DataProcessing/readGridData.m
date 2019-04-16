@@ -8,9 +8,6 @@ sizeGrids=struct('E11pt5',[70,75,40],'E13pt5',[89,109,69],'E15pt5',[94,132,65],'
 %% specify directories
 % Location of saved API gene expression data expressed in a cell
 expression_loc=fullfile('Data','API','GridData',fileTimePoints{timePointIndex});
-
-% Folder to save the created matlab variables
-folder_save=fullfile('Data','Matlab_variables');
 %%
 A=dir(expression_loc);
 % remove hidden files
@@ -47,10 +44,15 @@ close(h)
 %% redirect to home directory
 cd(currentFolder);
 %%
-str=strcat(folder_save,'\','energyGrids_',timePoints{timePointIndex},'.mat');
+var_name1=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
+str=fullfile('Data','Matlab_variables',var_name1);
 save(str,'energyGrids','-v7.3')
-str=strcat(folder_save,'\','timePointInfo_',timePoints{timePointIndex},'.mat');
+
+var_name2=strcat('timePointInfo_',timePoints{timePointIndex},'.mat');
+str=fullfile('Data','Matlab_variables',var_name2);
 save(str,'timePointInfo')
-str=strcat(folder_save,'\','geneIDInfo_',timePoints{timePointIndex},'.mat');
+
+var_name3=strcat('geneIDInfo_',timePoints{timePointIndex},'.mat');
+str=fullfile('Data','Matlab_variables',var_name3);
 save(str,'geneIDInfo')
 end

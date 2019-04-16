@@ -1,3 +1,3 @@
-function [distances] = computeDistances(distMat)
+function [distances] = extractDistances(distMat)
 distances=distMat(find(triu(ones(size(distMat)),1)));
 end

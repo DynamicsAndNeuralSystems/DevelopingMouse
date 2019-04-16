@@ -7,12 +7,12 @@ load('voxelGeneCoexpression_all') % contains 'voxGeneMat_all','distMat_all','dat
 %---------------------------------------------------------------------
 % Plot gene coexpression against distance
 %---------------------------------------------------------------------
-for i = 1:length(timePoints)
+for i = 1 %:length(timePoints)
     % extract the correlation coefficients
     geneCorr=corrcoef((voxGeneMat_all{i}(dataIndSelect_all{i},:))','rows','pairwise');
     corrCoeff=geneCorr(find(triu(ones(size(geneCorr)),1)));
-    % extract distances from distance matrix
-    distances = extractDistances(distMat_all{i});
+    % compute distances
+    distances = computeDistances(distMat_all{i});
     % plot coexpression against distance
     f=figure('color','w');
     gcf;
@@ -24,9 +24,11 @@ for i = 1:length(timePoints)
     f=figureFullScreen(f,true); 
     % save the figure
     filename=strcat('scatter_voxel','_',timePoints{i},'.jpeg');
-    str=fullfile('Data','Outs','scatter_voxel',filename);
-    saveas(f,str)
+    str=fullfile('Data','Outs');
+    saveas(f,filename)
 end
+
+
 %---------------------------------------------------------------------
 % fitting
 %---------------------------------------------------------------------
