@@ -1,13 +1,12 @@
+function readGridData(whatTimePointNow)
 %% load the files
-%  grid volume size
 tic
 
-% user input: current time point
-timePointNow={'E15.5'};
-% user input: location of saved API gene expression data
-expression_loc='D:\Data\DevelopingAllenMouseAPI-master\API data\GridData';
-% user input: folder to save the created matlab variables
-folder_save='D:\Data\DevelopingMousePhase2\readGridData';
+timePointNow=whatTimePointNow;
+% Location of saved API gene expression data
+expression_loc=fullfile('Data','API','GridData');
+% Folder to save the created matlab variables
+folder_save=fullfile('Data','Matlab_variables');
 
 fileTimePoints={'E11.5','E13.5','E15.5','E18.5','P4','P14','P28'};
 i=find(cellfun(@(c)strcmp(timePointNow,c),fileTimePoints)); %match index to the chosen timepoint
