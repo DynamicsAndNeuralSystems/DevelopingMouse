@@ -1,7 +1,8 @@
 # Developing Mouse Scripts
 
 ## Retrieve data from Allen API
-Fills the `Data` directory.
+*pip install allensdk
+*Fills the `Data` directory.
 
 ### Voxel-level expression data
 
