@@ -2,105 +2,81 @@ from allensdk.api.queries.rma_api import RmaApi
 import pandas as pd
 import os
 
+MOUSE_GRAPH_ID = 17
+
+def getStructureInfo(structure_level, other_criteria):
+    api = RmaApi()
+    STRUCTURE_LEVEL=structure_level
+    OTHER_CRITERIA=other_criteria
+
+    structures = pd.DataFrame(
+        api.model_query('Structure',
+                        criteria=('[graph_id$eq%d]' % MOUSE_GRAPH_ID)+\
+                        ('[st_level$eq%d]' % STRUCTURE_LEVEL)+\
+                        (str(OTHER_CRITERIA)),
+                        num_rows='all'))
+    return structures
+
 def main():
     os.chdir(r'D:\Data\DevelopingAllenMouseAPI-master\Git')
 
     api = RmaApi()
 
-    structures = pd.DataFrame(
-        api.model_query('Structure',
-                        criteria='[graph_id$eq17][st_level$eq5]\
-                        [acronym$nev_r11A]\
-                        [acronym$nev_r10A]\
-                        [acronym$nev_SpB]\
-                        [acronym$nev_POA]\
-                        [acronym$nev_r5A]\
-                        [acronym$nev_r5R]\
-                        [acronym$nev_r3R]\
-                        [acronym$nev_r11B]\
-                        [acronym$nev_TelR]\
-                        [acronym$nev_r6B]\
-                        [acronym$nev_POR]\
-                        [acronym$nev_r2F]\
-                        [acronym$nev_r9B]\
-                        [acronym$nev_m2R]\
-                        [acronym$nev_r8R]\
-                        [acronym$nev_r7R]\
-                        [acronym$nev_THyB]\
-                        [acronym$nev_m2A]\
-                        [acronym$nev_r11F]\
-                        [acronym$nev_isA]\
-                        [acronym$nev_r6F]\
-                        [acronym$nev_p3B]\
-                        [acronym$nev_r9F]\
-                        [acronym$nev_r3F]\
-                        [acronym$nev_isF]\
-                        [acronym$nev_m2B]\
-                        [acronym$nev_r3F]\
-                        [acronym$nev_isF]\
-                        [acronym$nev_m2B]\
-                        [acronym$nev_r8A]\
-                        [acronym$nev_isR]\
-                        [acronym$nev_r3B]\
-                        [acronym$nev_SpF]\
-                        [acronym$nev_r6R]\
-                        [acronym$nev_r3A]\
-                        [acronym$nev_r4A]\
-                        [acronym$nev_r7F]\
-                        [acronym$nev_r1F]\
-                        [acronym$nev_r4B]\
-                        [acronym$nev_r5F]\
-                        [acronym$nev_THyF]\
-                        [acronym$nev_p2A]\
-                        [acronym$nev_r7B]\
-                        [acronym$nev_SpA]\
-                        [acronym$nev_r2B]\
-                        [acronym$nev_r8F]\
-                        [acronym$nev_p1A]\
-                        [acronym$nev_r1R]\
-                        [acronym$nev_p3A]\
-                        [acronym$nev_p1R]\
-                        [acronym$nev_p2B]\
-                        [acronym$nev_TelA]\
-                        [acronym$nev_r8B]\
-                        [acronym$nev_m1R]\
-                        [acronym$nev_r1A]\
-                        [acronym$nev_r10B]\
-                        [acronym$nev_p2R]\
-                        [acronym$nev_p3R]\
-                        [acronym$nev_r5B]\
-                        [acronym$nev_isB]\
-                        [acronym$nev_THyA]\
-                        [acronym$nev_p1F]\
-                        [acronym$nev_r1B]\
-                        [acronym$nev_m1A]\
-                        [acronym$nev_p2F]\
-                        [acronym$nev_r4R]\
-                        [acronym$nev_r4F]\
-                        [acronym$nev_r9R]\
-                        [acronym$nev_r9A]\
-                        [acronym$nev_r10F]\
-                        [acronym$nev_m2F]\
-                        [acronym$nev_r10R]\
-                        [acronym$nev_p1B]\
-                        [acronym$nev_PHyB]\
-                        [acronym$nev_r2R]\
-                        [acronym$nev_r7A]\
-                        [acronym$nev_p3F]\
-                        [acronym$nev_r2A]\
-                        [acronym$nev_SpR]\
-                        [acronym$nev_m1F]\
-                        [acronym$nev_r6A]\
-                        [acronym$nev_r11R]\
-                        [acronym$nev_m1B]\
-                        [acronym$nev_PHyF]\
-                        [acronym$nev_PHyA]\
-                        [parent_structure_id$ne17651]',
-                        num_rows='all'))
+    # download level 5 structures
+    other_criteria_level5 = '[parent_structure_id$ne126651574]\
+                            [parent_structure_id$ne126651586]\
+                            [parent_structure_id$ne126651606]\
+                            [parent_structure_id$ne126651618]\
+                            [parent_structure_id$ne126651642]\
+                            [parent_structure_id$ne126651654]\
+                            [parent_structure_id$ne126651670]\
+                            [parent_structure_id$ne126651682]\
+                            [parent_structure_id$ne126651698]\
+                            [parent_structure_id$ne126651710]\
+                            [parent_structure_id$ne126651730]\
+                            [parent_structure_id$ne126651742]\
+                            [parent_structure_id$ne126651758]\
+                            [parent_structure_id$ne126651770]\
+                            [parent_structure_id$ne126651790]\
+                            [parent_structure_id$ne126651810]\
+                            [parent_structure_id$ne126651830]\
+                            [parent_structure_id$ne126651854]\
+                            [parent_structure_id$ne126651874]\
+                            [parent_structure_id$ne126651898]\
+                            [parent_structure_id$ne126651918]\
+                            [parent_structure_id$ne126651942]\
+                            [parent_structure_id$ne126651962]\
+                            [parent_structure_id$ne126651982]\
+                            [parent_structure_id$ne126652002]\
+                            [parent_structure_id$ne126652022]\
+                            [parent_structure_id$ne17651]\
+                            [parent_structure_id$ne126652042]'
+
+    structures=getStructureInfo(structure_level=5, other_criteria=other_criteria_level5)
+
+    STRUCTURE_LEVEL = 5
 
     abs_dir = os.path.dirname(__file__)
     rel_dir = os.path.join(abs_dir, './Data/API/Structures')
-    data = ''.join([rel_dir, '/structureData_level5.csv'])
+    data = ''.join([rel_dir, '/structureData_level%d.csv' % STRUCTURE_LEVEL])
+    structures.to_csv(data)
+
+    # download level 3 structures
+
+    other_criteria_level3 = '[parent_structure_id$ne126651566]\
+                            [parent_structure_id$ne126651634]\
+                            [parent_structure_id$ne126651722]\
+                            [parent_structure_id$ne126651786]\
+                            [parent_structure_id$ne126651850]\
+                            [parent_structure_id$ne126651894]\
+                            [parent_structure_id$ne126651938]'
+    structures=getStructureInfo(structure_level=3, other_criteria=other_criteria_level3)
+
+    STRUCTURE_LEVEL = 3
+
+    abs_dir = os.path.dirname(__file__)
+    rel_dir = os.path.join(abs_dir, './Data/API/Structures')
+    data = ''.join([rel_dir, '/structureData_level%d.csv' % STRUCTURE_LEVEL])
     structures.to_csv(data)
 
 if __name__ == '__main__':

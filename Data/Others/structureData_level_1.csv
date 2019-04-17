@@ -1,9 +1,0 @@
-,acronym,atlas_id,color_hex_triplet,depth,failed,failed_facet,graph_id,graph_order,hemisphere_id,id,name,neuro_name_structure_id,neuro_name_structure_id_path,ontology_id,parent_structure_id,safe_name,sphinx_id,st_level,structure_id_path,structure_name_facet,weight
-0,H,,EA37FF,2,False,734881840,17,1308,3,16808,hindbrain,,,12,15565,hindbrain,11208,1,/15564/15565/16808/,4078864362,8390
-1,SpC,,EBE3D5,2,False,734881840,17,2397,3,17651,spinal cord,,,12,15565,spinal cord,12297,1,/15564/15565/17651/,1633110081,8390
-2,v_M,,17B317,2,False,734881840,17,2607,3,126651722,"ventricles, midbrain",,,12,126651558,ventricles midbrain,12507,1,/15564/126651558/126651722/,448794744,8390
-3,v_F,,C35C2E,2,False,734881840,17,2567,3,126651562,"ventricles, forebrain",,,12,126651558,ventricles forebrain,12467,1,/15564/126651558/126651562/,417545302,8390
-4,M,,17B317,2,False,734881840,17,1132,3,16649,midbrain,,,12,15565,midbrain,11032,1,/15564/15565/16649/,3596836837,8390
-5,F,,C86A39,2,False,734881840,17,2,3,15566,forebrain,,,12,15565,forebrain,9902,1,/15564/15565/15566/,2526114016,8390
-6,v_H,,EA37FF,2,False,734881840,17,2622,3,126651782,"ventricles, hindbrain",,,12,126651558,ventricles hindbrain,12522,1,/15564/126651558/126651782/,2104281948,8390
-7,v_SpC,,EBE3D5,2,False,734881840,17,2687,3,126652042,"ventricles, spinal cord",,,12,126651558,ventricles spinal cord,12587,1,/15564/126651558/126652042/,2896347830,8390
