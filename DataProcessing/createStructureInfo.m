@@ -138,5 +138,5 @@ end
 %------------------------------------------------------------------------
 % Save the variable
 %------------------------------------------------------------------------
-str=fullfile('Data','Matlab_variables', 'dataDevMouse.mat');
+str=fullfile('Matlab_variables', 'dataDevMouse.mat');
 save(str,'dataDevMouse');

@@ -21,15 +21,12 @@ for i = 1:length(timePoints)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
     str = sprintf('Developing Mouse %s',timePoints{i});
     title(str,'Fontsize',19);
-    f=figureFullScreen(f,true); 
+    f=figureFullScreen(f,true);
     % save the figure
     filename=strcat('scatter_voxel','_',timePoints{i},'.jpeg');
-    str=fullfile('Data','Outs','scatter_voxel',filename);
+    str=fullfile('Outs','scatter_voxel',filename);
     saveas(f,str)
 end
 %---------------------------------------------------------------------
 % fitting
 %---------------------------------------------------------------------
-
-
-
