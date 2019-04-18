@@ -60,8 +60,8 @@ Using z-score for norm field: `MakeDevMouseGeneExpression_zscore.m`
 Note: the `.csv` files are stored in `Data` folder
 
 ## Analysis
-
-
+* `geneCoexpression_scatter_voxel` plots gene coexpression against distance separation at the voxel level
+* All figures are saved in Data/Outs
 ## Testing
 
 ### Distance comparison
