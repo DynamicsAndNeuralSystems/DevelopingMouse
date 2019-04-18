@@ -1,8 +1,11 @@
 # Developing Mouse Scripts
 
 ## Retrieve data from Allen API
-`pip install allensdk`
+Download Allen API package by `pip install allensdk`
 Fills the `Data` directory.
+structure.py : structure colours
+
+
 
 ### Voxel-level expression data
 
