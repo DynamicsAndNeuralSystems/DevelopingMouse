@@ -1,3 +1,4 @@
+clearvars
 %---------------------------------------------------------------------
 % initialize and load variables
 %---------------------------------------------------------------------
@@ -7,16 +8,20 @@ load('voxelGeneCoexpression_all') % contains 'voxGeneMat_all','distMat_all','dat
 %---------------------------------------------------------------------
 % Plot gene coexpression against distance
 %---------------------------------------------------------------------
+% initialize
+distances_all = cell(length(timePoints),1);
+corrCoeff_all = cell(length(timePoints),1);
+% create variables and plot
 for i = 1:length(timePoints)
     % extract the correlation coefficients
     geneCorr=corrcoef((voxGeneMat_all{i}(dataIndSelect_all{i},:))','rows','pairwise');
-    corrCoeff=geneCorr(find(triu(ones(size(geneCorr)),1)));
+    corrCoeff_all{i}=geneCorr(find(triu(ones(size(geneCorr)),1)));
     % extract distances from distance matrix
-    distances = extractDistances(distMat_all{i});
+    distances_all{i} = extractDistances(distMat_all{i});
     % plot coexpression against distance
     f=figure('color','w');
     gcf;
-    scatter(distances,corrCoeff,'.')
+    scatter(distances_all{i},corrCoeff_all{i},'.')
     xlabel('Separation Distance (um)','FontSize',16)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
     str = sprintf('Developing Mouse %s',timePoints{i});
@@ -28,5 +33,7 @@ for i = 1:length(timePoints)
     saveas(f,str)
 end
 %---------------------------------------------------------------------
-% fitting
+% save variables
 %---------------------------------------------------------------------
+str=fullfile('Matlab_variables','corrCoeffAll_distanceAll.mat');
+save(str, 'distances_all', 'corrCoeff_all');
