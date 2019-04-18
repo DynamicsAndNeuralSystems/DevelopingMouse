@@ -1,9 +1,9 @@
 # Developing Mouse Scripts
 
 ## Retrieve data from Allen API
-Download Allen API package by `pip install allensdk`
-Fills the `Data` directory.
-structure.py : structure colours
+* Fills the `Data` directory.
+* First download Allen API package by `pip install allensdk`
+* Run `structure.py` to download structure information
 
 
 
@@ -37,6 +37,9 @@ Allen RMA API query `classes.ipynb` OR `Allen+RMA+API+query+classes.py`
 ## Data processing
 
 Convert downloaded data into Matlab variables, fills the `DataRendering` [`ProcessedData`] directory.
+* `createStructureInfo.m` creates a Matlab variable `dataDevMouse.mat` containing structure information, including structure abbreviation, ID, colour, coordinates, major division abbreviation (the level 3 structure it belongs to), major division colour, a table containing the above info, and distance matrix
+* `createGeneCoexpressionMatrix.m` creates a Matlab variable containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis) for 7 time points
+
 
 * Extracted coordinates (`coOrds_AdultMouse.csv`) and ID (`ID_AdultMouse.csv`) of adult mouse structures from the file "coOrds_AdultMouse.csv": `extractCoords_allenserver.m`
 * Obtain the list of adult mouse structure abbreviation (`acronym_AdultMouse.csv`) using the list of structure ID
