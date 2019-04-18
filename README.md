@@ -62,6 +62,8 @@ Note: the `.csv` files are stored in `Data` folder
 
 ## Analysis
 * `geneCoexpression_scatter_voxel` plots gene coexpression against distance separation at the voxel level
+* `createFitting` fits the data to a few types of curves, plots decay constant (3 parameter exponential fitting) against maximum distance in each time point); and save the fitting statistic, decay constant and maximum distance to `fitting.mat`
+* `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
 * All figures are saved in Outs
 ## Testing
 
