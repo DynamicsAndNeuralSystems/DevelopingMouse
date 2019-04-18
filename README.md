@@ -40,7 +40,7 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `createStructureInfo.m` creates a Matlab variable `dataDevMouse.mat` containing structure information, including structure abbreviation, ID, colour, coordinates, major division abbreviation (the level 3 structure it belongs to), major division colour, a table containing the above info, and distance matrix
 * `createGeneExpressionMatrix.m` creates a Matlab variable containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis) for 7 time points
 * `createDevMouseGeneExpression` creates gene expression matrices normalized by different methods
-
+* Matlab variables are saved in the folder `Matlab_variables`
 
 * Extracted coordinates (`coOrds_AdultMouse.csv`) and ID (`ID_AdultMouse.csv`) of adult mouse structures from the file "coOrds_AdultMouse.csv": `extractCoords_allenserver.m`
 * Obtain the list of adult mouse structure abbreviation (`acronym_AdultMouse.csv`) using the list of structure ID
@@ -62,7 +62,7 @@ Note: the `.csv` files are stored in `Data` folder
 
 ## Analysis
 * `geneCoexpression_scatter_voxel` plots gene coexpression against distance separation at the voxel level
-* All figures are saved in Data/Outs
+* All figures are saved in Outs
 ## Testing
 
 ### Distance comparison
