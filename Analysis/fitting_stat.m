@@ -1,5 +1,5 @@
 % usage:
-% whatfitMethods is a structure containing one or more methods
+% whatfitMethods is a cell containing one or more methods as strings
 function fitting_stat(whatfitMethods, whatNorm, xData, yData)
     % initializa
     adjRSquare=struct();

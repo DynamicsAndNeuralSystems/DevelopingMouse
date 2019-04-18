@@ -21,7 +21,7 @@ id = dataArray_id{:, 1};
 
 %Clear temporary variables
 clearvars filename formatSpec_acronym formatSpec_color formatSpec_id dataArray_color dataArray_acronym dataArray_id;
-%%
+
 %------------------------------------------------------------------------
 % Import reference space ID from StructureCenter.
 %------------------------------------------------------------------------
@@ -38,11 +38,11 @@ structure_reference_space_id = dataArray_reference_space_id{:, 1};
 
 % Clear temporary variables
 clearvars filename formatSpec_structure_id formatSpec_reference_space_id dataArray_structure_id dataArray_reference_space_id;
-%%
+
 %------------------------------------------------------------------------
 % Import acronym path from AcronymPath.
 %------------------------------------------------------------------------
-%%
+
 filename = fullfile('Data','API','Structures','AcronymPath_level5.csv');
 
 formatSpec_AcronymPath = '%*q%q%q%[^\n\r]';
@@ -62,7 +62,6 @@ end
 % Create output variable
 acronymPathlevel5clean = raw;
 
-%%
 %------------------------------------------------------------------------
 % Import import level 3 acronym and color from Structure
 %------------------------------------------------------------------------
@@ -70,14 +69,12 @@ filename = fullfile('Data','API','Structures','structureData_level3.csv');
 acronym_level3 = readInXLS(filename, 'B2:B20');
 color_level3 = readInXLS(filename, 'D2:D20');
 clearvars filename
-%%
 %------------------------------------------------------------------------
 % Import coordinates from Structure Center
 %------------------------------------------------------------------------
 filename = fullfile('Data','API','Structures','structureCenters_level5.csv');
 coOrds=csvread(filename,1,4,[1,4,805,6]);
 clearvars filename
-%% 
 %------------------------------------------------------------------------
 % Create the variable
 %------------------------------------------------------------------------
