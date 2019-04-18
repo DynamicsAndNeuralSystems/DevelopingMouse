@@ -39,6 +39,7 @@ Allen RMA API query `classes.ipynb` OR `Allen+RMA+API+query+classes.py`
 Convert downloaded data into Matlab variables, fills the `DataRendering` [`ProcessedData`] directory.
 * `createStructureInfo.m` creates a Matlab variable `dataDevMouse.mat` containing structure information, including structure abbreviation, ID, colour, coordinates, major division abbreviation (the level 3 structure it belongs to), major division colour, a table containing the above info, and distance matrix
 * `createGeneCoexpressionMatrix.m` creates a Matlab variable containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis) for 7 time points
+* `createDevMouseGeneExpression` creates gene expression matrices normalized by different methods
 
 
 * Extracted coordinates (`coOrds_AdultMouse.csv`) and ID (`ID_AdultMouse.csv`) of adult mouse structures from the file "coOrds_AdultMouse.csv": `extractCoords_allenserver.m`
