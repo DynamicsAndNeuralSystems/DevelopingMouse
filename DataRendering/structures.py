@@ -2,25 +2,55 @@ from allensdk.api.queries.rma_api import RmaApi
 import pandas as pd
 import os
 
+api = RmaApi()
+
 MOUSE_GRAPH_ID = 17
 
 def getStructureInfo(structure_level, other_criteria):
-    api = RmaApi()
     STRUCTURE_LEVEL=structure_level
     OTHER_CRITERIA=other_criteria
 
     structures = pd.DataFrame(
         api.model_query('Structure',
                         criteria=('[graph_id$eq%d]' % MOUSE_GRAPH_ID)+\
-                        ('[st_level$eq%d]' % STRUCTURE_LEVEL)+\
-                        (str(OTHER_CRITERIA)),
+                                ('[st_level$eq%d]' % STRUCTURE_LEVEL)+\
+                                (str(OTHER_CRITERIA)),
                         num_rows='all'))
     return structures
 
-def main():
-    os.chdir(r'D:\Data\DevelopingAllenMouseAPI-master\Git')
+def getCentreCoordinates_DevMouse(structure_level):
+    STRUCTURE_LEVEL=structure_level
 
-    api = RmaApi()
+    structure_centers = pd.DataFrame(
+    api.model_query('StructureCenter',
+                    criteria='structure'+\
+                            ('[st_level$eq%d]' % STRUCTURE_LEVEL)+\
+                            ('[graph_id$eq%d]' % MOUSE_GRAPH_ID),
+                    num_rows='all'))
+    return structure_centers
+
+def getCentreCoordinates_AdultMouse():
+    structure_centers_adult = pd.DataFrame(
+    api.model_query('StructureCenter',
+                    criteria='structure[graph_id$eq1]',
+                    num_rows='all'))
+    return structure_centers_adult
+
+def getAcronymPath(structure_level, other_criteria):
+    STRUCTURE_LEVEL=structure_level
+    OTHER_CRITERIA=other_criteria
+
+    OntologyNode = pd.DataFrame(
+    api.model_query('OntologyNode',
+                    criteria='structure'+\
+                            ('[st_level$eq%d]' % STRUCTURE_LEVEL)+\
+                            ('[graph_id$eq%d]' % MOUSE_GRAPH_ID)+\
+                            (str(OTHER_CRITERIA)),
+                    num_rows='all'))
+    return OntologyNode
+
+def main():
+    os.chdir(r'D:\Data\DevelopingAllenMouseAPI-master\Git') # user input the Git directory as on their computer here
 
     # download level 5 structures
     other_criteria_level5 = '[parent_structure_id$ne126651574]\
@@ -56,13 +86,14 @@ def main():
 
     STRUCTURE_LEVEL = 5
 
+    # specify the directories
     abs_dir = os.path.dirname(__file__)
     rel_dir = os.path.join(abs_dir, './Data/API/Structures')
+
     data = ''.join([rel_dir, '/structureData_level%d.csv' % STRUCTURE_LEVEL])
     structures.to_csv(data)
 
     # download level 3 structures
-
     other_criteria_level3 = '[parent_structure_id$ne126651566]\
                             [parent_structure_id$ne126651634]\
                             [parent_structure_id$ne126651722]\
@@ -74,10 +105,25 @@ def main():
 
     STRUCTURE_LEVEL = 3
 
-    abs_dir = os.path.dirname(__file__)
-    rel_dir = os.path.join(abs_dir, './Data/API/Structures')
     data = ''.join([rel_dir, '/structureData_level%d.csv' % STRUCTURE_LEVEL])
     structures.to_csv(data)
+
+    # Download coordinates of centre of developing mouse structures
+    structure_centers=getCentreCoordinates_DevMouse(structure_level=5)
+    STRUCTURE_LEVEL = 5
+    data = ''.join([rel_dir, '/structureCenters_level%d.csv' % STRUCTURE_LEVEL])
+    structure_centers.to_csv(data)
+
+    # Download coordinates of centre of adult mouse structures
+    structure_centers_adult=getCentreCoordinates_AdultMouse()
+    data = ''.join([rel_dir, '/structureCenters_adult.csv'])
+    structure_centers_adult.to_csv(data)
+
+    # download acronym path for developing mouse
+    OntologyNode=getAcronymPath(structure_level=5, other_criteria=other_criteria_level5)
+    STRUCTURE_LEVEL = 5
+    data = ''.join([rel_dir, '/AcronymPath_level%d.csv' % STRUCTURE_LEVEL])
+    OntologyNode.to_csv(data)
 
 if __name__ == '__main__':
     main()
