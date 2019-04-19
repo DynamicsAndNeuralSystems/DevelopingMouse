@@ -70,6 +70,7 @@ Note: the `.csv` files are stored in `Data` folder
 * `createFitting` fits the data to a few types of curves, plots decay constant (3 parameter exponential fitting) against maximum distance in each time point); and save the fitting statistic, decay constant and maximum distance to `fitting.mat`
 * `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
 * `GeneCoexpression_scatter` plots gene coexpression against distance separation at the structure level
+* `compareDistanceMatrix` serves to validate the accuracy of our methodology of querying the API; it plots the MDS of API and Oh et al data, scatter3 plot of API data, and % error in distance (Oh et al as gold standard) against distance 
 
 * All figures are saved in Outs
 ## Testing
