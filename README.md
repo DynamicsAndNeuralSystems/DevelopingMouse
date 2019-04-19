@@ -1,12 +1,13 @@
 # Developing Mouse Scripts
 
 ## Retrieve data from Allen API
-* Fills the `Data` directory.
+* Fills the `Data/API` directory.
 * First download Allen API package by `pip install allensdk`
 * Run `structure.py` to download structure information
 
 ## Other raw data
-`A mesoscale connectome of the mouse brain supp table 4_ipsi` is obtained from supplementary table 4 of the Oh et. al paper, which contains a distance matrix of adult brain structures
+* `A mesoscale connectome of the mouse brain supp table 4_ipsi` is obtained from supplementary table 4 of the Oh et. al paper, which contains a distance matrix of adult brain structures
+* Stored in `Data/others`
 
 ### Voxel-level expression data
 
