@@ -1,16 +1,19 @@
+clearvars
+
 load('voxelGeneCoexpression_all.mat');
+load('corrCoeffAll_distanceAll.mat');
 % Initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 fitting_stat_all = struct();
-distances_all = cell(length(timePoints),1);
-corrCoeff_all = cell(length(timePoints),1);
+% distances_all = cell(length(timePoints),1);
+% corrCoeff_all = cell(length(timePoints),1);
 % Get correlation coefficient and distances
 for i = 1:length(timePoints)
     % extract the correlation coefficients
-    geneCorr=corrcoef((voxGeneMat_all{i}(dataIndSelect_all{i},:))','rows','pairwise');
-    corrCoeff_all{i}=geneCorr(find(triu(ones(size(geneCorr)),1)));
-    % extract distances from distance matrix
-    distances_all{i} = extractDistances(distMat_all{i});
+    % geneCorr=corrcoef((voxGeneMat_all{i}(dataIndSelect_all{i},:))','rows','pairwise');
+    % corrCoeff_all{i}=geneCorr(find(triu(ones(size(geneCorr)),1)));
+    % % extract distances from distance matrix
+    % distances_all{i} = extractDistances(distMat_all{i});
     % fit
     [fitting_stat_all.(timePoints{i}).adjRSquare, fitting_stat_all.(timePoints{i}).fitObject,fitting_stat_all.(timePoints{i}).fHandle]=fitting_stat({'linear','exp_1_0','exp1','exp'}, '', distances_all{i}, corrCoeff_all{i});
 end
@@ -25,7 +28,7 @@ theStyle = '-';
 theLineWidth = 2;
 % create the figure
 b=figure('color','w');
-for i=1:7
+for i=1:length(timePoints)
     % collect decay constant
     decayConstant(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.n;
     theColor=cmapOut(i,:);

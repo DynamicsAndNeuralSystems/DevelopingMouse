@@ -1,129 +1,45 @@
-%% acronym file opening
-% open acronym file with one word name (if the current acronym file has 2 word names, make them one word by hyphen to avoid error ('acronym_onewordname.csv' is the file with acronyms of all regions downloaded from Allen server with names changed to one word)
+% read in acronyms
 if exist('acronym_AdultMouse.csv','file')
-    fid = fopen('acronym_AdultMouse.csv','r');
-    structAcronyms = textscan(fid,'%s');
-    fclose(fid);
-    structAcronyms = structAcronyms{1};
+    % fid = fopen('acronym_AdultMouse.csv','r');
+    % structAcronyms = textscan(fid,'%s');
+    % fclose(fid);
+    structAcronyms = importfile_acronym('acronym_AdultMouse.csv')
 else
     error('acronym_AdultMouse.csv is missing')
 end
-%%
-%fid = fopen('acronym.csv','r');
-%regAcronyms = textscan(fid,'%s');
-%fclose(fid);
-%regAcronyms = regAcronyms{1};
-%%
+% read in coordinates
 if exist('coOrds_AdultMouse.csv','file')
     coOrds = csvread('coOrds_AdultMouse.csv');
 else
     error('coOrds_AdultMouse.csv is missing')
-%     % opening and combining Oh et al data
-%     centre_Oh_1_1=csvread('centre_Oh_1_1.csv');
-%     centre_Oh_2_1=csvread('centre_Oh_2_1.csv');
-%     centre_Oh_3_1=csvread('centre_Oh_3_1.csv');
-%     centre_Oh_combined_1=vertcat(centre_Oh_1_1,centre_Oh_2_1,centre_Oh_3_1);
-%     coOrds=centre_Oh_combined_1;
 end
-%%
+% read in ID
 if exist('ID_AdultMouse.csv','file')
     % import structure IDs
     ID=csvread('ID_AdultMouse.csv');
 else
     error('ID_AdultMouse.csv is missing')
-%     ID_Oh_1_1=csvread('ID_Oh_1_1.csv');
-%     ID_Oh_2_1=csvread('ID_Oh_2_1.csv');
-%     ID_Oh_3_1=csvread('ID_Oh_3_1.csv');
-%     ID_Oh_combined_1=vertcat(ID_Oh_1_1,ID_Oh_2_1,ID_Oh_3_1);
-%     ID=ID_Oh_combined_1;
 end
+% remove duplications
+[coOrds_clean,ia,~] = unique(coOrds,'rows','stable');
+structAcronyms_clean=structAcronyms(ia);
+ID_clean=ID(ia);
 
-
-%%
-%find out duplicate rows
-[~,ia,~] = unique(coOrds,'rows','stable');
-ixDupRows = setdiff(1:size(coOrds,1), ia);
-
-%% list the IDs of the duplicated coordinates
-%ID_of_Dup=ID(ixDupRows);
-% list duplicated coordinates
-dupCoOrds=coOrds(ixDupRows,:);
-%% make a loop thru duplicated coordinates to find out index pairs of duplicated coordinates
-dupIxPairs=cell(length(dupCoOrds),1);
-for i=1:length(dupCoOrds)
-    dupIxPairs{i}=find(ismember(coOrds,dupCoOrds(i,:),'rows'));
-end
-%% list the IDs of the repeated coordinates
-coOrdsDupID=cell(length(dupIxPairs),1);
-for i=1:length(dupIxPairs)
-    for j=1:length(dupIxPairs{i})
-        coOrdsDupID{i}(j)=ID(dupIxPairs{i}(j));
-    end
-end
-%%
-% find out duplicate IDs
-[~,ia,~]=unique(ID,'stable');
-ixDupID=setdiff(1:length(ID),ia);
-
-%% make a loop thru duplicated IDs to find out index pairs of duplicated IDs
-dupIxPairs_ID=cell(length(ixDupID),1);
-for i=1:length(dupIxPairs_ID)
-    dupIxPairs_ID{i}=find(ismember(ID,ID(ixDupID(i))));
-end
-%% what are the duplicate IDs
-dupID=ID(ixDupID);
-
-%% find out abbre of the repeated coordinates
-% coOrdsDupAcro=cell(length(dupIxPairs),1);
-% for i=1:length(dupIxPairs)
-%     for j=1:length(dupIxPairs{i})
-%         coOrdsDupAcro{i}(j)=structAcronyms{coOrdsDupID{i}(j)};
-%     end
-% end
-%% turn duplicate ID into NaN, and their corresponding coord to [NaN,NaN,NaN] and abbre to empty string
-ID_clean=ID;
-ID_clean(ixDupID,:)=NaN;
-coOrds_clean=coOrds;
-coOrds_clean(ixDupID,:)=repmat([NaN,NaN,NaN],length(ixDupID),1);
-structAcronyms_clean=structAcronyms;
-structAcronyms_clean(ixDupID)={''};
-
-%% turn duplicate rows from coOrds_clean into [NaN,NaN,NaN], and their corresponding ID into Nan, abbre to empty string
-coOrds_clean(ixDupRows,:)=repmat([NaN,NaN,NaN],length(ixDupRows),1);
-ID_clean(ixDupRows,:)=NaN;
-structAcronyms_clean(ixDupRows)={''};
-
-%%
-% remove all NaN from ID, coord, and empty string from abbre
-ID_clean(isnan(ID_clean))=[];
-coOrds_clean=coOrds_clean(~any(isnan(coOrds_clean),2),:);
-structAcronyms_clean=structAcronyms_clean(~cellfun('isempty',structAcronyms_clean));
-
-%% if no duplicate ID/coords need to be dealt with, proceed from here
-% ID_clean=ID;
-% structAcronyms_clean=structAcronyms;
-% coOrds_clean=coOrds;
-%%
-%-------------------------------------------------------------------------------
-%dataFile = '/Users/benfulcher/GoogleDrive/Work/CurrentProjects/CellTypesMouse/Code/AllenGeneDataset_19419.mat';
-%fprintf(1,'New Allen SDK-data from %s\n',dataFile);
-%load(dataFile,'structInfo');
+% load matlab variable containing adult mouse strcuture data
 if exist('structInfo.mat','file')
     load('structInfo.mat')
 else
     error('structInfo.mat is missing')
 end
-%%.
+
 % Match:
 [~,ia,ib] = intersect(structInfo.acronym,structAcronyms_clean,'stable');
-%%
 structInfo = structInfo(ia,:);
 coOrds_clean = coOrds_clean(ib,:);
-numRegions = height(structInfo);
-%% Also match structure acronyms for other uses (not for this current script)
 structAcronyms_clean=structAcronyms_clean(ib,:);
-%%
 ID_clean=ID_clean(ib,:);
+% obtain the number of regions of the table
+numRegions = height(structInfo);
 %%
 %-------------------------------------------------------------------------------
 % Get Euclidean distances and rescale to 2d
@@ -285,33 +201,3 @@ xlabel('Distance between structures in Oh et al (um)')
 ylabel('% error')
 t=title('Percentage error against separation distance in Oh et al');
 set(t,'Fontsize',18)
-%%
-% %% troubleshooting
-% % check whether IDs are the same
-% original_Oh_ID=csvread('ID_Oh.csv');
-% [C,iq,ir]=intersect(original_Oh_ID,ID,'rows','stable');
-%
-% %% troubleshooting
-% centre_Oh_1_original=csvread('centre_Oh_1.csv');
-% centre_Oh_1_new=csvread('centre_Oh_1_1.csv');
-% [E,ig,ih]=intersect(centre_Oh_1_original,centre_Oh_1_new,'rows','stable');
-
-
-%%
-% a=labels_Oh(ix);
-% b=structAcronyms_clean(iy);
-% strcmp(a,b);
-%% exporting
-% csvwrite('coOrds_clean.csv',coOrds_clean)
-% csvwrite('ID_clean.csv',ID_clean)
-% %% for strings
-% fid=fopen('structAcronyms_clean.csv','wt');
-% fprintf(fid,'%s,\n',structAcronyms_clean{:});
-% fclose(fid);
-% %%
-% save('Allen_2011mouse_coords.mat', 'coOrds_clean','ID_clean','structAcronyms_clean')
-%%
-% cd 'D:\Data\DevelopingAllenMouseAPI-master\Allen annotation volume\Reference space\Atlas 2011\Oh et al data\Basal data'
-% fid=fopen('labels_Oh.csv','wt');
-% fprintf(fid,'%s,\n',labels_Oh{:});
-% fclose(fid);

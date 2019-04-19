@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[19]:
-
-
 from allensdk.api.queries.ontologies_api import OntologiesApi
 from allensdk.core.structure_tree import StructureTree
 from allensdk.api.queries.mouse_connectivity_api import MouseConnectivityApi
@@ -142,7 +136,3 @@ tree.get_structure_sets()
 
 
 # In[ ]:
-
-
-
-

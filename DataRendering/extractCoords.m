@@ -1,4 +1,4 @@
-% extract the coordinates from the server
+% extract the coordinates 
 coOrds=csvread('structureCenters_adult.csv',1,4,[1,4,1474,6]);
 label=csvread('structureCenters_adult.csv',1,2,[1,2,1474,2]);
 %%
@@ -12,6 +12,8 @@ coOrds_is9=coOrds(is9,:);
 ID_is9=ID(is9);
 
 %% save
-dlmwrite('coOrds_AdultMouse.csv',coOrds_is9,'delimiter', ',', 'precision', 10);
+str = fullfile('Processed', 'coOrds_AdultMouse.csv');
+dlmwrite(str, coOrds_is9,'delimiter', ',', 'precision', 10);
 %%
-dlmwrite('ID_AdultMouse.csv',ID_is9,'delimiter', ',', 'precision', 10);
+str = fullfile('Processed', 'ID_AdultMouse.csv');
+dlmwrite(str,ID_is9,'delimiter', ',', 'precision', 10);
