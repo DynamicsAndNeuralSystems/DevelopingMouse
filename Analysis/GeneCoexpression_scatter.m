@@ -2,7 +2,7 @@ clearvars
 % user input: the
 whichField={'normStructure'};
 % user input: the percentage of genes missing above which to filter a structure
-filterThreshold = 0.1;
+filterThreshold = 0.9;
 % load variables
 load('dataDevMouse.mat')
 load('DevMouseGeneExpression.mat')
@@ -19,17 +19,17 @@ symbol={'o','^','<','v','^','square','diamond'};
 % distanceGlobal=[];
 % corrCoeffGlobal=[];
 
-for i=1%1:length(timePoints) % for each time point
+for i=1:length(timePoints) % for each time point
     slice=squeeze(gene3D(i,:,:)); % makes a matrix of 78 (structure) x 2100 (genes)
-    % filter off structures with more than 10% of genes missing
-    isMissing=(sum(~isnan(slice),2) <= filterThreshold*length(geneList));
-    slice_clean=slice(~isMissing,:);
+    % filter off structures with more than a certain threshold % of genes missing
+    isMissing=((sum(isnan(slice),1)) >= (filterThreshold*length(geneList)));
+    slice_clean=slice(:,~isMissing);
     % match the structure regions (because not all time points have all region coordinates available)
     [~,ia,ib]=intersect(char(structures(~isMissing)),dataDevMouse.(timePoints{i}).acronym,'stable');
     % only structures in which coordinates are available are used
-    slice_clean=slice_clean(ia,:);
+    slice_clean=slice_clean(:,ia);
     % compute correlation coefficient between region pairs
-    geneCorr{i} = corrcoef('slice_clean','rows','pairwise');
+    geneCorr{i} = corrcoef(slice_clean,'rows','pairwise');
     % extract the correlation coefficients
     corrCoeff=[];
     for j=2:size(geneCorr{i},2)
@@ -115,11 +115,13 @@ for i=1%1:length(timePoints) % for each time point
         t.Position=[1 yPosition(j)];
     end
 
-     str = sprintf('Developing Mouse over all time points');
+     str = sprintf('Developing Mouse %s gene coexpression vs distance',timePoints{i});
      title(str,'FontSize',19);
+     g=figureFullScreen(g,true);
+     set(g, 'PaperPositionMode', 'auto') % to save a figure that is the same size as the figure on the screen
 
      % save figure
      filename = strcat('GeneCoexpression_scatter','_', timePoints{i},'.jpeg');
-     str = fullfile('Outs','gene_coexpression_scatter');
+     str = fullfile('Outs','gene_coexpression_scatter',filename);
      saveas(g,str)
 end
