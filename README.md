@@ -41,6 +41,7 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `createGeneExpressionMatrix.m` creates a Matlab variable containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis) for 7 time points
 * `createDevMouseGeneExpression` creates gene expression matrices normalized by different methods
 * `extractCoords` extracts coordinates and ID of adult mouse (from `structureCenters_adult.csv`) with correct map ID into `coOrds_AdultMouse.csv` and `ID_AdultMouse.csv`
+* `getAcronymFromID.py` queries for adult mouse acronym from ID using `ID_AdultMouse.csv` as input, yielding `acronym_AdultMouse.csv`
 * Matlab variables are saved in the folder `Matlab_variables`
 * csv files are saved in the folder `Processed`
 
