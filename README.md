@@ -69,7 +69,7 @@ Note: the `.csv` files are stored in `Data` folder
 * `geneCoexpression_scatter_voxel` plots gene coexpression against distance separation at the voxel level
 * `createFitting` fits the voxel and structure data to a few types of curves, plots decay constant (3 parameter exponential fitting) against maximum distance in each time point); and save the fitting statistic, decay constant and maximum distance to `fitting.mat`
 * `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
-* `GeneCoexpression_scatter` plots gene coexpression against distance separation at the structure level
+* `GeneCoexpression_scatter` plots gene coexpression against distance separation at the structure level; also create `'corrCoeff_distances_ontoDist_clean.mat` which contains distances, correlation coefficient and ontological distances at the structural level
 * `compareDistanceMatrix` serves to validate the accuracy of our methodology of querying the API; it plots the MDS of API and Oh et al data, scatter3 plot of API data, and % error in distance (Oh et al as gold standard) against distance 
 * `createExponentialPlot.m` plots 1) 3 term exponential of voxel data 2) the former plus 3 term exponential of structure data
 * `createBinningPlot.m` uses voxel data and plots gene coexpression in bins against distance separation
