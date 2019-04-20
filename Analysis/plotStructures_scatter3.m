@@ -1,4 +1,4 @@
-function [figure] = plotStructures(xData, yData, whatplot, dotColorCell, labelCell, divisionLabel, numData, plotTitle)
+function [f] = plotStructures_scatter3(xData, yData, zData, dotColorCell, labelingCell, divisionLabel, numData, plotTitle)
   % whatplot: scatter or scatter3
   % dotColorCell is a cell containing dot colors as elements
   f = figure('color','w');
@@ -7,12 +7,13 @@ function [figure] = plotStructures(xData, yData, whatplot, dotColorCell, labelCe
   dotColors = [dotColors{:}]';
 
   nodeSize = 50;
-  whatplot(xData,yData,nodeSize,dotColors,'fill','MarkerEdgeColor','k')
+
+  scatter3(xData,yData,zData,nodeSize,dotColors,'fill','MarkerEdgeColor','k')
 
   % Add labels:
   xDataRange = range(xData);
   for i = 1:numData
-      text(xData(i)+0.04*xDataRange,yData(i),labelCell{i},...
+      text(xData(i)+0.04*xDataRange,yData(i),zData(i),labelingCell{i},...
                           'color',brighten(dotColors(i,:),-0.3))
   end
 
@@ -22,9 +23,11 @@ function [figure] = plotStructures(xData, yData, whatplot, dotColorCell, labelCe
   numDivisions = length(theDivisions);
   for i = 1:numDivisions
       % Put each major region in the center of those points
-      centrePoint = [mean(xData(divisionLabels==theDivisions(i))),mean(yData(divisionLabels==theDivisions(i)))];
+      centrePoint = [mean(xData(divisionLabels==theDivisions(i))),...
+                    mean(yData(divisionLabels==theDivisions(i))),...
+                    mean(zData(divisionLabels==theDivisions(i)))];
       find_1 = find(divisionLabels==theDivisions(i),1);
-      text(centrePoint(1),centrePoint(2),char(theDivisions(i)), ...
+      text(centrePoint(1),centrePoint(2),centrePoint(3),char(theDivisions(i)), ...
                   'color','k','FontSize',14,'BackgroundColor',dotColors(find_1,:))
   end
   t=title(plotTitle);

@@ -1,4 +1,3 @@
-clearvars
 %---------------------------------------------------------------------
 % initialize and load variables
 %---------------------------------------------------------------------
@@ -35,5 +34,5 @@ end
 %---------------------------------------------------------------------
 % save variables
 %---------------------------------------------------------------------
-str=fullfile('Matlab_variables','corrCoeffAll_distanceAll.mat');
+str=fullfile('Matlab_variables','corrCoeffAll_distancesAll.mat');
 save(str, 'distances_all', 'corrCoeff_all');
