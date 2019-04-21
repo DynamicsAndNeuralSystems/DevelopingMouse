@@ -3,6 +3,6 @@ function readSpinalCordID()
 save_loc=fullfile('Data','Matlab_variables');
 % import spinal cord IDs
 spinalCord_ID=csvread('SpC_descendantID.csv',1,1,[1 1 93 1]);
-str=fullfile('Data','Matlab_variables','spinalCord_ID.mat');
+str=fullfile('Matlab_variables','spinalCord_ID.mat');
 save(str,'spinalCord_ID')
 end

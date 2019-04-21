@@ -1,17 +1,21 @@
-function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, ...
-                                                            whatNumData, whatNorm, ...
-                                                            whatVoxelThreshold, thisBrainDiv)
+% function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, ...
+%                                                             whatNumData, whatNorm, ...
+%                                                             whatVoxelThreshold, thisBrainDiv)
   % for whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
   % for thisBrainDiv: 'forebrain', 'midbrain' or 'hindbrain'; if left out, all brain divisions included
   % for whatNumData: either input 'all' or the number of voxels to be included
     %% Sets background variables
     % current time point
+    whatTimePointNow='E11pt5';
     timePointNow=whatTimePointNow;
+    whatNumData=1000;
+    whatNorm='scaledSigmoid';
+    whatVoxelThreshold=0.3;
+    thisBrainDiv='all';
+
     % matlab variable directory
     varDir=fullfile('Matlab_variables');
-    % % change thisBrainDiv to a cell for later referencing use
-    % thisBrainDiv_cell=cell(1,1);
-    % thisBrainDiv_cell{1}=thisBrainDiv;
+
     % this script creates a voxel x gene matrix with irrelevant voxels filtered out
     sizeGrids=struct('E11pt5',[70,75,40],'E13pt5',[89,109,69],'E15pt5',[94,132,65],'E18pt5',[67,43,40],'P4',[77,43,50],...
         'P14',[68,40,50],'P28',[73,41,53]);
@@ -30,11 +34,7 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     % filters off spinal cord voxels
     isSpinalCord=ismember(annotationGrids{timePointIndex},spinalCord_ID);
     isAnno=annotationGrids{timePointIndex}>0;
-    % if nargin<5 % all brain divisions
-    %     isIncluded=union(union(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
-    %                     ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
-    %                     ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID));
-    % else % only a particular brain division
+
     if strcmp(thisBrainDiv,'all')
         isIncluded=or(or(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
                           ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
@@ -48,7 +48,6 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     else
       error('Invalid brain division input')
     end
-    % end
     % make voxel x gene matrix
     voxGeneMat=zeros(nnz(isAnno & ~isSpinalCord & isIncluded),length(energyGrids));
 
@@ -97,4 +96,4 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     % Create distance matrix from only voxels selected for gene expression matrix
     [dataIndSelect,~]=datasample([1:size(voxGeneMat,1)],numData,'replace',false);
     distMat=squareform(pdist(coOrds(dataIndSelect,:),'euclidean')*resolutionGrid.(timePoints{timePointIndex}));
-end
+% end

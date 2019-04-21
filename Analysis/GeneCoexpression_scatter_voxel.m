@@ -18,18 +18,18 @@ for i = 1:length(timePoints)
     % extract distances from distance matrix
     distances_all{i} = extractDistances(distMat_all{i});
     % plot coexpression against distance
-    f=figure('color','w');
+    f=figure('color','w','Position',get(0, 'Screensize'));
     gcf;
     scatter(distances_all{i},corrCoeff_all{i},'.')
     xlabel('Separation Distance (um)','FontSize',16)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
     str = sprintf('Developing Mouse %s',timePoints{i});
     title(str,'Fontsize',19);
-    f=figureFullScreen(f,true);
-    % save the figure
+    F=getframe(f);
+        % save the figure
     filename=strcat('scatter_voxel','_',timePoints{i},'.jpeg');
     str=fullfile('Outs','scatter_voxel',filename);
-    saveas(f,str)
+    imwrite(F.cdata,str,'jpeg');
 end
 %---------------------------------------------------------------------
 % save variables

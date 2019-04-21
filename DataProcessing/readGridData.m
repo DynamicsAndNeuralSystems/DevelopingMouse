@@ -1,5 +1,5 @@
 function readGridData(whatTimePointNow)
-%% 
+%%
 fileTimePoints={'E11.5','E13.5','E15.5','E18.5','P4','P14','P28'};
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 timePointIndex=find(cellfun(@(c)strcmp(whatTimePointNow,c),timePoints)); %match index to the chosen timepoint
@@ -14,8 +14,7 @@ A=dir(expression_loc);
 A=A(arrayfun(@(A) A.name(1), A) ~= '.');
 % initialize variables
 energyGrids=cell(length(A),1);
-timePointInfo=cell(length(A),1);
-geneIDInfo=zeros(length(A),1);
+% geneIDInfo=zeros(length(A),1);
 
 % store original directory and move to new directory (necessitated by
 % filepath problems)
@@ -26,7 +25,7 @@ h = waitbar(0,'Compiling energy grid...');
 steps=length(A);
 %%
 for j=1:length(A)
-    
+
     fileStr=fullfile(A(j).name,'energy.raw');
     % ENERGY = 3-D matrix of expression energy grid volume
     % load files
@@ -35,8 +34,7 @@ for j=1:length(A)
     fclose( fid );
     energyGrids{j} = reshape(energyGrids{j},sizeGrids.(timePoints{timePointIndex}));
     infoStr=strsplit(A(j).name,'_');
-    timePointInfo{j}=infoStr{1};
-    geneIDInfo(j)=str2double(infoStr{2});
+    % geneIDInfo(j)=str2double(infoStr{2});
     waitbar(j/steps)
 end
 close(h)
@@ -45,14 +43,10 @@ close(h)
 cd(currentFolder);
 %%
 var_name1=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
-str=fullfile('Data','Matlab_variables',var_name1);
+str=fullfile('Matlab_variables',var_name1);
 save(str,'energyGrids','-v7.3')
 
-var_name2=strcat('timePointInfo_',timePoints{timePointIndex},'.mat');
-str=fullfile('Data','Matlab_variables',var_name2);
-save(str,'timePointInfo')
-
-var_name3=strcat('geneIDInfo_',timePoints{timePointIndex},'.mat');
-str=fullfile('Data','Matlab_variables',var_name3);
-save(str,'geneIDInfo')
+% var_name3=strcat('geneIDInfo_',timePoints{timePointIndex},'.mat');
+% str=fullfile('Data','Matlab_variables',var_name3);
+% save(str,'geneIDInfo')
 end

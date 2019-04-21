@@ -39,6 +39,6 @@ for i=1:length(timePoints) % for each time point%
 %     isNotAnno=annotationGrids{i}==0;
 end
 %% save variables
-str=fullfile('Data','Matlab_variables','annotationGrids.mat');
+str=fullfile('Matlab_variables','annotationGrids.mat');
 save(str,'annotationGrids')
 end
