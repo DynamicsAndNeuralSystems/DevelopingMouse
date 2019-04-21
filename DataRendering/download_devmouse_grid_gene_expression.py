@@ -52,3 +52,4 @@ for j in expID_list: # for each experiment
 for j in range(len(URL_list)): #len(URL_list)
     r = requests.get(URL_list[j], stream=True)
     z = zipfile.ZipFile(StringIO.StringIO(r.content))
+    dirName=os.path.join([directory,age_list[j],'\\\\',age_list[j],'_',str(geneID_list[j])])

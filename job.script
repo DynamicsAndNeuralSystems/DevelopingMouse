@@ -1,3 +1,2 @@
 #!/bin/bash
 ./startup.m
-./DataRendering/download_devmouse_unionizes.py
