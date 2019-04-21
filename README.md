@@ -3,6 +3,7 @@
 ## Retrieve data from Allen API
 * Fills the `Data/API` directory.
 * First download Allen API package by `pip install allensdk`
+* Run `download_devmouse_unionizes.py` to retrieve gene expression data at structure level (tentative)
 * Run `structure.py` to download structure information
 * Run `getBrainDivision.py` to download major brain division info (forebrain, midbrain and hindbrain) and ID of their descendants; data saved in `structure_F.csv`, `structure_M.csv`,`structure_H.csv`,`structure_F_descendant_ID.csv`,`structure_M_descendant_ID.csv`,`structure_H_descendant_ID.csv`
 
@@ -42,7 +43,7 @@ Allen RMA API query `classes.ipynb` OR `Allen+RMA+API+query+classes.py`
 Convert downloaded data into Matlab variables, fills the `DataRendering` [`ProcessedData`] directory.
 * `createStructureInfo.m` creates a Matlab variable `dataDevMouse.mat` containing structure information, including structure abbreviation, ID, colour, coordinates, major division abbreviation (the level 3 structure it belongs to), major division colour, a table containing the above info, and distance matrix
 * `createGeneExpressionMatrix.m` creates a Matlab variable containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis; it also indicates the voxels included in the distance matrix) for 7 time points
-* `createDevMouseGeneExpression` creates gene expression matrices normalized by different methods
+* `createDevMouseGeneExpression` creates gene expression matrices at the structure level normalized by different methods
 * `extractCoords` extracts coordinates and ID of adult mouse (from `structureCenters_adult.csv`) with correct map ID into `coOrds_AdultMouse.csv` and `ID_AdultMouse.csv`
 * `getAcronymFromID.py` queries (from API) for adult mouse acronym from ID using `ID_AdultMouse.csv` as input, yielding `acronym_AdultMouse.csv`
 * `makeBrainDivisionID.m` extracts IDs from the csv files (`F_descendantID.csv`, `M_descendantID.csv`, `H_descendentID.csv`) and color from the csv files (`structure_F.csv`, `structure_M.csv`, `structure_H.csv`) and stores them in a variable `brainDivision.mat`
