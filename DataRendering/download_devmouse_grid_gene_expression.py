@@ -1,11 +1,12 @@
 from allensdk.api.queries.rma_api import RmaApi
 import pandas as pd
 import requests, zipfile, StringIO
+import csv
 api = RmaApi()
 
 # specify the directories
 abs_dir = os.path.dirname(__file__)
-rel_dir = os.path.join(abs_dir, '..','Data','API','Unionizes')
+rel_dir = os.path.join(abs_dir, '..','Data','API','GridData')
 
 ages = ['E11.5','E13.5','E15.5','E18.5','P4','P14','P28']
 
@@ -52,4 +53,25 @@ for j in expID_list: # for each experiment
 for j in range(len(URL_list)): #len(URL_list)
     r = requests.get(URL_list[j], stream=True)
     z = zipfile.ZipFile(StringIO.StringIO(r.content))
-    dirName=os.path.join([directory,age_list[j],'\\\\',age_list[j],'_',str(geneID_list[j])])
+    dirName=os.path.join(rel_dir,age_list[j],"".join(age_list[j],'_',str(geneID_list[j])))
+    z.extractall(dirName)
+
+used = set()
+age_unique = [x for x in age_list if x not in used and (used.add(x) or True)]
+used = set()
+geneID_unique = [x for x in geneID_list if x not in used and (used.add(x) or True)]
+used = set()
+geneAcronym_unique = [x for x in geneAcronym_list if x not in used and (used.add(x) or True)]
+
+file_str=os.path.join(rel_dir,'timePoints.csv')
+with open(file_str, 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+    wr.writerow(age_unique)
+file_str=os.path.join(rel_dir,'geneEntrez.csv')
+with open(file_str, 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+    wr.writerow(geneID_unique)
+file_str=os.path.join(rel_dir,'geneAbbreviations.csv')
+with open(file_str, 'wb') as myfile:
+    wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+    wr.writerow(geneAcronym_unique)
