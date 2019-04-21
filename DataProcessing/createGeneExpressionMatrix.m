@@ -26,6 +26,7 @@ for i=1:length(timePoints)
     voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i} = dataIndSelect;
 end
 %% create gene expression matrix for each brain divisions
+
 for k=1:length(brainDivisions)
     for i=1:length(timePoints)
         [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData_brainDiv(i), whatNorm, 0.3, brainDivisions{k});
