@@ -1,2 +1,4 @@
 #!/bin/bash
+startup.m
+
 ./DataProcessing/createGeneExpressionMatrix.m

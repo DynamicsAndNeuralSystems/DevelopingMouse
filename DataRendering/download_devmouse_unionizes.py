@@ -6,14 +6,24 @@ from allensdk.api.queries.rma_api import RmaApi
 import allensdk.core.json_utilities as json_utilities
 import numpy as np
 import csv # For saving string data to csv
+import os
 
 #-------------------------------------------------------------------------------
 # Global parameters:
 #-------------------------------------------------------------------------------
-json_file_name = 'all_unionizes.json'
-csv_file_name = 'unionizes.csv'
+# specify the directories
+abs_dir = os.path.dirname(__file__)
+rel_dir = os.path.join(abs_dir, '..','Data','API','Unionizes')
 
-structure_acronyms = ['isR','isA','r1R','r1A']
+json_file_name = 'all_unionizes.json'
+csv_file_name = os.path.join(rel_dir,'unionizes.csv')
+
+structure_acronyms = ['r4B','POR','r3F','r10F','THyA','r1R','p2R','r4F','r7B','p1R','p1A',
+'r1B','m1B','m2B','p3F','r5F','isA','r9F','p1B','r3R','m2F','r10B','r6R','r9A','r9R','r10R',
+'POA','p3R','r6A','r4A','isB','m2R','p1F','m2A','r9B','r7R','isF','r8R','r6B','r8F','r8A',
+'r4R','p2A','p3A','r3A','PHyB','m1R','r3B','THyF','p2F','THyB','p2B','r7F','r11R','r1A',
+'r5B','p3B','r2A','r11A','r11B','isR','r7A','r2R','r6F','r11F','PHyA','r2F','r5A','r5R',
+'r8B','r10A','TelA','m1F','r1F','PHyF','m1A','r2B','TelR']
 # structure_acronyms = ['is','r1']
 ages = ['E11.5','E13.5','E15.5','E18.5','P4','P14','P28','P56']
 
@@ -120,23 +130,23 @@ def SaveExpressionEnergy(df):
                 ExpressionData['density'][ai,gi] = df_match[df_match.age_name.isin([ageName])]['expression_density'].mean()
 
         # Save to a csv file:
-        fileName = "SDK_ExpressionEnergy_%s.csv" % structureName
+        fileName = os.path.join(rel_dir,"SDK_ExpressionEnergy_%s.csv" % structureName)
         np.savetxt(fileName, ExpressionData['energy'], delimiter=",")
-        fileName = "SDK_ExpressionDensity_%s.csv" % structureName
+        fileName = os.path.join(rel_dir,"SDK_ExpressionDensity_%s.csv" % structureName)
         np.savetxt(fileName, ExpressionData['density'], delimiter=",")
 
     # Save the structures:
-    SaveListCSV(structure_acronyms,"SDK_StructureNames.csv")
+    SaveListCSV(structure_acronyms,os.path.join(rel_dir,"SDK_StructureNames.csv"))
 
     # Save the time points:
-    SaveListCSV(ages,"SDK_timePoints.csv")
+    SaveListCSV(ages,os.path.join(rel_dir,"SDK_timePoints.csv"))
 
     # Save the genes:
-    SaveListCSV(unique_genes,"SDK_geneAbbreviations.csv")
+    SaveListCSV(unique_genes,os.path.join("SDK_geneAbbreviations.csv"))
 
     # Match the entrez_id
     unique_entrez = df.gene_entrez.unique()
-    SaveListCSV(unique_entrez,"SDK_geneEntrez.csv")
+    SaveListCSV(unique_entrez,os.path.join(rel_dir,"SDK_geneEntrez.csv"))
     # entrez_ids = [df.gene_entrez[a] for ]
 
 def main():

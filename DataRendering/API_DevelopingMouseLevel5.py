@@ -6,6 +6,7 @@ from allensdk.api.queries.rma_api import RmaApi
 import allensdk.core.json_utilities as json_utilities
 import numpy as np
 import csv # For saving string data to csv
+import os
 
 #-------------------------------------------------------------------------------
 # Global parameters:
@@ -18,6 +19,10 @@ structure_acronyms = ['r4B','POR','r3F','r10F','THyA','r1R','p2R','r4F','r7B','p
 # ,'THy','SeSPall','PaSe','PHy','AOB','AOV','AOD','OB','TTe','PMCo','PLCo','ACo','Dg','Pal','ASPall','Stri','is','CbV','r1','CbH','r2','PH','PMH','MH','RSCx','Strp','p2','p3','p1','m1','CCx']
 # structure_acronyms = ['isR','isA','r1R','r1A']
 ages = ['E11.5','E13.5','E15.5','E18.5','P4','P14','P28']
+
+# specify the directories
+abs_dir = os.path.dirname(__file__)
+rel_dir = os.path.join(abs_dir, '..','Data','API','Unionizes')
 
 def download_devmouse_unionizes(file_name, structure_acronyms, age_names):
     acronym_str = "'" + "','".join(structure_acronyms) + "'"
@@ -122,23 +127,23 @@ def SaveExpressionEnergy(df):
                 ExpressionData['density'][ai,gi] = df_match[df_match.age_name.isin([ageName])]['expression_density'].mean()
 
         # Save to a csv file:
-        fileName = "SDK_ExpressionEnergy_%s.csv" % structureName
+        fileName = os.path.join(rel_dir,"SDK_ExpressionEnergy_%s.csv" % structureName)
         np.savetxt(fileName, ExpressionData['energy'], delimiter=",")
-        fileName = "SDK_ExpressionDensity_%s.csv" % structureName
+        fileName = os.path.join(rel_dir,"SDK_ExpressionDensity_%s.csv" % structureName)
         np.savetxt(fileName, ExpressionData['density'], delimiter=",")
 
     # Save the structures:
-    SaveListCSV(structure_acronyms,"SDK_StructureNames.csv")
+    SaveListCSV(structure_acronyms,os.path.join(rel_dir,"SDK_StructureNames.csv"))
 
     # Save the time points:
-    SaveListCSV(ages,"SDK_timePoints.csv")
+    SaveListCSV(ages,os.path.join(rel_dir,"SDK_timePoints.csv"))
 
     # Save the genes:
-    SaveListCSV(unique_genes,"SDK_geneAbbreviations.csv")
+    SaveListCSV(unique_genes,os.path.join(rel_dir,"SDK_geneAbbreviations.csv"))
 
     # Match the entrez_id
     unique_entrez = df.gene_entrez.unique()
-    SaveListCSV(unique_entrez,"SDK_geneEntrez.csv")
+    SaveListCSV(unique_entrez,os.path.join(rel_dir,"SDK_geneEntrez.csv"))
     # entrez_ids = [df.gene_entrez[a] for ]
 
 def main():
