@@ -25,6 +25,10 @@ for i=1:length(timePoints)
     voxelGeneCoexpression_all.wholeBrain.distMat_all{i} = distMat;
     voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i} = dataIndSelect;
 end
+
+%% save variables
+str=fullfile('Matlab_variables', 'voxelGeneCoexpression_all.mat');
+save(str,'voxelGeneCoexpression_all','-v7.3');
 %% create gene expression matrix for each brain divisions
 
 for k=1:length(brainDivisions)
@@ -35,7 +39,3 @@ for k=1:length(brainDivisions)
         voxelGeneCoexpression_all.(brainDivisions{k}).dataIndSelect_all{i} = dataIndSelect;
     end
 end
-
-%% save variables
-str=fullfile('Matlab_variables', 'voxelGeneCoexpression_all.mat');
-save(str,'voxelGeneCoexpression_all','-v7.3');
