@@ -45,7 +45,7 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `createDevMouseGeneExpression` creates gene expression matrices normalized by different methods
 * `extractCoords` extracts coordinates and ID of adult mouse (from `structureCenters_adult.csv`) with correct map ID into `coOrds_AdultMouse.csv` and `ID_AdultMouse.csv`
 * `getAcronymFromID.py` queries (from API) for adult mouse acronym from ID using `ID_AdultMouse.csv` as input, yielding `acronym_AdultMouse.csv`
-* `makeBrainDivisionID.m` extracts IDs from the csv files (F_descendantID.csv, M_descendantID.csv, H_descendentID.csv) and store them in a variable `brainDivisionID.mat`
+* `makeBrainDivisionID.m` extracts IDs from the csv files (`F_descendantID.csv`, `M_descendantID.csv`, `H_descendentID.csv`) and color from the csv files (`structure_F.csv`, `structure_M.csv`, `structure_H.csv`) and stores them in a variable `brainDivision.mat`
 
 * Matlab variables are saved in the folder `Matlab_variables`
 * csv files are saved in the folder `Processed`
