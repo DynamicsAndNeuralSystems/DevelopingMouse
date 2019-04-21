@@ -1,4 +1,3 @@
 #!/bin/bash
 startup.m
-
-./DataProcessing/createGeneExpressionMatrix.m
+./DataRendering/download_devmouse_unionizes.py
