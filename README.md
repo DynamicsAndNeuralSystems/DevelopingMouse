@@ -4,6 +4,7 @@
 * Fills the `Data/API` directory.
 * First download Allen API package by `pip install allensdk`
 * Run `structure.py` to download structure information
+* Run `getBrainDivision.py` to download major brain division info (forebrain, midbrain and hindbrain) and ID of their descendants; data saved in `structure_F.csv`, `structure_M.csv`,`structure_H.csv`,`structure_F_descendant_ID.csv`,`structure_M_descendant_ID.csv`,`structure_H_descendant_ID.csv`
 
 ## Other raw data
 * `A mesoscale connectome of the mouse brain supp table 4_ipsi` is obtained from supplementary table 4 of the Oh et. al paper, which contains a distance matrix of adult brain structures
@@ -44,6 +45,8 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `createDevMouseGeneExpression` creates gene expression matrices normalized by different methods
 * `extractCoords` extracts coordinates and ID of adult mouse (from `structureCenters_adult.csv`) with correct map ID into `coOrds_AdultMouse.csv` and `ID_AdultMouse.csv`
 * `getAcronymFromID.py` queries (from API) for adult mouse acronym from ID using `ID_AdultMouse.csv` as input, yielding `acronym_AdultMouse.csv`
+* `makeBrainDivisionID.m` extracts IDs from the csv files (F_descendantID.csv, M_descendantID.csv, H_descendentID.csv) and store them in a variable `brainDivisionID.mat`
+
 * Matlab variables are saved in the folder `Matlab_variables`
 * csv files are saved in the folder `Processed`
 
