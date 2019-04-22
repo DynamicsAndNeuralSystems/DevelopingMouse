@@ -42,7 +42,9 @@ Allen RMA API query `classes.ipynb` OR `Allen+RMA+API+query+classes.py`
 
 Convert downloaded data into Matlab variables, fills the `DataRendering` [`ProcessedData`] directory.
 * `createStructureInfo.m` creates a Matlab variable `dataDevMouse.mat` containing structure information, including structure abbreviation, ID, colour, coordinates, major division abbreviation (the level 3 structure it belongs to), major division colour, a table containing the above info, and distance matrix
-* `createGeneExpressionMatrix.m` creates a Matlab variable containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis; it also indicates the voxels included in the distance matrix) for 7 time points
+* `createGeneExpressionMatrix.m` creates the following:
+1) `voxelGeneCoexpression_all.mat` containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis; it also indicates the voxels included in the distance matrix) for 7 time points
+2) `voxelGeneCoexpression_all_brainDiv.mat` containing the same data but separately for the forebrain, midbrain and hindbrain.
 * `createDevMouseGeneExpression` creates gene expression matrices at the structure level normalized by different methods
 * `extractCoords` extracts coordinates and ID of adult mouse (from `structureCenters_adult.csv`) with correct map ID into `coOrds_AdultMouse.csv` and `ID_AdultMouse.csv`
 * `getAcronymFromID.py` queries (from API) for adult mouse acronym from ID using `ID_AdultMouse.csv` as input, yielding `acronym_AdultMouse.csv`
@@ -70,14 +72,17 @@ Using z-score for norm field: `MakeDevMouseGeneExpression_zscore.m`
 Note: the `.csv` files are stored in `Data` folder
 
 ## Analysis
-* `geneCoexpression_scatter_voxel` plots gene coexpression against distance separation at the voxel level
-* `createFitting` fits the voxel and structure data to a few types of curves, plots decay constant (3 parameter exponential fitting) against maximum distance in each time point); and save the fitting statistic, decay constant and maximum distance to `fitting.mat`
+* `geneCoexpression_scatter_voxel.m` plots gene coexpression against distance separation at the voxel level
+* `createFitting.m` fits the voxel and structure data to a few types of curves, plots decay constant (3 parameter exponential fitting) against maximum distance in each time point); and save the fitting statistic, decay constant and maximum distance to `fitting.mat`
 * `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
-* `GeneCoexpression_scatter` plots gene coexpression against distance separation at the structure level; also create `'corrCoeff_distances_ontoDist_clean.mat` which contains distances, correlation coefficient and ontological distances at the structural level
-* `compareDistanceMatrix` serves to validate the accuracy of our methodology of querying the API; it plots the MDS of API and Oh et al data, scatter3 plot of API data, and % error in distance (Oh et al as gold standard) against distance 
+* `GeneCoexpression_scatter.m` plots gene coexpression against distance separation at the structure level; also create `'corrCoeff_distances_ontoDist_clean.mat` which contains distances, correlation coefficient and ontological distances at the structural level
+* `compareDistanceMatrix.m` serves to validate the accuracy of our methodology of querying the API; it plots the MDS of API and Oh et al data, scatter3 plot of API data, and % error in distance (Oh et al as gold standard) against distance 
 * `createExponentialPlot.m` plots 1) 3 term exponential of voxel data 2) the former plus 3 term exponential of structure data
 * `createBinningPlot.m` uses voxel data and plots gene coexpression in bins against distance separation
 * `GeneCoexpression_ontologicalDistance.m` plots gene coexpression against ontological distance at the structural level (ontological distance between structure x and y is calculated as: steps of x from nearest common ancestor + steps of y from nearest common ancestor)
+* `GeneCoexpression_scatter_voxel_brainDiv.m` plots gene coexpression against distance separation at the voxel level for forebrain, midbrain and hindbrain
+* `createFitting_brainDiv.m` has the similar function as `createFitting.m` except it is for forebrain, midbrain and hindbrain separately; saves the fitting statistic, decay constant and maximum distance to `fitting_brainDiv.mat`
+* `decayConstant_voxel_brainDiv.m`  plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance separately for forebrain, midbrain and hindbrain 
 
 * All figures are saved in Outs
 ## Testing
