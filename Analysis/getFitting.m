@@ -1,4 +1,4 @@
-function [f, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataType, xData, yData)
+function [f, F, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataType, xData, yData, brainDiv)
   % dataType: 'voxel' or 'structure'
   % xData and yData are cells each containing distances and correlation coefficient of all time points
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
@@ -19,7 +19,7 @@ function [f, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataType, 
   theStyle = '-';
   theLineWidth = 2;
   % create the figure
-  f=figure('color','w');
+  f=figure('color','w','Position', get(0, 'Screensize'));
   for i=1:length(timePoints)
       % collect decay constant
       decayConstant(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.n;
@@ -44,9 +44,10 @@ function [f, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataType, 
 
   xlabel('Max distance (um)','FontSize',16)
   ylabel('Decay constant','FontSize',13)
-  str=sprintf('Developing Mouse decay constant against max distance, %s', dataType);
+  str=sprintf('Developing Mouse decay constant against max distance, %s, %s', dataType, brainDiv);
   title(str,'Fontsize',16)
+  F=getframe(f);
   % get the right figure size
-  f=figureFullScreen(f,true);
-  set(f, 'PaperPositionMode', 'auto') % to save a figure that is the same size as the figure on the screen
+  % f=figureFullScreen(f,true);
+  % set(f, 'PaperPositionMode', 'auto') % to save a figure that is the same size as the figure on the screen
 end

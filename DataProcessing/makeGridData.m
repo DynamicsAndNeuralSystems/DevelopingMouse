@@ -44,7 +44,7 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     elseif strcmp(thisBrainDiv,'midbrain')
       isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID);
     elseif strcmp(thisBrainDiv,'hindbrain')
-      isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.hindrain.ID);
+      isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID);
     else
       error('Invalid brain division input')
     end

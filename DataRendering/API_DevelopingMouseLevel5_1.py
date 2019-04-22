@@ -6,10 +6,17 @@ from allensdk.api.queries.rma_api import RmaApi
 import allensdk.core.json_utilities as json_utilities
 import numpy as np
 import csv # For saving string data to csv
+import os
 
 #-------------------------------------------------------------------------------
 # Global parameters:
 #-------------------------------------------------------------------------------
+# specify the directories
+abs_dir = os.path.dirname(__file__)
+rel_dir = os.path.join(abs_dir, '..','Data','API','Unionizes')
+# direct to correct file
+os.chdir(rel_dir)
+
 json_file_name = 'all_unionizes.json'
 csv_file_name = 'unionizes.csv'
 
@@ -40,7 +47,7 @@ def download_devmouse_unionizes(file_name, structure_acronyms, age_names):
     # for i in range(0, total_rows, blockSize):
 
     while not done:
-        print "Row %d, attempting to retrieve %d rows..." % (startRow, blockSize)
+        print("Row %d, attempting to retrieve %d rows..." % (startRow, blockSize))
 
         tot_rows = len(rows)
         rows += api.model_query(model='StructureUnionize',
@@ -52,7 +59,7 @@ def download_devmouse_unionizes(file_name, structure_acronyms, age_names):
         numRows = len(rows) - tot_rows # additional rows retrieved on running the query
         startRow += numRows
 
-        print "%d rows retrieved." % numRows
+        print("%d rows retrieved." % numRows)
 
         # Check if we're at the end of the road
         if numRows == 0 or numRows < blockSize:
@@ -99,10 +106,10 @@ def SaveExpressionEnergy(df):
     numStructs = len(structure_acronyms)
     numTimePoints = len(ages)
 
-    print "Saving expression data..."
+    print("Saving expression data...")
 
     for structureName in structure_acronyms:
-        print structureName+"..."
+        print(structureName+"...")
         ExpressionData = {};
         ExpressionData['energy'] = np.empty([numTimePoints,numGenes])
         ExpressionData['energy'].fill(np.nan)
@@ -160,7 +167,7 @@ def main():
     gb = df.groupby(['structure','age_name'])
     gdf = gb.agg({'data_set_id': pd.Series.nunique})
 
-    print gdf
+    print(gdf)
 
     # Make an expression energy matrix:
     SaveExpressionEnergy(df)

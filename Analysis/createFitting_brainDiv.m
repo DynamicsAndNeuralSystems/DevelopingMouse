@@ -2,36 +2,37 @@ clear
 
 % initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-spatialData=struct();
-fitting_stat_all=struct();
-decayConstant=struct();
-maxDistance=struct();
+spatialData_brainDiv=struct();
+fitting_stat_all_brainDiv=struct();
+decayConstant_brainDiv=struct();
+maxDistance_brainDiv=struct();
+brainDivisions={'forebrain','midbrain','hindbrain'};
+dataType={'voxel'};
 % voxel data
-spatialData.voxel.corrCoeffAll=load('corrCoeffAll_distancesAll.mat','corrCoeff_all');
-spatialData.voxel.corrCoeffAll=spatialData.voxel.corrCoeffAll.('corrCoeff_all');
-spatialData.voxel.distancesAll=load('corrCoeffAll_distancesAll.mat','distances_all');
-%%
-spatialData.voxel.distancesAll=spatialData.voxel.distancesAll.('distances_all');
-% structure data
-spatialData.structure.corrCoeffAll=load('corrCoeff_distances_ontoDist_clean.mat','corrCoeff_clean');
-spatialData.structure.corrCoeffAll=spatialData.structure.corrCoeffAll.('corrCoeff_clean');
-spatialData.structure.distancesAll=load('corrCoeff_distances_ontoDist_clean.mat','distances_clean');
-spatialData.structure.distancesAll=spatialData.structure.distancesAll.('distances_clean');
-
-% Initialize
-dataType={'voxel', 'structure'};
-for i=1:length(dataType)
-    [f, F, fitting_stat_all.(dataType{i}), decayConstant.(dataType{i}), maxDistance.(dataType{i})]=getFitting(dataType{i},spatialData.(dataType{i}).distancesAll,spatialData.(dataType{i}).corrCoeffAll,'wholeBrain');
-    % save figure
-    str=fullfile('Outs', 'decay_constant',strcat('decayConstant_',dataType{i},'.jpeg'));
-    imwrite(F.cdata,str,'jpeg');
+load('corrCoeffAll_distancesAll_brainDiv.mat');
+for k=1:length(brainDivisions)
+  spatialData_brainDiv.voxel.(brainDivisions{k}).corrCoeffAll=...
+                            corrCoeffAll_distancesAll_brainDiv.(brainDivisions{k}).corrCoeff_all;
+  spatialData_brainDiv.voxel.(brainDivisions{k}).distancesAll=...
+                            corrCoeffAll_distancesAll_brainDiv.(brainDivisions{k}).distances_all;
+  for i=1:length(dataType)
+      [f, F, fitting_stat_all_brainDiv.(dataType{i}).(brainDivisions{k}), ...
+      decayConstant_brainDiv.(dataType{i}).(brainDivisions{k}), ...
+      maxDistance_brainDiv.(dataType{i}).(brainDivisions{k})]=...
+              getFitting(dataType{i},...
+                        spatialData_brainDiv.(dataType{i}).(brainDivisions{k}).distancesAll,...
+                        spatialData_brainDiv.(dataType{i}).(brainDivisions{k}).corrCoeffAll,...
+                        brainDivisions{k});
+      % save figure
+      str=fullfile('Outs', 'decay_constant_brainDiv',strcat('decayConstant_',dataType{i},'_',brainDivisions{k},'.jpeg'));
+      imwrite(F.cdata,str,'jpeg')
+  end
 end
-
 %----------------------------------------------------------------------------------------------
 % save variables
 %----------------------------------------------------------------------------------------------
-str=fullfile('Matlab_variables','fitting.mat');
-save(str, 'decayConstant', 'maxDistance','fitting_stat_all','spatialData')
+str=fullfile('Matlab_variables','fitting_brainDiv.mat');
+save(str, 'decayConstant_brainDiv', 'maxDistance_brainDiv','fitting_stat_all_brainDiv','spatialData_brainDiv')
 
 % save
 
