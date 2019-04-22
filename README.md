@@ -80,6 +80,7 @@ Note: the `.csv` files are stored in `Data` folder
 * `createExponentialPlot.m` plots 1) 3 term exponential of voxel data 2) the former plus 3 term exponential of structure data
 * `createBinningPlot.m` uses voxel data and plots gene coexpression in bins against distance separation
 * `GeneCoexpression_ontologicalDistance.m` plots gene coexpression against ontological distance at the structural level (ontological distance between structure x and y is calculated as: steps of x from nearest common ancestor + steps of y from nearest common ancestor)
+* `GeneCoexpression_scatter_voxel_brainDiv.m` plots gene coexpression against distance separation at the voxel level for forebrain, midbrain and hindbrain
 
 * All figures are saved in Outs
 ## Testing
