@@ -48,7 +48,7 @@ def download_devmouse_unionizes(file_name, structure_acronyms, age_names):
     # for i in range(0, total_rows, blockSize):
 
     while not done:
-        print "Row %d, attempting to retrieve %d rows..." % (startRow, blockSize)
+        print("Row %d, attempting to retrieve %d rows..." % (startRow, blockSize))
 
         tot_rows = len(rows)
         rows += api.model_query(model='StructureUnionize',
@@ -60,7 +60,7 @@ def download_devmouse_unionizes(file_name, structure_acronyms, age_names):
         numRows = len(rows) - tot_rows # additional rows retrieved on running the query
         startRow += numRows
 
-        print "%d rows retrieved." % numRows
+        print("%d rows retrieved." % numRows)
 
         # Check if we're at the end of the road
         if numRows == 0 or numRows < blockSize:
@@ -92,7 +92,7 @@ def to_dataframe(unionizes, ages):
     return pd.DataFrame.from_records(fdata)
 
 def SaveListCSV(stringList,fileName):
-    resultFile = open(fileName,'wb')
+    resultFile = open(fileName,'w')
     wr = csv.writer(resultFile, dialect='excel')
     wr.writerow(stringList)
 
@@ -107,10 +107,10 @@ def SaveExpressionEnergy(df):
     numStructs = len(structure_acronyms)
     numTimePoints = len(ages)
 
-    print "Saving expression data..."
+    print("Saving expression data...")
 
     for structureName in structure_acronyms:
-        print structureName+"..."
+        print(structureName+"...")
         ExpressionData = {};
         ExpressionData['energy'] = np.empty([numTimePoints,numGenes])
         ExpressionData['energy'].fill(np.nan)
@@ -168,9 +168,10 @@ def main():
     gb = df.groupby(['structure','age_name'])
     gdf = gb.agg({'data_set_id': pd.Series.nunique})
 
-    print gdf
+    print(gdf)
 
     # Make an expression energy matrix:
     SaveExpressionEnergy(df)
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()

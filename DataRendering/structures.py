@@ -62,6 +62,7 @@ def getAcronymPath(structure_level, other_criteria):
     return OntologyNode
 
 def main():
+    print('hi')
     #os.chdir(r'D:\Data\DevelopingAllenMouseAPI-master\Git') # user input the Git directory as on their computer here
 
     # download level 5 structures of developing mouse
