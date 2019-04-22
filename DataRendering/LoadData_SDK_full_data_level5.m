@@ -44,7 +44,7 @@ for i = 1:length(expMeasure)
     Exp.(expMeasure{i}).raw = cell(numStructures,1);
     for j = 1:numStructures
             fileName = sprintf('SDK_Expression%s_%s.csv',expMeasure{i},structures{j});
-            Exp.(expMeasure{i}).raw{j} = importfile1(fileName);
+            Exp.(expMeasure{i}).raw{j} = importfile2(fileName);
     end
 end
 
