@@ -12,10 +12,8 @@ for j = 1:length(paths)
     if strcmp(paths{j},'Data')
         % no nested subdirectories
         addpath(paths{j})
-        % add path to a directory containing allen structure data
+        % add path to a directory containing allen data
         addpath(fullfile('Data','API','Structures'))
-        % add path to a directory containing allen unionizes data
-        addpath(fullfile('Data','API','Unionizes'))
         % add path to a directory containing other raw data
         addpath(fullfile('Data','Others'))
     else

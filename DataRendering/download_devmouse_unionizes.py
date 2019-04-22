@@ -1,3 +1,4 @@
+#!/usr/local/python/3.7.2-gcc6/bin/python3
 #-------------------------------------------------------------------------------
 # Script from David Feng
 #-------------------------------------------------------------------------------
@@ -142,7 +143,7 @@ def SaveExpressionEnergy(df):
     SaveListCSV(ages,os.path.join(rel_dir,"SDK_timePoints.csv"))
 
     # Save the genes:
-    SaveListCSV(unique_genes,os.path.join(rel_dir,"SDK_geneAbbreviations.csv"))
+    SaveListCSV(unique_genes,os.path.join("SDK_geneAbbreviations.csv"))
 
     # Match the entrez_id
     unique_entrez = df.gene_entrez.unique()
