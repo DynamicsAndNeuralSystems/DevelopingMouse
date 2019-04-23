@@ -50,7 +50,7 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `getAcronymFromID.py` queries (from API) for adult mouse acronym from ID using `ID_AdultMouse.csv` as input, yielding `acronym_AdultMouse.csv`
 * `makeBrainDivisionID.m` extracts IDs from the csv files (`F_descendantID.csv`, `M_descendantID.csv`, `H_descendentID.csv`) and color from the csv files (`structure_F.csv`, `structure_M.csv`, `structure_H.csv`) and stores them in a variable `brainDivision.mat`
 * `createSpatialData_2BrainDiv.m` computes correlation coefficients and distances from pairs of brain divisions (forebrain, midbrain and hindbrain), creating `spatialData_2brainDiv.mat`
-* `createCellSpecificGenes.m` creates `enrichedGenes.mat` containing the abbreviations of Allen data gene that are enriched in developing and mature astrocytes, and progenitor and postmitotic oligodendrocytes.
+* `createCellSpecificGenes.m` creates `enrichedGenes.mat` containing the struct `enrichedGenes` (the abbreviations of Allen data gene that are enriched in developing and mature astrocytes, and progenitor and postmitotic oligodendrocytes), `geneID` and `geneAbbreviation` for later use (mapping gene abbreviation to ID) 
 
 * Matlab variables are saved in the folder `Matlab_variables`
 * csv files are saved in the folder `Processed`
