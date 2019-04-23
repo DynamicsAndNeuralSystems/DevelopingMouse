@@ -167,8 +167,8 @@ for i=1:length(timePoints)
       end
 
       %%
-      matAdjRSquare=zeros(length(timePoints),length(fitMethods));
-      for k=1:length(timePoints)
+      matAdjRSquare=zeros(1,length(fitMethods));
+      for k=1%:length(timePoints)
           for j=1:length(fitMethods)
               matAdjRSquare(k,j)=adjRSquare.(fitMethods{j})(k);
           end
