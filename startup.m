@@ -14,6 +14,8 @@ for j = 1:length(paths)
         addpath(paths{j})
         % add path to a directory containing allen data
         addpath(fullfile('Data','API','Structures'))
+        addpath(fullfile('Data','API','Unionizes'))
+        addpath(fullfile('Data','API','Filtering'))
         % add path to a directory containing other raw data
         addpath(fullfile('Data','Others'))
     else
