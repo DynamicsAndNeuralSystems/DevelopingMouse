@@ -32,4 +32,4 @@ geneID=importfile_SDK_geneEntrez('SDK_geneEntrez.csv');
 
 % save variable
 str=fullfile('Matlab_variables','enrichedGenes.mat');
-save(str,'enrichedGenes');
+save(str,'enrichedGenes','geneAbbreviation','geneID');
