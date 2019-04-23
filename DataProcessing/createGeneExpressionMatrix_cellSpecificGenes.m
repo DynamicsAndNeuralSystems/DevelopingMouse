@@ -13,10 +13,7 @@ brainDivisions={'forebrain','midbrain','hindbrain'};
 voxelGeneCoexpression_all_cellSpecificGenes=struct();
 voxelGeneCoexpression_all_brainDiv_cellSpecificGenes=struct();
 
-% create annotation grids
-makeAnnotationGrids();
-% create spinal cord ID
-readSpinalCordID();
+%
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
     readGridData(timePoints{i});

@@ -70,8 +70,8 @@ for i=1:length(timePoints)
         combNow1=C(d,1);
         combNow2=C(d,2);
         theColor=cmapOut(d,:);
-        xData=spatialData_2brainDiv.(timePoints{i}).(brainDivisions{combNow1}).(brainDivisions{combNow2}).corrCoeff;
-        yData=spatialData_2brainDiv.(timePoints{i}).(brainDivisions{combNow1}).(brainDivisions{combNow2}).distances;
+        xData=spatialData_2brainDiv.(timePoints{i}).(brainDivisions{combNow1}).(brainDivisions{combNow2}).distances;
+        yData=spatialData_2brainDiv.(timePoints{i}).(brainDivisions{combNow1}).(brainDivisions{combNow2}).corrCoeff;
         xThresholds = arrayfun(@(x)quantile(xData,x),linspace(0,1,numThresholds));
         xThresholds(end) = xThresholds(end) + eps;
         yMeans = arrayfun(@(x)mean(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),1:numThresholds-1);
