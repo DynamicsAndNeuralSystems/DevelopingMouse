@@ -11,16 +11,17 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
   f=figure('color','w','Position',get(0, 'Screensize'));
   gcf;
   if densityOn==1
-    xBin_num=0.1*(max(distances_all)-min(distances_all));
-    yBin_num=xBin_num;
-    xBin=linspace(min(distances_all),max(distances_all),xBin_num);
-    yBin=linspace(min(corrCoeff_all),max(corrCoeff_all),yBin_num);
+    % xBin_num=0.1*(max(distances_all)-min(distances_all));
+    % yBin_num=xBin_num;
+    [N,Xedges,Yedges] = histcounts2(distances_all(:),corrCoeff_all(:));
+    % xBin=linspace(min(distances_all),max(distances_all),xBin_num);
+    % yBin=linspace(min(corrCoeff_all),max(corrCoeff_all),yBin_num);
     % Bin the data:
-    N=histcounts2(distances_all(:), corrCoeff_all(:), xBin, yBin);
+    % N=histcounts2(distances_all(:), corrCoeff_all(:), xBin, yBin);
     % Plot scattered data (for comparison):
     subplot(2, 1, 1);
     scatter(distances_all,corrCoeff_all,'.');
-    set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
+    set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]));
     hold on
     % add exponential fitting
     xData=linspace(min(distances_all),max(distances_all),0.1*length(distances_all));
@@ -29,10 +30,9 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     subplot(2, 1, 2);
     imagesc(xBin, yBin, N);
     colorbar
-    set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]), 'YDir','normal');
+    set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]), 'YDir','normal');
   elseif densityOn==0
     scatter(distances_all,corrCoeff_all,'.')
-    set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
     % add exponential fitting
     xData=linspace(min(distances_all),max(distances_all),0.1*length(distances_all));
     p=plot(xData,fitting_stat_all.voxel.(timePointNow).fHandle.exp(xData));
