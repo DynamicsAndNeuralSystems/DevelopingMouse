@@ -30,7 +30,7 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     p=plot(xData,fitting_stat_all.voxel.(timePointCell{1}).fHandle.exp(xData));
     % Plot heatmap:
     subplot(2, 1, 2);
-    imagesc(xBin, yBin, N);
+    imagesc(xBin, flip(yBin), N);
     set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
   elseif densityOn==0
     scatter(distances_all,corrCoeff_all,'.')
