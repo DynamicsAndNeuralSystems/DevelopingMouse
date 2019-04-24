@@ -4,7 +4,8 @@
 %%
 % initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-numData=1000;
+numData=[10000,10000,10000,10000,10000,10000,10000];
+% full size for 7 time points: 210000, 669369, 806520, 115240, 165550, 136000, 158629
 numData_brainDiv=[587,1000,1000,1000,1000,1000,1000]; % number of data ...
 %for each time point when division of brain is under question...
 %(instead of all brain)
@@ -20,7 +21,7 @@ readSpinalCordID();
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
     readGridData(timePoints{i});
-    [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData, whatNorm, 0.3,'all',0);
+    [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData(i), whatNorm, 0.3,'all',0);
     voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
     voxelGeneCoexpression_all.wholeBrain.distMat_all{i} = distMat;
     voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i} = dataIndSelect;
