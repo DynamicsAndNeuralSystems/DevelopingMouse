@@ -12,7 +12,7 @@ corrCoeff_all = cell(length(timePoints),1);
 % Plot gene coexpression against distance
 %---------------------------------------------------------------------
 % create variables and plot
-for i = 1:length(timePoints)
+for i = 1%:length(timePoints)
     [f,F,distances_all{i},corrCoeff_all{i}]=plotGeneCoexpression_scatter_voxel(...
                                             voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i},...
                                             voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i},...
@@ -30,5 +30,5 @@ end
 %---------------------------------------------------------------------
 % save variables
 %---------------------------------------------------------------------
-str=fullfile('Matlab_variables','corrCoeffAll_distancesAll.mat');
-save(str, 'distances_all', 'corrCoeff_all');
+% str=fullfile('Matlab_variables','corrCoeffAll_distancesAll.mat');
+% save(str, 'distances_all', 'corrCoeff_all');

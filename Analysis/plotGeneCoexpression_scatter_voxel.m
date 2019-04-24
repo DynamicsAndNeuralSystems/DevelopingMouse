@@ -28,7 +28,7 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     p=plot(xData,fitting_stat_all.voxel.(timePointNow).fHandle.exp(xData));
     % Plot heatmap:
     subplot(2, 1, 2);
-    imagesc(xBin, yBin, N);
+    imagesc(Xedges, Yedges, N);
     colorbar
     set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]), 'YDir','normal');
   elseif densityOn==0
