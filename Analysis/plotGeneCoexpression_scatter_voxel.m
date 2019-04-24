@@ -12,9 +12,9 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
   gcf;
   if densityOn==1
     xBin_num=0.1*(max(distances_all)-min(distances_all));
-    yBin_num=0.1*(max(corrCoeff_all)-min(corrCoeff_all));
-    xBin=linspace(0,max(distances_all),xBin_num);
-    yBin=linspace(-0.4,1,yBin_num);
+    yBin_num=xBin_num;
+    xBin=linspace(min(distances_all),max(distances_all),xBin_num);
+    yBin=linspace(min(corrCoeff_all),max(corrCoeff_all),yBin_num);
     % Bin the data:
     N=histcounts2(distances_all(:), corrCoeff_all(:), xBin, yBin);
     % Plot scattered data (for comparison):
@@ -28,9 +28,8 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     % Plot heatmap:
     subplot(2, 1, 2);
     imagesc(xBin, yBin, N);
-    set(gca,'YDir','normal') % flip y axis
     colorbar
-    set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
+    set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]), 'YDir','normal');
   elseif densityOn==0
     scatter(distances_all,corrCoeff_all,'.')
     set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
