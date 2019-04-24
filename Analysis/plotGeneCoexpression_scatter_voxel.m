@@ -39,7 +39,7 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     xData=linspace(min(distances_all),max(distances_all),0.1*length(distances_all));
     p=plot(xData,fitting_stat_all.voxel.(timePointCell{1}).fHandle.exp(xData));
   end
-  set(p,'Color','k')
+  set(p,'Color','k','LineWidth',5)
   legend(p,'Exponential fit')
   xlabel('Separation Distance (um)','FontSize',16)
   ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
