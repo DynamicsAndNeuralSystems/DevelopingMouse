@@ -15,15 +15,17 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
   gcf;
   if densityOn==1
     xBin=linspace(0,max(distances_all),xBin_num);
-    yBin=linspace(-0.4,1,yBin_num);
+    yBin=linspace(1,-0.4,yBin_num);
     % Bin the data:
     [N,~,~]=histcounts2(distances_all(:), corrCoeff_all(:), xBin, yBin);
     % Plot scattered data (for comparison):
-    subplot(1, 2, 1);
+    subplot(2, 1, 1);
     scatter(distances_all,corrCoeff_all,'.');
+    set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
     % Plot heatmap:
-    subplot(1, 2, 2);
+    subplot(2, 1, 2);
     imagesc(xBin, yBin, N);
+    set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
   elseif densityOn==0
     scatter(distances_all,corrCoeff_all,'.')
   end
