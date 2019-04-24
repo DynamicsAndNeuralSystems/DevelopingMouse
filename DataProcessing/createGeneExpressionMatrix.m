@@ -2,6 +2,9 @@
 % Create gene coexpression matrix
 %-------------------------------------------------------------------------------
 %%
+% load variables
+load('annotationGrids.mat');
+load('spinalCord_ID.mat');
 % initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 numData=[10000,10000,10000,10000,10000,10000,10000];
@@ -14,10 +17,6 @@ brainDivisions={'forebrain','midbrain','hindbrain'};
 voxelGeneCoexpression_all=struct();
 voxelGeneCoexpression_all_brainDiv=struct();
 
-% create annotation grids
-makeAnnotationGrids();
-% create spinal cord ID
-readSpinalCordID();
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
     readGridData(timePoints{i});
