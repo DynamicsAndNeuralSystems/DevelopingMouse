@@ -3,7 +3,7 @@ timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 load('fitting.mat','maxDistance','decayConstant')
 % obtain confidence interval of the decay constants
 for i in length(timePoints)
-  fitting_stat_all.voxel.(timePoints{i}).
+  fitting_stat_all.voxel.(timePoints{i}).fitObject.exp()
 end
 f=figure('color','w');
 plot(log(maxDistance.voxel),log(decayConstant.voxel),'ok','DisplayName','data1');

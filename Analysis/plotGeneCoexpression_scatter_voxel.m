@@ -2,11 +2,6 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
                                             voxGeneMat,dataIndSelect,distMat,fitting_stat_all,...
                                             timePointNow,brainDiv,densityOn)
                                             % densityOn = 1 if density is needed, 0 otherwise
-  xBin_num=100;
-  yBin_num=100;
-  % timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-  timePointCell=cell(1,1);
-  timePointCell{1}=timePointNow;
   % extract the correlation coefficients
   geneCorr=corrcoef((voxGeneMat(dataIndSelect,:))','rows','pairwise');
   corrCoeff_all=geneCorr(find(triu(ones(size(geneCorr)),1)));
@@ -16,6 +11,8 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
   f=figure('color','w','Position',get(0, 'Screensize'));
   gcf;
   if densityOn==1
+    xBin_num=0.1*(max(distances_all)-min(distances_all));
+    yBin_num=0.1*(max(corrCoeff_all)-min(corrCoeff_all));
     xBin=linspace(0,max(distances_all),xBin_num);
     yBin=linspace(-0.4,1,yBin_num);
     % Bin the data:
@@ -27,11 +24,11 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     hold on
     % add exponential fitting
     xData=linspace(min(distances_all),max(distances_all),0.1*length(distances_all));
-    p=plot(xData,fitting_stat_all.voxel.(timePointCell{1}).fHandle.exp(xData));
+    p=plot(xData,fitting_stat_all.voxel.(timePointNow).fHandle.exp(xData));
     % Plot heatmap:
     subplot(2, 1, 2);
     imagesc(xBin, yBin, N);
-    set(gca,'YDir','normal') % flip y axis 
+    set(gca,'YDir','normal') % flip y axis
     colorbar
     set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
   elseif densityOn==0
@@ -39,7 +36,7 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
     % add exponential fitting
     xData=linspace(min(distances_all),max(distances_all),0.1*length(distances_all));
-    p=plot(xData,fitting_stat_all.voxel.(timePointCell{1}).fHandle.exp(xData));
+    p=plot(xData,fitting_stat_all.voxel.(timePointNow).fHandle.exp(xData));
   end
   set(p,'Color','k','LineWidth',5)
   legend(p,'Exponential fit')
