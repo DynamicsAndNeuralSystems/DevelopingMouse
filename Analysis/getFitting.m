@@ -2,7 +2,9 @@ function [f, F, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataTyp
   % dataType: 'voxel' or 'structure'
   % xData and yData are cells each containing distances and correlation coefficient of all time points
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+  % initialize
   fitting_stat_all = struct();
+  err=zeros(length(timePoints),1);
   for i = 1:length(timePoints)
       [fitting_stat_all.(timePoints{i}).adjRSquare, ...
       fitting_stat_all.(timePoints{i}).fitObject,...
@@ -10,6 +12,11 @@ function [f, F, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataTyp
                                                 xData{i}, yData{i});
   end
 
+  % obtain error of the decay constants (95% CI)
+  for i=1:length(timePoints)
+    CI=confint(fitting_stat_all.(timePoints{i}).fitObject.exp);
+    err(i)=CI(2,3)-CI(1,3);
+  end
   %% exponential fit (3 parameter)
   decayConstant=zeros(length(timePoints),1);
   maxDistance = zeros(length(timePoints),1);
@@ -17,7 +24,7 @@ function [f, F, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataTyp
   cmapOut = BF_getcmap('dark2',7,0,0);
   % Specify plotting style for later use
   theStyle = '-';
-  theLineWidth = 2;
+  % theLineWidth = 2;
   % create the figure
   f=figure('color','w','Position', get(0, 'Screensize'));
   for i=1:length(timePoints)
@@ -27,8 +34,8 @@ function [f, F, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataTyp
       % collect max distance
       maxDistance(i)=max(xData{i});
       % plot
-      plot(maxDistance(i),decayConstant(i),'-o','MarkerSize',10,'LineStyle',theStyle,...
-          'LineWidth',theLineWidth,'Color',theColor)
+      errorbar(maxDistance(i),decayConstant(i),err(i),'-o','MarkerSize',10,'LineStyle',theStyle,...
+          'LineWidth',(fitting_stat_all.(timePoints{i}).adjRSquare.exp)*5,'Color',theColor)
       yPosition=linspace(1,0.4,length(timePoints));
       % first, get the colours needed
       cmapOut = BF_getcmap('dark2',7,0,0);

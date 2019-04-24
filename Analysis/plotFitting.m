@@ -1,4 +1,4 @@
-function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType)
+function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, xLabel)
   % thisDataType: 'voxel' or 'structure'
   % F is the getframe object for setting figure saving size
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
@@ -34,7 +34,7 @@ function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType)
       t.Position=[1 yPosition(i)];
       hold on
   end
-  xlabel('Separation Distance (um)','FontSize',16)
+  xlabel(xLabel,'FontSize',16)
   ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
   switch fitType
       case 'exp'
