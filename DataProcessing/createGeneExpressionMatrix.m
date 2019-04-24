@@ -34,17 +34,18 @@ save(str,'voxelGeneCoexpression_all','-v7.3');
 % clear variable to save memory
 clear voxelGeneCoexpression_all
 
-%% create gene expression matrix for each brain divisions
-for k=1:length(brainDivisions)
-    for i=1:length(timePoints)
-        [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData_brainDiv(i), ...
-                                                            whatNorm, 0.3, brainDivisions{k},0);
-        voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).voxGeneMat_all{i} = voxGeneMat;
-        voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).distMat_all{i} = distMat;
-        voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).dataIndSelect_all{i} = dataIndSelect;
-    end
-end
-
-% save variables
-str=fullfile('Matlab_variables', 'voxelGeneCoexpression_all_brainDiv.mat');
-save(str,'voxelGeneCoexpression_all_brainDiv','-v7.3');
+% brain divisions ignored for now
+% %% create gene expression matrix for each brain divisions
+% for k=1:length(brainDivisions)
+%     for i=1:length(timePoints)
+%         [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData_brainDiv(i), ...
+%                                                             whatNorm, 0.3, brainDivisions{k},0);
+%         voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).voxGeneMat_all{i} = voxGeneMat;
+%         voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).distMat_all{i} = distMat;
+%         voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).dataIndSelect_all{i} = dataIndSelect;
+%     end
+% end
+%
+% % save variables
+% str=fullfile('Matlab_variables', 'voxelGeneCoexpression_all_brainDiv.mat');
+% save(str,'voxelGeneCoexpression_all_brainDiv','-v7.3');
