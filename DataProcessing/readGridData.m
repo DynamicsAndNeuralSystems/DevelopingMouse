@@ -18,15 +18,15 @@ energyGrids=cell(length(A),1);
 
 % store original directory and move to new directory (necessitated by
 % filepath problems)
-currentFolder = pwd;
-cd(expression_loc);
+% currentFolder = pwd;
+% cd(expression_loc);
 
 h = waitbar(0,'Compiling energy grid...');
 steps=length(A);
 %%
 for j=1:length(A)
 
-    fileStr=fullfile(A(j).name,'energy.raw');
+    fileStr=fullfile('Data','API','GridData',fileTimePoints{timePointIndex},A(j).name,'energy.raw');
     % ENERGY = 3-D matrix of expression energy grid volume
     % load files
     fid = fopen(fileStr, 'r', 'l' );
@@ -40,7 +40,7 @@ end
 close(h)
 
 %% redirect to home directory
-cd(currentFolder);
+% cd(currentFolder);
 %%
 var_name1=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
 str=fullfile('Matlab_variables',var_name1);

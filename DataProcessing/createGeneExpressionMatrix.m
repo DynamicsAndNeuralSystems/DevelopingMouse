@@ -20,7 +20,7 @@ readSpinalCordID();
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
     readGridData(timePoints{i});
-    [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData, whatNorm, 0.3,'all');
+    [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData, whatNorm, 0.3,'all',0);
     voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
     voxelGeneCoexpression_all.wholeBrain.distMat_all{i} = distMat;
     voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i} = dataIndSelect;
@@ -36,7 +36,8 @@ clear voxelGeneCoexpression_all
 %% create gene expression matrix for each brain divisions
 for k=1:length(brainDivisions)
     for i=1:length(timePoints)
-        [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData_brainDiv(i), whatNorm, 0.3, brainDivisions{k});
+        [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData_brainDiv(i), ...
+                                                            whatNorm, 0.3, brainDivisions{k},0);
         voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).voxGeneMat_all{i} = voxGeneMat;
         voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).distMat_all{i} = distMat;
         voxelGeneCoexpression_all_brainDiv.(brainDivisions{k}).dataIndSelect_all{i} = dataIndSelect;
