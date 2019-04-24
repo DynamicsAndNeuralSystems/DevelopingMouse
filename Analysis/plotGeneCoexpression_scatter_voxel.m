@@ -1,10 +1,12 @@
 function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(...
-                                            voxGeneMat,dataIndSelect,distMat,...
+                                            voxGeneMat,dataIndSelect,distMat,fitting_stat_all,...
                                             timePointNow,brainDiv,densityOn)
                                             % densityOn = 1 if density is needed, 0 otherwise
   xBin_num=100;
   yBin_num=100;
-  timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+  % timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+  timePointCell=cell(1,1);
+  timePointCell{1}=timePointNow;
   % extract the correlation coefficients
   geneCorr=corrcoef((voxGeneMat(dataIndSelect,:))','rows','pairwise');
   corrCoeff_all=geneCorr(find(triu(ones(size(geneCorr)),1)));
@@ -15,19 +17,26 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
   gcf;
   if densityOn==1
     xBin=linspace(0,max(distances_all),xBin_num);
-    yBin=linspace(1,-0.4,yBin_num);
+    yBin=linspace(-0.4,1,yBin_num);
     % Bin the data:
-    [N,~,~]=histcounts2(distances_all(:), corrCoeff_all(:), xBin, yBin);
+    [N,~,~]=histcounts2(corrCoeff_all(:), distances_all(:), xBin, yBin);
     % Plot scattered data (for comparison):
     subplot(2, 1, 1);
     scatter(distances_all,corrCoeff_all,'.');
     set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
+    hold on
+    % add exponential fitting
+    xData=linspace(min(distances_all),max(corrCoeff_all),0.1*length(distances_all));
+    plot(xData,fitting_stat_all.voxel.(timePointCell{1}).fHandle.exp(xData));
     % Plot heatmap:
     subplot(2, 1, 2);
     imagesc(xBin, yBin, N);
     set(gca, 'XLim', xBin([1 end]), 'YLim', yBin([1 end]));
   elseif densityOn==0
     scatter(distances_all,corrCoeff_all,'.')
+    % add exponential fitting
+    xData=linspace(min(distances_all),max(corrCoeff_all),0.1*length(distances_all));
+    plot(xData,fitting_stat_all.voxel.(timePointCell{1}).fHandle.exp(xData));
   end
   xlabel('Separation Distance (um)','FontSize',16)
   ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
