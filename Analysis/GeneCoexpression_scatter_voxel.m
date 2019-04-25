@@ -3,7 +3,7 @@
 %---------------------------------------------------------------------
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 load('voxelGeneCoexpression_all.mat') % contains 'voxGeneMat_all','distMat_all','dataIndSelect_all'
-% load('fitting.mat');
+load('fitting.mat');
 %
 % initialize
 distances_all = cell(length(timePoints),1);
