@@ -42,7 +42,7 @@ Allen RMA API query `classes.ipynb` OR `Allen+RMA+API+query+classes.py`
 
 Convert downloaded data into Matlab variables, fills the `DataRendering` [`ProcessedData`] directory.
 * `createStructureInfo.m` creates a Matlab variable `dataDevMouse.mat` containing structure information, including structure abbreviation, ID, colour, coordinates, major division abbreviation (the level 3 structure it belongs to), major division colour, a table containing the above info, and distance matrix
-* `createAnnotationGrids_SpinalCordID.m` creates `AnnotationGrids.mat` and `spinalCord_ID.mat`
+* `createAnnotationGrids_SpinalCordID_energyGrid.m` creates `AnnotationGrids.mat`,`spinalCord_ID.mat`,`createAnnotationGrids_SpinalCordID_energyGrid.mat`
 * `createGeneExpressionMatrix.m` creates the following:
 1) `voxelGeneCoexpression_all.mat` containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis; it also indicates the voxels included in the distance matrix) for 7 time points
 2) `voxelGeneCoexpression_all_brainDiv.mat` containing the same data but separately for the forebrain, midbrain and hindbrain.
