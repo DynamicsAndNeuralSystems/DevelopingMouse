@@ -21,14 +21,14 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,...
         'P14',200,'P28',200);
     %% load matlab variables
-    filename=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
+    filename=strcat('energyGrids_',timePointNow,'.mat');
     load('annotationGrids.mat')
     load('spinalCord_ID.mat')
     load('brainDivision.mat')
-    load('enrichedGenes.mat')
-    load('geneID_gridExpression.mat')
 
     if (iscell(cellSpecific))
+      load('enrichedGenes.mat')
+      load('geneID_gridExpression.mat')
       if strcmp(cellSpecific{1},'astrocyte')
         if strcmp(cellSpecific{2},'developing')
           geneIDix=cell(length(enrichedGenes.astrocyte.developing),1);
