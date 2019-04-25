@@ -1,7 +1,9 @@
-function [f,F] = plotBinning(xData_all,yData_all,numThresholds)
+function [f,F,xPlotDataAll,yPlotDataAll] = plotBinning(xData_all,yData_all,numThresholds)
   % xData_all and yData_all are cells containing data from all time points
   % F is the getframe object for setting figure saving size
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+  xPlotDataAll=cell(length(timePoints),1);
+  yPlotDataAll=cell(length(timePoints),1);
   % specify styles
   theStyle = '-';
   theLineWidth = 2;
@@ -19,14 +21,14 @@ function [f,F] = plotBinning(xData_all,yData_all,numThresholds)
       xThresholds(end) = xThresholds(end) + eps;
       yMeans = arrayfun(@(x)mean(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),1:numThresholds-1);
 
-      xPlotData=zeros(numThresholds-1,1);
-      yPlotData=zeros(numThresholds-1,1);
+      xPlotDataAll{i}=zeros(numThresholds-1,1);
+      yPlotDataAll{i}=zeros(numThresholds-1,1);
       for g = 1:numThresholds-1
-          xPlotData(g)=mean(xThresholds(g:g+1));
-          yPlotData(g)=yMeans(g);
+          xPlotDataAll{i}(g)=mean(xThresholds(g:g+1));
+          yPlotDataAll{i}(g)=yMeans(g);
           hold on
       end
-      plot(xPlotData,yPlotData,'-o','MarkerSize',5,'LineStyle',theStyle,'LineWidth',theLineWidth,'Color',theColor)
+      plot(xPlotDataAll{i},yPlotDataAll{i},'-o','MarkerSize',5,'LineStyle',theStyle,'LineWidth',theLineWidth,'Color',theColor)
 
       yPosition=linspace(1,0.4,length(timePoints));
       t=text(0.5,0.5,char(timePoints{i}),'color','k','FontSize',14,'BackgroundColor',...

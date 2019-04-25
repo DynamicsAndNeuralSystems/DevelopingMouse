@@ -1,6 +1,7 @@
-function [f, F, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataType, xData, yData, brainDiv)
+function [f, F, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataType, xData, yData, brainDiv, dataProcessing)
   % dataType: 'voxel' or 'structure'
   % xData and yData are cells each containing distances and correlation coefficient of all time points
+  % dataProcessing: 'original' or 'binned numThresholds=xx'
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   % initialize
   fitting_stat_all = struct();
@@ -51,8 +52,8 @@ function [f, F, fitting_stat_all, decayConstant, maxDistance]=getFitting(dataTyp
 
   xlabel('Max distance (um)','FontSize',16)
   ylabel('Decay constant','FontSize',13)
-  str=sprintf('Developing Mouse decay constant against max distance, %s, %s', dataType, brainDiv);
-  title(str,'Fontsize',16)
+  str=sprintf('Developing Mouse decay constant against max distance, %s, %s, %s', dataType, brainDiv,dataProcessing);
+  title(str,'Fontsize',14)
   F=getframe(f);
   % get the right figure size
   % f=figureFullScreen(f,true);

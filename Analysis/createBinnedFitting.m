@@ -1,5 +1,6 @@
 clear
-
+filename='binnedData_numThresholds100.mat';
+load(filename);
 % initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 spatialData=struct();
@@ -7,36 +8,29 @@ fitting_stat_all=struct();
 decayConstant=struct();
 maxDistance=struct();
 % voxel data
-spatialData.voxel.corrCoeffAll=load('corrCoeffAll_distancesAll.mat','corrCoeff_all');
-spatialData.voxel.corrCoeffAll=spatialData.voxel.corrCoeffAll.('corrCoeff_all');
-spatialData.voxel.distancesAll=load('corrCoeffAll_distancesAll.mat','distances_all');
-%%
-spatialData.voxel.distancesAll=spatialData.voxel.distancesAll.('distances_all');
-% structure data
-spatialData.structure.corrCoeffAll=load('corrCoeff_distances_ontoDist_clean.mat','corrCoeff_clean');
-spatialData.structure.corrCoeffAll=spatialData.structure.corrCoeffAll.('corrCoeff_clean');
-spatialData.structure.distancesAll=load('corrCoeff_distances_ontoDist_clean.mat','distances_clean');
-spatialData.structure.distancesAll=spatialData.structure.distancesAll.('distances_clean');
-
+spatialData.voxel.yPlotDataAll=yPlotDataAll;
+spatialData.voxel.xPlotDataAll=xPlotDataAll;
+spatialData.voxel.numThresholds=numThresholds;
 % Initialize
-dataType={'voxel', 'structure'};
+dataType={'voxel'};
 for i=1:length(dataType)
     [f, F, fitting_stat_all.(dataType{i}), ...
     decayConstant.(dataType{i}), ...
     maxDistance.(dataType{i})]=getFitting(dataType{i},...
-                                spatialData.(dataType{i}).distancesAll,...
-                                spatialData.(dataType{i}).corrCoeffAll,...
+                                spatialData.(dataType{i}).xPlotDataAll,...
+                                spatialData.(dataType{i}).yPlotDataAll,...
                                 'wholeBrain',...
-                                'original');
+                                sprintf('binned numThresholds=%d',...
+                                        spatialData.(dataType{i}).numThresholds));
     % save figure
-    str=fullfile('Outs', 'decay_constant',strcat('decayConstant_',dataType{i},'.jpeg'));
+    str=fullfile('Outs', 'decay_constant_binned',strcat('decayConstant_binned_',dataType{i},'.jpeg'));
     imwrite(F.cdata,str,'jpeg');
 end
 
 %----------------------------------------------------------------------------------------------
 % save variables
 %----------------------------------------------------------------------------------------------
-str=fullfile('Matlab_variables','fitting.mat');
+str=fullfile('Matlab_variables','fitting_binned.mat');
 save(str, 'decayConstant', 'maxDistance','fitting_stat_all','spatialData')
 
 % save
