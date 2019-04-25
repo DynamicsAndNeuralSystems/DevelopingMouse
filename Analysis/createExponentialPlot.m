@@ -23,7 +23,7 @@ imwrite(F.cdata, str, 'jpeg');
 
 clear
 
-%% exponential fit, x axis scaled
+%% exponential fit, x axis scaled (distance/max distance)
 load('fitting_scaled.mat');
 [~,F]= plotFitting(spatialData.voxel.distancesAll_scaled,'exp',fitting_stat_all,'voxel','Separation Distance/maxDistance',...
                   0.1,'original');
