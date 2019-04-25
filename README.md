@@ -53,6 +53,7 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `createSpatialData_2BrainDiv.m` computes correlation coefficients and distances from pairs of brain divisions (forebrain, midbrain and hindbrain), creating `spatialData_2brainDiv.mat`
 * `createCellSpecificGenes.m` creates `enrichedGenes.mat` containing the struct `enrichedGenes` (the abbreviations of Allen data gene that are enriched in developing and mature astrocytes, and progenitor and postmitotic oligodendrocytes), `geneID` and `geneAbbreviation` for later use (mapping gene abbreviation to ID) 
 * `createGeneList_gridExpression.m` obtains a list of gene IDs from the downloaded Grid Expression Data, storing them in `geneID_gridExpression.mat`
+* `createBinnedData.m` bins the correlation and distance data by quantiles and save them in `binnedData_numThresholds100.mat`
 
 * Matlab variables are saved in the folder `Matlab_variables`
 * csv files are saved in the folder `Processed`
