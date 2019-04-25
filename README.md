@@ -89,6 +89,7 @@ Note: the `.csv` files are stored in `Data` folder
 * `createFitting_brainDiv.m` has the similar function as `createFitting.m` except it is for forebrain, midbrain and hindbrain separately; saves the fitting statistic, decay constant and maximum distance to `fitting_brainDiv.mat`
 * `decayConstant_voxel_brainDiv.m`  plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance separately for forebrain, midbrain and hindbrain 
 * `GeneCoexpression_Binning_voxel_2brainDiv.m` plots forebrain-midbrain, forebrain-hindbrain and midbrain-hindbrain coexpression against distance for all time points
+* `createBinnedFitting.m` does the same thing as `createFitting.m` except it works on binned data from `createBinnedData.m`; it creates `fitting_binned.mat`
 
 * All figures are saved in Outs
 ## Testing
