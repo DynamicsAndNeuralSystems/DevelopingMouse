@@ -4,7 +4,7 @@
 * Fills the `Data/API` directory.
 * First download Allen API package by `pip install allensdk`
 * Run `download_devmouse_unionizes.py` to retrieve gene expression data at structure level (tentative)
-* Run `structure.py` to download structure information
+* Run `structures.py` to download structure information
 * Run `getBrainDivision.py` to download major brain division info (forebrain, midbrain and hindbrain) and ID of their descendants; data saved in `structure_F.csv`, `structure_M.csv`,`structure_H.csv`,`structure_F_descendant_ID.csv`,`structure_M_descendant_ID.csv`,`structure_H_descendant_ID.csv`
 
 ## Other raw data
@@ -42,7 +42,7 @@ Allen RMA API query `classes.ipynb` OR `Allen+RMA+API+query+classes.py`
 
 Convert downloaded data into Matlab variables, fills the `DataRendering` [`ProcessedData`] directory.
 * `createStructureInfo.m` creates a Matlab variable `dataDevMouse.mat` containing structure information, including structure abbreviation, ID, colour, coordinates, major division abbreviation (the level 3 structure it belongs to), major division colour, a table containing the above info, and distance matrix
-* `createAnnotationGrids_SpinalCordID_energyGrid.m` creates `AnnotationGrids.mat`,`spinalCord_ID.mat`,`createAnnotationGrids_SpinalCordID_energyGrid.mat`
+* `createAnnotationGrids_SpinalCordID_energyGrid.m` creates `AnnotationGrids.mat`,`spinalCord_ID.mat`,`energyGridE11pt5.mat`,`energyGridE13pt5.mat`,`energyGridE15pt5.mat`,`energyGridE18pt5.mat`,`energyGridP4.mat`,`energyGridP14.mat`,`energyGridP28.mat`
 * `createGeneExpressionMatrix.m` creates the following:
 1) `voxelGeneCoexpression_all.mat` containing voxel x gene matrix, distance matrix and a selector (determines which voxels are sampled for further analysis; it also indicates the voxels included in the distance matrix) for 7 time points
 2) `voxelGeneCoexpression_all_brainDiv.mat` containing the same data but separately for the forebrain, midbrain and hindbrain.
@@ -53,6 +53,7 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `createSpatialData_2BrainDiv.m` computes correlation coefficients and distances from pairs of brain divisions (forebrain, midbrain and hindbrain), creating `spatialData_2brainDiv.mat`
 * `createCellSpecificGenes.m` creates `enrichedGenes.mat` containing the struct `enrichedGenes` (the abbreviations of Allen data gene that are enriched in developing and mature astrocytes, and progenitor and postmitotic oligodendrocytes), `geneID` and `geneAbbreviation` for later use (mapping gene abbreviation to ID) 
 * `createGeneList_gridExpression.m` obtains a list of gene IDs from the downloaded Grid Expression Data, storing them in `geneID_gridExpression.mat`
+* `createBinnedData.m` bins the correlation and distance data by quantiles and save them in `binnedData_numThresholds100.mat`
 
 * Matlab variables are saved in the folder `Matlab_variables`
 * csv files are saved in the folder `Processed`
@@ -88,6 +89,8 @@ Note: the `.csv` files are stored in `Data` folder
 * `createFitting_brainDiv.m` has the similar function as `createFitting.m` except it is for forebrain, midbrain and hindbrain separately; saves the fitting statistic, decay constant and maximum distance to `fitting_brainDiv.mat`
 * `decayConstant_voxel_brainDiv.m`  plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance separately for forebrain, midbrain and hindbrain 
 * `GeneCoexpression_Binning_voxel_2brainDiv.m` plots forebrain-midbrain, forebrain-hindbrain and midbrain-hindbrain coexpression against distance for all time points
+* `createBinnedFitting.m` does the same thing as `createFitting.m` except it works on binned data from `createBinnedData.m`; it creates `fitting_binned.mat`
+* `createBinnedExponentialPlot.m` plots the exponential fitting of the binned data
 
 * All figures are saved in Outs
 ## Testing
