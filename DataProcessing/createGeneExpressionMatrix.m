@@ -24,7 +24,7 @@ voxelGeneCoexpression_all_brainDiv=struct();
 for i=1:length(timePoints)
     load(strcat('energyGrids_',timePoints{i},'.mat'))
     fprintf('hi\n')
-    [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData, whatNorm, 0.3,'all',0);
+    [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData(i), whatNorm, 0.3,'all',0);
     voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
     voxelGeneCoexpression_all.wholeBrain.distMat_all{i} = distMat;
     voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i} = dataIndSelect;

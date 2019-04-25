@@ -156,9 +156,9 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
       coOrds=coOrds(isGoodVoxel,:);
       % for reproducibility
       rng(0,'twister')
-      stream = RandStream.getGlobalStream();
+      % s = RandStream('mlfg6331_64');
       % Create distance matrix from only voxels selected for gene expression matrix
-      [dataIndSelect,~]=datasample(stream,[1:size(voxGeneMat,1)],numData,'replace',false);
+      [dataIndSelect,~]=datasample(1:size(voxGeneMat,1),numData,'replace',false);
       distMat=squareform(pdist(coOrds(dataIndSelect,:),'euclidean')...
           *resolutionGrid.(timePointNow));
   else
