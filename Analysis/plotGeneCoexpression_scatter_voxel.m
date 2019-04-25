@@ -15,7 +15,7 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     % xBin_num=0.1*(max(distances_all)-min(distances_all));
     % yBin_num=xBin_num;
     % nbins=[0.01*length(distances_all(:)) 0.01*length(corrCoeff_all(:))]
-    [N,Xedges,Yedges] = histcounts2(distances_all(:),corrCoeff_all(:),'Normalization','probability');
+    [N,Xedges,Yedges] = histcounts2(distances_all(:),corrCoeff_all(:),'Normalization','countdensity');
     % xBin=linspace(min(distances_all),max(distances_all),xBin_num);
     % yBin=linspace(min(corrCoeff_all),max(corrCoeff_all),yBin_num);
     % Bin the data:
