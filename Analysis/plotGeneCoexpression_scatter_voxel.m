@@ -14,7 +14,8 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
   if densityOn==1
     % xBin_num=0.1*(max(distances_all)-min(distances_all));
     % yBin_num=xBin_num;
-    [N,Xedges,Yedges] = histcounts2(distances_all(:),corrCoeff_all(:));
+    nbins=[0.01*length(distances_all(:)) 0.01*length(corrCoeff_all(:))]
+    [N,Xedges,Yedges] = histcounts2(distances_all(:),corrCoeff_all(:),nbins);
     % xBin=linspace(min(distances_all),max(distances_all),xBin_num);
     % yBin=linspace(min(corrCoeff_all),max(corrCoeff_all),yBin_num);
     % Bin the data:
@@ -33,7 +34,7 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     % Plot heatmap:
     subplot(2, 1, 2);
     imagesc(Xedges, Yedges, BF_NormalizeMatrix_v2(N,'maxmin'));
-    colormap('pink')
+    colormap('hot')
     colorbar
     set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]), 'YDir','normal');
     xlabel('Separation Distance (um)','FontSize',16)
