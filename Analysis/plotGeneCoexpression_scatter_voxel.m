@@ -34,7 +34,7 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     % Plot heatmap:
     subplot(2, 1, 2);
     % imagesc(Xedges, Yedges, BF_NormalizeMatrix_v2(N,'maxmin'));
-    imagesc(Xedges, Yedges, BF_NormalizeMatrix_v2(N,'maxmin'));
+    imagesc(Xedges, Yedges, BF_NormalizeMatrix_v2(N,'zscore'));
     colormap('hot')
     colorbar
     set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]), 'YDir','normal');
