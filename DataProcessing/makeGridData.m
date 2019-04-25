@@ -155,7 +155,7 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
       % only keep good voxels
       coOrds=coOrds(isGoodVoxel,:);
       % for reproducibility
-      rng(0,'twister')
+      % rng(0,'twister')
       % s = RandStream('mlfg6331_64');
       % Create distance matrix from only voxels selected for gene expression matrix
       [dataIndSelect,~]=datasample(1:size(voxGeneMat,1),numData,'replace',false);
