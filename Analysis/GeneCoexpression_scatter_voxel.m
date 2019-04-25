@@ -8,6 +8,7 @@ load('fitting.mat');
 % initialize
 distances_all = cell(length(timePoints),1);
 corrCoeff_all = cell(length(timePoints),1);
+distances_all_scaled = cell(length(timePoints),1);
 %---------------------------------------------------------------------
 % Plot gene coexpression against distance
 %---------------------------------------------------------------------
@@ -24,6 +25,8 @@ for i = 1:length(timePoints)
     filename=strcat('scatter_voxel','_',timePoints{i},'.jpeg');
     str=fullfile('Outs','scatter_voxel',filename);
     imwrite(F.cdata,str,'jpeg');
+    % create another distance cell normalized by max distance
+    distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
     % saveas(f,str)
 end
 %%
@@ -31,4 +34,4 @@ end
 % save variables
 %---------------------------------------------------------------------
 str=fullfile('Matlab_variables','corrCoeffAll_distancesAll.mat');
-save(str, 'distances_all', 'corrCoeff_all');
+save(str, 'distances_all', 'corrCoeff_all', 'distances_all_scaled');
