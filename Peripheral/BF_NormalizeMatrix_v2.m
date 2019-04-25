@@ -1,4 +1,4 @@
-function dataMatrixNorm = BF_NormalizeMatrix(dataMatrix,normMethod,isTraining)
+function dataMatrixNorm = BF_NormalizeMatrix_v2(dataMatrix,normMethod,isTraining)
 % BF_NormalizeMatrix    Normalizes all columns of an input matrix.
 %
 %---INPUTS:
@@ -176,7 +176,7 @@ end
 function xhat = RobustSigmoid(x,doScale)
     % Outlier-adjusted sigmoid (optionally scaled to unit interval)
     if nargin < 2, doScale = 1; end
-    
+
     try
         goodVals = (~isnan(x) & isTraining);
     catch
