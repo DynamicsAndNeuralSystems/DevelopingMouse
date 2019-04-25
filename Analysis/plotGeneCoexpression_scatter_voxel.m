@@ -32,8 +32,8 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     title(str,'Fontsize',19);
     % Plot heatmap:
     subplot(2, 1, 2);
-    imagesc(Yedges, Xedges, BF_NormalizeMatrix_v2(N,'maxmin'));
-    colormap(hot)
+    imagesc(Xedges, Yedges, BF_NormalizeMatrix_v2(N,'maxmin'));
+    colormap('hot')
     colorbar
     set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]), 'YDir','normal');
     xlabel('Separation Distance (um)','FontSize',16)
