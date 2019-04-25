@@ -26,7 +26,7 @@ for i = 1:length(timePoints)
     str=fullfile('Outs','scatter_voxel',filename);
     imwrite(F.cdata,str,'jpeg');
     % create another distance cell normalized by max distance
-    distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
+    distances_all_scaled{i}=distances_all{i}/(max(distances_all{i})*2);
     % saveas(f,str)
 end
 %%
