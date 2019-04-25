@@ -32,11 +32,12 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     title(str,'Fontsize',19);
     % Plot heatmap:
     subplot(2, 1, 2);
-    s=pcolor(Xedges, Yedges, BF_NormalizeMatrix_v2(N,'maxmin'));
+    s=pcolor(Yedges, Xedges, BF_NormalizeMatrix_v2(N,'maxmin'));
     s.FaceColor = 'interp';
     colormap(hot)
     colorbar
-    set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]), 'YDir','normal');
+    % set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]), 'YDir','normal');
+    set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]));
     xlabel('Separation Distance (um)','FontSize',16)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
     title(str,'Fontsize',19);
