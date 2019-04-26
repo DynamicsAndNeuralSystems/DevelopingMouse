@@ -1,5 +1,4 @@
-function [fitting_stat_all, decayConstant, maxDistance]=getFitting(dataType,xData,yData)
-  % dataType: 'voxel' or 'structure'
+function [fitting_stat_all, decayConstant, maxDistance]=getFitting(xData,yData)
   % xData and yData are cells each containing distances and correlation coefficient of all time points
   % dataProcessing: 'original' or 'binned numThresholds=xx'
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};

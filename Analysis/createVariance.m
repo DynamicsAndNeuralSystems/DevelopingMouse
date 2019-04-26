@@ -20,8 +20,7 @@ for k=1:length(incrementVector) % for each sampling size
                                                                       dataIndSelect_all{i});
     end
     % fit and obtain correlation coefficient (all time points included)
-    decayConstant_samples{k}=zeros(samplingNum,1);
-    [~, decayConstant_samples{k}(j), ~]=getFitting(dataType,distances_all,corrCoeff_all);
+    [~, decayConstant_samples{k}, ~]=getFitting(distances_all,corrCoeff_all);
   end
 end
 % calculate variance for each time point
