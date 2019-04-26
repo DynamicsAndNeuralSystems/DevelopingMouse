@@ -1,15 +1,14 @@
 function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, ...
                                                             whatNumData, whatNorm, ...
-                                                            whatVoxelThreshold, ...
-                                                            thisBrainDiv, cellSpecific)
+                                                            whatVoxelThreshold, thisBrainDiv)
   % for whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
   % for thisBrainDiv: 'forebrain', 'midbrain' or 'hindbrain'; if left out, all brain divisions included
   % for whatNumData: either input 'all' or the number of voxels to be included
-  % if cell specific genes are used, type the cell type in the format of {'cellType','stage'} e.g. {'astrocyte','developing'};
-  % otherwise, type 0
     %% Sets background variables
     % current time point
     timePointNow=whatTimePointNow;
+    % matlab variable directory
+    varDir=fullfile('Matlab_variables');
     % % change thisBrainDiv to a cell for later referencing use
     % thisBrainDiv_cell=cell(1,1);
     % thisBrainDiv_cell{1}=thisBrainDiv;
@@ -20,84 +19,22 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     timePointIndex=find(cellfun(@(c)strcmp(timePointNow,c),timePoints)); %match index to the chosen timepoint
     resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,...
         'P14',200,'P28',200);
-    % set file name for later loading
-    filename=strcat('energyGrids_',timePointNow,'.mat');
     %% load matlab variables
-    load('brainDivision.mat')
-    load(filename)
-    % comment out cell specific for now (troubleshooting)
-    % if (iscell(cellSpecific))
-    %   load('enrichedGenes.mat')
-    %   load('geneID_gridExpression.mat')
-    %   if strcmp(cellSpecific{1},'astrocyte')
-    %     if strcmp(cellSpecific{2},'developing')
-    %       geneIDix=cell(length(enrichedGenes.astrocyte.developing),1);
-    %       % compare developing astrocytes gene acronym with gene abbreviation to index into the energy grid needed
-    %       for k=1:length(enrichedGenes.astrocyte.developing)
-    %         geneIDix{k}=cellfun(@(x) strcmp(enrichedGenes.astrocyte.developing,x), geneAbbreviation);
-    %       end
-    %       if nnz(geneIDix{1})==0
-    %         fprintf('No gene available for %s %s in %s',cellSpecific{1},cellSpecific{2},timePointNow);
-    %       else
-    %         load(filename);
-    %         energyGrids=energyGrids(geneIDix{1});
-    %       end
-    %    elseif strcmp(cellSpecific{2},'mature')
-    %       geneIDix=cell(length(enrichedGenes.astrocyte.mature),1);
-    %       % compare developing astrocytes gene acronym with gene abbreviation to index into the energy grid needed
-    %       for k=1:length(enrichedGenes.astrocyte.mature)
-    %         geneIDix{k}=cellfun(@(x) strcmp(enrichedGenes.astrocyte.mature,x), geneAbbreviation);
-    %       end
-    %       if nnz(geneIDix{1})==0
-    %         fprintf('No gene available for %s %s in %s',cellSpecific{1},cellSpecific{2},timePointNow);
-    %       else
-    %         load(filename);
-    %         energyGrids=energyGrids(geneIDix{1});
-    %       end
-    %     end
-    %    elseif strcmp(cellSpecific{1},'oligodendrocyte')
-    %     if strcmp(cellSpecific{2},'progenitor')
-    %       geneIDix=cell(length(enrichedGenes.oligodendrocyte.progenitor),1);
-    %       % compare developing astrocytes gene acronym with gene abbreviation to index into the energy grid needed
-    %       for k=1:length(enrichedGenes.oligodendrocyte.progenitor)
-    %         geneIDix{k}=cellfun(@(x) strcmp(enrichedGenes.oligodendrocyte.progenitor,x), geneAbbreviation);
-    %       end
-    %       if nnz(geneIDix{1})==0
-    %         fprintf('No gene available for %s %s in %s',cellSpecific{1},cellSpecific{2},timePointNow);
-    %       else
-    %         load(filename);
-    %         energyGrids=energyGrids(geneIDix{1});
-    %       end
-    %     elseif strcmp(cellSpecific{2},'postmitotic')
-    %       geneIDix=cell(length(enrichedGenes.oligodendrocyte.postmitotic),1);
-    %       % compare developing astrocytes gene acronym with gene abbreviation to index into the energy grid needed
-    %       for k=1:length(enrichedGenes.oligodendrocyte.postmitotic)
-    %         geneIDix{k}=cellfun(@(x) strcmp(enrichedGenes.oligodendrocyte.postmitotic,x), geneAbbreviation);
-    %       end
-    %       if nnz(geneIDix{1})==0
-    %         fprintf('No gene available for %s %s in %s',cellSpecific{1},cellSpecific{2},timePointNow);
-    %       else
-    %         load(filename);
-    %         energyGrids=energyGrids(geneIDix{1});
-    %       end
-    %     end
-    %   end
-    % elseif (isnumeric(cellSpecific) & cellSpecific == 0);
-    %   load(filename);
-    % elseif (isnumeric(cellSpecific) & cellSpecific ~= 0)
-    %   error('numeric cellSpecific must be the number 0')
-    % elseif ~(isnumeric(cellSpecific)|iscell(cellSpecific))
-    %   error('undefined cellSpecific data type')
-    % end
-
-    % if exist('energyGrids')==1 % if energyGrids is loaded
+    filename=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
+    str=fullfile(varDir,filename);
+    load(str)
     load('annotationGrids.mat')
     load('spinalCord_ID.mat')
+    load('brainDivision.mat')
     %% Create the matrix
     % filters off spinal cord voxels
     isSpinalCord=ismember(annotationGrids{timePointIndex},spinalCord_ID);
-    % only keep annotated voxels
     isAnno=annotationGrids{timePointIndex}>0;
+    % if nargin<5 % all brain divisions
+    %     isIncluded=union(union(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
+    %                     ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
+    %                     ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID));
+    % else % only a particular brain division
     if strcmp(thisBrainDiv,'all')
         isIncluded=or(or(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
                           ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
@@ -107,11 +44,11 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     elseif strcmp(thisBrainDiv,'midbrain')
       isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID);
     elseif strcmp(thisBrainDiv,'hindbrain')
-      isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID);
+      isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.hindrain.ID);
     else
       error('Invalid brain division input')
     end
-    clear annotationGrids
+    % end
     % make voxel x gene matrix
     voxGeneMat=zeros(nnz(isAnno & ~isSpinalCord & isIncluded),length(energyGrids));
 
@@ -157,16 +94,7 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     coOrds=horzcat(a,b,c);
     % only keep good voxels
     coOrds=coOrds(isGoodVoxel,:);
-    % for reproducibility
-    % rng(0,'twister')
-    % s = RandStream('mlfg6331_64');
     % Create distance matrix from only voxels selected for gene expression matrix
-    [dataIndSelect,~]=datasample(1:size(voxGeneMat,1),numData,'replace',false);
-    distMat=squareform(pdist(coOrds(dataIndSelect,:),'euclidean')...
-        *resolutionGrid.(timePointNow));
-  % else
-  %   voxGeneMat=NaN;
-  %   distMat=NaN;
-  %   dataIndSelect=NaN;
-  % end
+    [dataIndSelect,~]=datasample([1:size(voxGeneMat,1)],numData,'replace',false);
+    distMat=squareform(pdist(coOrds(dataIndSelect,:),'euclidean')*resolutionGrid.(timePoints{timePointIndex}));
 end

@@ -1,12 +1,12 @@
-function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(...
-                                            voxGeneMat,dataIndSelect,distMat,fitting_stat_all,...
+function [f,F]=plotGeneCoexpression_scatter_voxel(...
+                                            corrCoeff,distances,fitting_stat_all,...
                                             timePointNow,brainDiv,densityOn)
                                             % densityOn = 1 if density is needed, 0 otherwise
-  % extract the correlation coefficients
-  geneCorr=corrcoef((voxGeneMat(dataIndSelect,:))','rows','pairwise');
-  corrCoeff_all=geneCorr(find(triu(ones(size(geneCorr)),1)));
-  % extract distances from distance matrix
-  distances_all = extractDistances(distMat);
+  % % extract the correlation coefficients
+  % geneCorr=corrcoef((voxGeneMat(dataIndSelect,:))','rows','pairwise');
+  % corrCoeff_all=geneCorr(find(triu(ones(size(geneCorr)),1)));
+  % % extract distances from distance matrix
+  % distances_all = extractDistances(distMat);
   % plot coexpression against distance
   f=figure('color','w','Position',get(0, 'Screensize'));
   gcf;
@@ -15,18 +15,18 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     % xBin_num=0.1*(max(distances_all)-min(distances_all));
     % yBin_num=xBin_num;
     % nbins=[0.01*length(distances_all(:)) 0.01*length(corrCoeff_all(:))]
-    [N,Xedges,Yedges] = histcounts2(distances_all(:),corrCoeff_all(:),'Normalization','pdf');
+    [N,Xedges,Yedges] = histcounts2(distances(:),corrCoeff(:),'Normalization','pdf');
     % xBin=linspace(min(distances_all),max(distances_all),xBin_num);
     % yBin=linspace(min(corrCoeff_all),max(corrCoeff_all),yBin_num);
     % Bin the data:
     % N=histcounts2(distances_all(:), corrCoeff_all(:), xBin, yBin);
     % Plot scattered data (for comparison):
     subplot(2, 1, 1);
-    scatter(distances_all,corrCoeff_all,'.');
+    scatter(distances,corrCoeff,'.');
     set(gca, 'XLim', Xedges([1 end]), 'YLim', Yedges([1 end]));
     hold on
     % add exponential fitting
-    xData=linspace(min(distances_all),max(distances_all),0.1*length(distances_all));
+    xData=linspace(min(distances),max(distances),0.1*length(distances));
     p=plot(xData,fitting_stat_all.voxel.(timePointNow).fHandle.exp(xData));
     xlabel('Separation Distance (um)','FontSize',16)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
@@ -42,9 +42,9 @@ function [f,F,distances_all,corrCoeff_all]=plotGeneCoexpression_scatter_voxel(..
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
     title(str,'Fontsize',19);
   elseif densityOn==0
-    scatter(distances_all,corrCoeff_all,'.')
+    scatter(distances,corrCoeff,'.')
     % add exponential fitting
-    xData=linspace(min(distances_all),max(distances_all),0.1*length(distances_all));
+    xData=linspace(min(distances),max(distances),0.1*length(distances));
     p=plot(xData,fitting_stat_all.voxel.(timePointNow).fHandle.exp(xData));
     xlabel('Separation Distance (um)','FontSize',16)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
