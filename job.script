@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=developingMouse
 #SBATCH --time=01:00:00
-#SBATCH --ntasks=32
-#SBATCH --ntasks-per-node=16
+#SBATCH --ntasks=2
+#SBATCH --ntasks-per-node=2
 #SBATCH --cpus-per-task=1
 #SBATCH --export=NONE
 
