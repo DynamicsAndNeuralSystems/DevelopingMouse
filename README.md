@@ -77,6 +77,7 @@ Using z-score for norm field: `MakeDevMouseGeneExpression_zscore.m`
 Note: the `.csv` files are stored in `Data` folder
 
 ## Analysis
+* `createCorrCoeffAll_distancesAll.m` computes correlation, distance and scaled distance from voxGeneMat and distMat (with dataIndSelect), saving them into `corrCoeffAll_distancesAll.mat`
 * `geneCoexpression_scatter_voxel.m` (matlab 2015b or later only) plots gene coexpression against distance separation at the voxel level 
 * `createFitting.m` fits the voxel and structure data to a few types of curves, plots decay constant (3 parameter exponential fitting) against maximum distance in each time point); and save the fitting statistic, decay constant and maximum distance to `fitting.mat`
 * `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
@@ -92,6 +93,7 @@ Note: the `.csv` files are stored in `Data` folder
 * `createBinnedFitting.m` does the same thing as `createFitting.m` except it works on binned data from `createBinnedData.m`; it creates `fitting_binned.mat`
 * `createBinnedExponentialPlot.m` plots the exponential fitting of the binned data
 * `createFitting_scaledDistance.m` does the same thing as `createFitting.m` except it works on scaled distance; saves data to `fitting_scaled.mat`
+* `createVariance.m` plots variance in estimation of decay constant against the number of voxels used in the analysis.
 
 * All figures are saved in Outs
 ## Testing
