@@ -1,11 +1,20 @@
+whatNorm='scaledSigmoid';
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+incrementVector=1000:1000:5000; % number of data incremented in steps of 1000 from 1000 to 5000
+variance=zeros(length(incrementVector),1);
+decay_constant=zeros(length(incrementVector),1);
 % calculate separately for each time point
-for i=1:length(timePoints)
-  for k=1000:1000:5000
-    % create gene expression matrix
-    
+
+for k=incrementVector
+  % create gene expression matrix
+  [voxGeneMat_all,distMat_all,dataIndSelect_all]=makeGeneExpressionMatrix(whatNorm, k);
+  for i=1:length(timePoints)
     % compute correlation
+    [distances,corrCoeff]=computeCorrCoeff_distances(voxGeneMat_all{i},...
+                                                    distMat_all{i},...
+                                                    dataIndSelect_all{i});
     % fitting
+    
     % obtain correlation coefficient
   end
 end
