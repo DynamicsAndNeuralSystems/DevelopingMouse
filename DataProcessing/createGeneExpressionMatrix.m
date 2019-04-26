@@ -7,7 +7,7 @@ load('annotationGrids.mat');
 load('spinalCord_ID.mat');
 % initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-numData=[1500,1500,1500,1500,1500,1500,1500];
+numData=[1000,1000,1000,1000,1000,1000,1000];
 % numData='all';
 % full size for 7 time points: 210000, 669369, 806520, 115240, 165550, 136000, 158629
 % after filtering off spinal cord, unannotated voxels and only including forebrain,midbrain and hindbrain
@@ -23,7 +23,7 @@ voxelGeneCoexpression_all_brainDiv=struct();
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
     load(strcat('energyGrids_',timePoints{i},'.mat'))
-    fprintf('hi\n')
+    fprintf('hi\n') % for troubleshooting
     [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData(i), whatNorm, 0.3,'all',0);
     voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
     voxelGeneCoexpression_all.wholeBrain.distMat_all{i} = distMat;
