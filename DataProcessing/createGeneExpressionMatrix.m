@@ -22,7 +22,6 @@ voxelGeneCoexpression_all_brainDiv=struct();
 
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
-    load(strcat('energyGrids_',timePoints{i},'.mat'))
     fprintf('hi\n') % for troubleshooting
     [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData(i), whatNorm, 0.3,'all',0);
     voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
