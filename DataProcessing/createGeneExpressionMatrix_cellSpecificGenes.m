@@ -16,12 +16,12 @@ voxelGeneCoexpression_all_subsetGenes=struct();
 
 % get the required gene ID
 load('enrichedGenes.mat'); % contains 'enrichedGenes','geneAbbreviation','geneID'
-abbreviation_subsetGenes=enrichedGenes.astrocyte.developing;
+abbreviation_subsetGenes=enrichedGenes.oligodendrocyte.progenitor;
 % map the gene abbreviation to the gene ID
 geneIDix=zeros(length(abbreviation_subsetGenes),1);
 for j=1:length(abbreviation_subsetGenes)
   % for each gene in the gene subset
-    geneIDix(j)=find(cellfun(@(x) strcmp(enrichedGenes.astrocyte.developing{j},x),geneAbbreviation));
+    geneIDix(j)=find(cellfun(@(x) strcmp(abbreviation_subsetGenes{j},x),geneAbbreviation));
 end
 geneID_subsetGenes=geneID(geneIDix);
 % create gene expression matrix for whole brain
@@ -33,9 +33,9 @@ for i=1:length(timePoints)
                                                                     0.3,...
                                                                     'all',...
                                                                     geneID_subsetGenes);
-    voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
-    voxelGeneCoexpression_all.wholeBrain.distMat_all{i} = distMat;
-    voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i} = dataIndSelect;
+    voxelGeneCoexpression_all_subsetGenes.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
+    voxelGeneCoexpression_all_subsetGenes.wholeBrain.distMat_all{i} = distMat;
+    voxelGeneCoexpression_all_subsetGenes.wholeBrain.dataIndSelect_all{i} = dataIndSelect;
 end
 
 %% save variables
@@ -43,7 +43,7 @@ str=fullfile('Matlab_variables', 'voxelGeneCoexpression_all_subsetGenes.mat');
 save(str,'voxelGeneCoexpression_all_subsetGenes','-v7.3');
 
 % clear variable to save memory
-clear voxelGeneCoexpression_all
+clear voxelGeneCoexpression_all_subsetGenes
 
 % ignore brain divisions for now
 % %% create gene expression matrix for each brain divisions
