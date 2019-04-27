@@ -23,6 +23,7 @@ for j=1:length(abbreviation_subsetGenes)
   % for each gene in the gene subset
     geneIDix(j)=find(cellfun(@(x) strcmp(abbreviation_subsetGenes{j},x),geneAbbreviation));
 end
+%%
 geneID_subsetGenes=geneID(geneIDix);
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
