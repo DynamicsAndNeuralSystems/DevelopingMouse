@@ -15,12 +15,25 @@ whatVoxelThreshold = 0.3;
 %for each time point when division of brain is under question...
 %(instead of all brain)
 
+% get the required gene ID
+load('enrichedGenes.mat'); % contains 'enrichedGenes','geneAbbreviation','geneID'
+abbreviation_subsetGenes=enrichedGenes.oligodendrocyte.progenitor;
+% map the gene abbreviation to the gene ID
+geneIDix=zeros(length(abbreviation_subsetGenes),1);
+for j=1:length(abbreviation_subsetGenes)
+  % for each gene in the gene subset
+    geneIDix(j)=find(cellfun(@(x) strcmp(abbreviation_subsetGenes{j},x),geneAbbreviation));
+end
+%%
+geneID_subsetGenes=geneID(geneIDix);
+
 % create gene coexpression matrix
 for i=1:length(timePoints)
     [voxGeneMat, coOrds] = makeGridData_subsetGenes(timePoints{i}, ...
-                                        whatNorm, ...
-                                        whatVoxelThreshold,...
-                                        'wholeBrain');
+                                                    whatNorm, ...
+                                                    whatVoxelThreshold,...
+                                                    'wholeBrain',...
+                                                    geneID_subsetGenes);
     str=fullfile('Matlab_variables', strcat('voxelGeneCoexpression_subsetGenes','_',timePoints{i},'.mat'));
     save(str,'voxGeneMat','coOrds','-v7.3');
     clear voxGeneMat coOrds

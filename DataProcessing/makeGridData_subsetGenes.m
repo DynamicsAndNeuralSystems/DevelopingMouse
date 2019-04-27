@@ -1,6 +1,7 @@
 function [voxGeneMat, coOrds] = makeGridData_subsetGenes(whatTimePointNow, ...
                                             whatNorm, ...
                                             whatVoxelThreshold,...
+                                            thisBrainDiv,...
                                             geneIDs)
   % for whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
   % for thisBrainDiv: 'forebrain', 'midbrain', 'hindbrain' or 'wholeBrain'
@@ -49,7 +50,7 @@ function [voxGeneMat, coOrds] = makeGridData_subsetGenes(whatTimePointNow, ...
     end
 
     % turn geneIDs into a vector
-    geneIDs=cellfun(@(x) {x}, geneIDs);
+    geneIDs=cell2mat(geneIDs);
     % get the index of genes to be included
     ixGeneSubset=find(ismember(geneIDInfo,geneIDs));
     % make voxel x gene matrix
