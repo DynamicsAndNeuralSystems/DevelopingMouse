@@ -15,13 +15,15 @@ voxelGeneCoexpression_all_subsetGenes=struct();
 % voxelGeneCoexpression_all_brainDiv_cellSpecificGenes=struct();
 
 % get the required gene ID
-load('enrichedGenes.mat');
-% geneID_cellSpecific=cell(1,1);
-geneIDix=zeros(length(geneID),1);
-for k=length(enrichedGenes.astrocyte.developing) % for each gene in the gene subset
-  geneIDix(j)=find(cellfun(@(x) strcmp(enrichedGenes.astrocyte.developing{k},x),geneAbbreviation));
+load('enrichedGenes.mat'); % contains 'enrichedGenes','geneAbbreviation','geneID'
+abbreviation_subsetGenes=enrichedGenes.astrocyte.developing;
+% map the gene abbreviation to the gene ID
+geneIDix=zeros(length(abbreviation_subsetGenes),1);
+for j=1:length(abbreviation_subsetGenes)
+  % for each gene in the gene subset
+    geneIDix(j)=find(cellfun(@(x) strcmp(enrichedGenes.astrocyte.developing{j},x),geneAbbreviation));
 end
-geneID_cellSpecific=geneID(geneIDix);
+geneID_subsetGenes=geneID(geneIDix);
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
     readGridData(timePoints{i});
@@ -30,7 +32,7 @@ for i=1:length(timePoints)
                                                                     whatNorm, ...
                                                                     0.3,...
                                                                     'all',...
-                                                                    geneID_cellSpecific);
+                                                                    geneID_subsetGenes);
     voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
     voxelGeneCoexpression_all.wholeBrain.distMat_all{i} = distMat;
     voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i} = dataIndSelect;
