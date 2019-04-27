@@ -1,47 +1,53 @@
-makeFitting_voxelOnly('corrCoeffAll_distancesAll_voxelGeneCoexpression_all', 0, 'allGenes') % non-scaled distance
-makeFitting_voxelOnly('corrCoeffAll_distancesAll', 1, 'allGenes') % scaled distance
-makeFitting_voxelOnly('corrCoeffAll_distancesAll_voxelGeneCoexpression_all_subsetGenes', 0, ...
-                      'oligodendrocyteProgenitor')
-% clear
-%
-% % initialize
-% timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-% spatialData=struct();
-% fitting_stat_all=struct();
-% decayConstant=struct();
-% maxDistance=struct();
-% % voxel data
-% spatialData.voxel.corrCoeffAll=load('corrCoeffAll_distancesAll.mat','corrCoeff_all');
-% spatialData.voxel.corrCoeffAll=spatialData.voxel.corrCoeffAll.('corrCoeff_all');
-% spatialData.voxel.distancesAll=load('corrCoeffAll_distancesAll.mat','distances_all');
-% %%
-% spatialData.voxel.distancesAll=spatialData.voxel.distancesAll.('distances_all');
-% % structure data
-% spatialData.structure.corrCoeffAll=load('corrCoeff_distances_ontoDist_clean.mat','corrCoeff_clean');
-% spatialData.structure.corrCoeffAll=spatialData.structure.corrCoeffAll.('corrCoeff_clean');
-% spatialData.structure.distancesAll=load('corrCoeff_distances_ontoDist_clean.mat','distances_clean');
-% spatialData.structure.distancesAll=spatialData.structure.distancesAll.('distances_clean');
-%
-% % Initialize
-% dataType={'voxel', 'structure'};
-% for j=1:length(dataType)
-%     [fitting_stat_all, ...
-%         decayConstant, ...
-%               maxDistance]=getFitting(spatialData.(dataType{j}).distancesAll,...
-%                                       spatialData.(dataType{j}).corrCoeffAll);
-%     [f, F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,dataType{j},'wholeBrain',...
-%                                       'original');
-%     % save figure
-%     str=fullfile('Outs', 'decay_constant',strcat('decayConstant_',dataType{j},'.jpeg'));
-%     imwrite(F.cdata,str,'jpeg');
-% end
-%
-% %----------------------------------------------------------------------------------------------
-% % save variables
-% %----------------------------------------------------------------------------------------------
-% str=fullfile('Matlab_variables','fitting.mat');
-% save(str, 'decayConstant', 'maxDistance','fitting_stat_all','spatialData')
+function makeFitting_voxelOnly(matFileName, isScaled, whatSubsetGene)
+  % matFileName: a string of the matlab variable containing corrCoeffAll_distancesAll
+  % isScaled: 1 means distances_all_scaled is used, 0 means distances_all is used
+  % whatSubsetGene: a string indicating the name of the gene subset used; if not subset, set as "allGenes"
+  % initialize
+  spatialData=struct();
+  fitting_stat_all=struct();
+  decayConstant=struct();
+  maxDistance=struct();
+  % voxel data
+  spatialData.voxel.corrCoeffAll=load('corrCoeffAll_distancesAll.mat','corrCoeff_all');
+  spatialData.voxel.corrCoeffAll=spatialData.voxel.corrCoeffAll.('corrCoeff_all');
+  if isScaled
+    spatialData.voxel.distancesAll_scaled=load('corrCoeffAll_distancesAll.mat','distances_all_scaled');
+    spatialData.voxel.distancesAll_scaled=spatialData.voxel.distancesAll_scaled.('distances_all_scaled');
+    fieldname='distancesAll_scaled';
+  else
+    spatialData.voxel.distancesAll=load('corrCoeffAll_distancesAll.mat','distances_all');
+    spatialData.voxel.distancesAll=spatialData.voxel.distancesAll.('distances_all');
+    fieldname='distancesAll';
+  end
+  % Initialize
+  dataType={'voxel'};
+  for i=1:length(dataType)
+      [f, F, fitting_stat_all.(dataType{i}), ...
+      decayConstant.(dataType{i}), ...
+      maxDistance.(dataType{i})]=getFitting(dataType{i},...
+                                  spatialData.(dataType{i}).(fieldname),...
+                                  spatialData.(dataType{i}).corrCoeffAll,...
+                                  'wholeBrain',...
+                                  'original');
+      % save figure
+      if isScaled
+        str=fullfile('Outs', 'decay_constant_scaled',strcat('decayConstant_scaled',dataType{i},'_',whatSubsetGene,'.jpeg'));
+      else
+        str=fullfile('Outs', 'decay_constant',strcat('decayConstant',dataType{i},'_',whatSubsetGene,'.jpeg'));
+      end
+      imwrite(F.cdata,str,'jpeg');
+  end
 
+  %----------------------------------------------------------------------------------------------
+  % save variables
+  %----------------------------------------------------------------------------------------------
+  if isScaled
+    str=fullfile('Matlab_variables',strcat('fitting_scaled','_',whatSubsetGene,'.mat'));
+  else
+    str=fullfile('Matlab_variables',strcat('fitting','_',whatSubsetGene,'.mat'));
+  end
+  save(str, 'decayConstant', 'maxDistance','fitting_stat_all','spatialData')
+end
 % save
 
 % fitting_stat_all = struct();

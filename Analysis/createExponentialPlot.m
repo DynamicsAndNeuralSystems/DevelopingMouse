@@ -25,7 +25,15 @@ clear
 
 %% exponential fit, x axis scaled (distance/max distance)
 load('fitting_scaled.mat');
-[~,F]= plotFitting(spatialData.voxel.distancesAll_scaled,'exp',fitting_stat_all,'voxel','Separation Distance/(maxDistance^2)',...
+[~,F]= plotFitting(spatialData.voxel.distancesAll_scaled,'exp',fitting_stat_all,'voxel','Separation Distance/maxDistance)',...
+                  0.1,'original');
+str = fullfile('Outs','exponential_plot','voxel_expFit_xScaled.jpeg');
+imwrite(F.cdata, str, 'jpeg');
+
+clear
+%% exponential fit, gene subset
+load('fitting_oligodendrocyteProgenitor.mat');
+[~,F]= plotFitting(spatialData.voxel.distancesAll,'exp',fitting_stat_all,'voxel','Separation Distance (um)',...
                   0.1,'original');
 str = fullfile('Outs','exponential_plot','voxel_expFit_xScaled.jpeg');
 imwrite(F.cdata, str, 'jpeg');

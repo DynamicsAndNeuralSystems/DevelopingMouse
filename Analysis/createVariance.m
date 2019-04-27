@@ -1,11 +1,12 @@
 whatNorm='scaledSigmoid';
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-incrementVector=1000:1000:2000; %1000:1000:5000; % number of data incremented in steps of 1000 from 1000 to 5000
+incrementVector=10:10:30; %1000:1000:5000; % number of data incremented in steps of 1000 from 1000 to 5000
 samplingNum=5;%100;
 variance=cell(length(timePoints),1);
 decayConstant_samples=cell(length(incrementVector),1);
 
 for k=1:length(incrementVector) % for each sampling size
+  decayConstant_samples{k}=cell(length(samplingNum),1);
   for j=1:samplingNum % collect decay constants 100 times
     distances_all = cell(length(timePoints),1);
     corrCoeff_all = cell(length(timePoints),1);
@@ -20,7 +21,6 @@ for k=1:length(incrementVector) % for each sampling size
                                                                       dataIndSelect_all{i});
     end
     clear voxGeneMat_all distMat_all dataIndSelect_all
-    decayConstant_samples{k}=cell(length(samplingNum),1);
     % fit and obtain correlation coefficient (all time points included)
     [~, decayConstant_samples{k}{j}, ~]=getFitting(distances_all,corrCoeff_all);
     % decayConstant_samples{k}{j} is a vector with decay constants for 7 time points

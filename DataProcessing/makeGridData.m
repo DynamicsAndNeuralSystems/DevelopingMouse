@@ -1,8 +1,9 @@
-function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, ...
-                                                            whatNumData, whatNorm, ...
-                                                            whatVoxelThreshold, thisBrainDiv)
+function [voxGeneMat, coOrds] = makeGridData(whatTimePointNow, ...
+                                            whatNorm, ...
+                                            whatVoxelThreshold,...
+                                            thisBrainDiv)
   % for whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
-  % for thisBrainDiv: 'forebrain', 'midbrain' or 'hindbrain'; if left out, all brain divisions included
+  % for thisBrainDiv: 'forebrain', 'midbrain', 'hindbrain' or 'wholeBrain'
   % for whatNumData: either input 'all' or the number of voxels to be included
     %% Sets background variables
     % current time point
@@ -35,7 +36,7 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     %                     ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
     %                     ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID));
     % else % only a particular brain division
-    if strcmp(thisBrainDiv,'all')
+    if strcmp(thisBrainDiv,'wholeBrain')
         isIncluded=or(or(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
                           ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
                           ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID));
@@ -76,25 +77,9 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData(whatTimePointNow, .
     %% normalize matrix
     voxGeneMat=BF_NormalizeMatrix(voxGeneMat,whatNorm); % 'scaledSigmoid' used in Monash analysis
 
-    % number of data used in analysis
-    if isnumeric(whatNumData)
-        numData=whatNumData; % 1000 used in Monash analysis
-        % Check against error
-        if numData>size(voxGeneMat,1)
-            error('number of data analyzed cannot be larger than number of available voxels')
-        end
-    elseif strcmp(whatNumData,'all')
-        numData=size(voxGeneMat,1);
-    else
-        error('Invalid numData input')
-    end
-    %% create coordinates and compute distance matrix
     % get all coordinates
     [a,b,c]=ind2sub(sizeGrids.(timePoints{timePointIndex}),find(isAnno & ~isSpinalCord & isIncluded));
     coOrds=horzcat(a,b,c);
     % only keep good voxels
     coOrds=coOrds(isGoodVoxel,:);
-    % Create distance matrix from only voxels selected for gene expression matrix
-    [dataIndSelect,~]=datasample([1:size(voxGeneMat,1)],numData,'replace',false);
-    distMat=squareform(pdist(coOrds(dataIndSelect,:),'euclidean')*resolutionGrid.(timePoints{timePointIndex}));
 end

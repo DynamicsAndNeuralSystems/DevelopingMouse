@@ -5,11 +5,10 @@ clearvars
 %%
 % initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-numData=1500;
 whatNorm='scaledSigmoid'; % normalizing method for makeGridData
+whatVoxelThreshold = 0.3;
 voxGeneMat_all = cell(length(timePoints),1);
-distMat_all = cell(length(timePoints),1);
-dataIndSelect_all = cell(length(timePoints),1);
+coOrds_all = cell(length(timePoints),1);
 
 % full size for 7 time points: 210000, 669369, 806520, 115240, 165550, 136000, 158629
 % after filtering off spinal cord, unannotated voxels and only including forebrain,midbrain and hindbrain
@@ -20,15 +19,19 @@ dataIndSelect_all = cell(length(timePoints),1);
 
 % create gene coexpression matrix
 for i=1:length(timePoints)
-    % readGridData(timePoints{i})
-    [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData, whatNorm, 0.3, 'all');
-    voxGeneMat_all{i} = voxGeneMat;
-    distMat_all{i} = distMat;
-    dataIndSelect_all{i} = dataIndSelect;
+    [voxGeneMat_all{i}, coOrds_all{i}] = makeGridData(timePoints{i}, ...
+                                        whatNorm, ...
+                                        whatVoxelThreshold,...
+                                        'wholeBrain');
+    % [voxGeneMat, distMat, dataIndSelect, coOrds] = makeGridData(timePoints{i}, numData, whatNorm, 0.3, 'all');
+    % voxGeneMat_all{i} = voxGeneMat;
+    % distMat_all{i} = distMat;
+    % dataIndSelect_all{i} = dataIndSelect;
+    % coOrds_all{i} = coOrds;
 end
 %% save variables
-str=fullfile('Matlab_variables','voxelGeneCoexpression', strcat('voxelGeneCoexpression_all_','numData',num2str(numData),'.mat'));
-save(str,'voxGeneMat_all','distMat_all','dataIndSelect_all','-v7.3');
+str=fullfile('Matlab_variables','voxelGeneCoexpression', 'voxelGeneCoexpression_all.mat');
+save(str,'voxGeneMat_all','coOrds_all','-v7.3');
 
 % Ignore brain divisions for now
 % %% create gene expression matrix for each brain divisions
