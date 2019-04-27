@@ -27,7 +27,7 @@ isInAllen=ismember(enrichedGenes.oligodendrocyte.postmitotic,geneList);
 enrichedGenes.oligodendrocyte.postmitotic=enrichedGenes.oligodendrocyte.postmitotic(isInAllen);
 
 % match gene name abbreviation to gene ID
-geneAbbreviation=importfile_SDK_geneAbbreviations('SDK_geneAbbreviations.csv');
+[~,geneAbbreviation,~]=xlsread('SDK_geneAbbreviations.csv','A1:CBX1');
 geneID=importfile_SDK_geneEntrez('SDK_geneEntrez.csv');
 
 % save variable
