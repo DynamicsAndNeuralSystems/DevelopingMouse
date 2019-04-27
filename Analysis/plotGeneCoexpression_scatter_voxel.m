@@ -27,7 +27,7 @@ function [f,F]=plotGeneCoexpression_scatter_voxel(...
     hold on
     % add exponential fitting
     xData=linspace(min(distances),max(distances),0.1*length(distances));
-    p=plot(xData,fitting_stat_all.voxel.(timePointNow).fHandle.exp(xData));
+    p=plot(xData,fitting_stat_all.(timePointNow).fHandle.exp(xData));
     xlabel('Separation Distance (um)','FontSize',16)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
     title(str,'Fontsize',19);
@@ -45,7 +45,7 @@ function [f,F]=plotGeneCoexpression_scatter_voxel(...
     scatter(distances,corrCoeff,'.')
     % add exponential fitting
     xData=linspace(min(distances),max(distances),0.1*length(distances));
-    p=plot(xData,fitting_stat_all.voxel.(timePointNow).fHandle.exp(xData));
+    p=plot(xData,fitting_stat_all.(timePointNow).fHandle.exp(xData));
     xlabel('Separation Distance (um)','FontSize',16)
     ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
     title(str,'Fontsize',19);
