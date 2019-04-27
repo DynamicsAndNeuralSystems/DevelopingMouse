@@ -21,7 +21,7 @@ for i=1:length(timePoints)
                                         whatNorm, ...
                                         whatVoxelThreshold,...
                                         'wholeBrain');
-    str=fullfile('Matlab_variables','voxelGeneCoexpression', strcat('voxelGeneCoexpression','_',timePoints{i},'.mat'));
+    str=fullfile('Matlab_variables', strcat('voxelGeneCoexpression','_',timePoints{i},'.mat'));
     save(str,'voxGeneMat','coOrds','-v7.3');
     clear voxGeneMat coOrds
 end
