@@ -1,15 +1,25 @@
 % create correlation coefficient and distances
-function [distances_all,corrCoeff_all]=makeSpatialData(whatNumData)
+function [distances_all,corrCoeff_all]=makeSpatialData(whatNumData,isSubsetGenes)
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   distances_all=cell(length(timePoints),1);
   corrCoeff_all=cell(length(timePoints),1);
   for i=1:length(timePoints)
-    filename=strcat('voxelGeneCoexpression','_',timePoints{i},'.mat');
+    if isSubsetGenes
+      filename=strcat('voxelGeneCoexpression_subsetGenes','_',timePoints{i},'.mat');
+    else
+      filename=strcat('voxelGeneCoexpression','_',timePoints{i},'.mat');
     load(filename);
     [distances_all{i},corrCoeff_all{i}]=sampleGridData(voxGeneMat,coOrds,whatNumData,timePoints{i});
+    end
   end
-  str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+  if isSubsetGenes
+    str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+                                          num2str(whatNumData),'_subsetGenes','.mat'));
+  else
+    str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
                                           num2str(whatNumData),'.mat'));
+  end
+
   save(str,'distances_all','corrCoeff_all')
 end
 % makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all','wholeBrain')
