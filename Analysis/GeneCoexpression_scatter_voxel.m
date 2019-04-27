@@ -2,8 +2,8 @@
 % initialize and load variables
 %---------------------------------------------------------------------
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-load('spatialData_NumData_50.mat') % contains 'voxGeneMat_all','distMat_all','dataIndSelect_all'
-load('fitting_NumData_50.mat');
+load('spatialData_NumData_1000.mat') % contains 'voxGeneMat_all','distMat_all','dataIndSelect_all'
+load('fitting_NumData_1000.mat');
 %
 %---------------------------------------------------------------------
 % Plot gene coexpression against distance

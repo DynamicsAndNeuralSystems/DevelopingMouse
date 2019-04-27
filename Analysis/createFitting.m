@@ -1,4 +1,4 @@
-filestr='spatialData_NumData_50';
+filestr='spatialData_NumData_1000';
 load(strcat(filestr,'.mat'));
 file_parts=strsplit(filestr,'_');
 NumData=file_parts{3};
