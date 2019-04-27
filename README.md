@@ -55,6 +55,7 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `createGeneList_gridExpression.m` obtains a list of gene IDs from the downloaded Grid Expression Data, storing them in `geneID_gridExpression.mat`
 * `createBinnedData.m` bins the correlation and distance data by quantiles and save them in `binnedData_NumData_(number)_numThresholds_number.mat`
 
+
 * Matlab variables are saved in the folder `Matlab_variables`
 * csv files are saved in the folder `Processed`
 
@@ -83,7 +84,10 @@ Note: the `.csv` files are stored in `Data` folder
 * `createFitting.m` fits the voxel data to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number).mat`; also fits scaled distance, saving the resut to `fitting_NumData(number)_scaled.mat`
 * `createFitting_structures.m` does the same thing as `createFitting.m` except it works on structural-level data, saving result in `fitting_structures.mat`
 * `geneCoexpression_scatter_voxel.m` (matlab 2015b or later only) plots gene coexpression against distance separation at the voxel level 
-* `createDecayConstantPlot` plots decay constant against max distance
+* `createDecayConstantPlot.m` plots decay constant against max distance at voxel level
+* `createDecayConstantPlot_binned.m` plots decay constant against max distance at voxel level for binned data
+* `createDecayConstantPlot_binned_scaled.m` plots decay constant against max distance at voxel level for binned data, with distance scaled
+* `createDecayConstantPlot_strutures.m` plots decay constant against max distance at structural level
 * `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
 * `createBinnedData.m` bins the voxel data, saving the results in `binnedData_NumData_(number)_numThresholds_(number).m`
 * `createBinnedFitting.m` does the same thing as `createFitting.m` except it works on binned data from `createBinnedData.m`; it creates `fitting_NumData_1000_binnedData_numThresholds_100.mat` and `fitting_NumData_1000_binnedData_numThresholds_100_scaled.mat`
