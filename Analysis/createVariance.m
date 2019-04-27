@@ -1,7 +1,7 @@
 whatNorm='scaledSigmoid';
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-incrementVector=10:10:30; %1000:1000:5000; % number of data incremented in steps of 1000 from 1000 to 5000
-samplingNum=5;%100;
+incrementVector=1000:1000:5000; % number of data incremented in steps of 1000 from 1000 to 5000
+samplingNum=100;
 variance=cell(length(timePoints),1);
 decayConstant_samples=cell(length(incrementVector),1);
 
@@ -35,10 +35,10 @@ for i=1:length(timePoints)
   plot(incrementVector,variance{i})
   xlabel('Sample size','FontSize',16)
   ylabel('Variance in decay constant','FontSize',13)
-  str=sprintf('Variance in decay constant against sample size, %s',timePoints{i});
+  str=sprintf('Variance in decay constant against sample size, %s, numTrials=%d',timePoints{i},samplingNum);
   title(str,'FontSize',19)
   F=getframe(f);
-  filename=strcat(sprintf('decay_constant_variance_%s',timePoints{i}),'.jpeg');
+  filename=strcat(sprintf('decay_constant_variance_%s, numTrials=%d',timePoints{i},samplingNum),'.jpeg');
   str=fullfile('Outs','decay_constant_variance',filename);
   imwrite(F.cdata,str,'jpeg');
 end

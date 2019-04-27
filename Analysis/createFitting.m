@@ -1,7 +1,15 @@
-makeFitting_voxelOnly('corrCoeffAll_distancesAll_voxelGeneCoexpression_all', 0, 'allGenes') % non-scaled distance
-makeFitting_voxelOnly('corrCoeffAll_distancesAll', 1, 'allGenes') % scaled distance
-makeFitting_voxelOnly('corrCoeffAll_distancesAll_voxelGeneCoexpression_all_subsetGenes', 0, ...
-                      'oligodendrocyteProgenitor')
+filestr='spatialData_NumData_50';
+load(strcat(filestr,'.mat'));
+file_parts=strsplit(filestr,'_');
+NumData=file_parts{3};
+% create spatial data
+[fitting_stat_all, decayConstant, maxDistance]=getFitting(distances_all,corrCoeff_all);
+str=fullfile('Matlab_variables',strcat('fitting_NumData_',NumData,'.mat'));
+save(str,'fitting_stat_all','decayConstant','maxDistance');
+% makeFitting_voxelOnly('corrCoeffAll_distancesAll_voxelGeneCoexpression_all', 0, 'allGenes') % non-scaled distance
+% makeFitting_voxelOnly('corrCoeffAll_distancesAll', 1, 'allGenes') % scaled distance
+% makeFitting_voxelOnly('corrCoeffAll_distancesAll_voxelGeneCoexpression_all_subsetGenes', 0, ...
+%                       'oligodendrocyteProgenitor')
 % clear
 %
 % % initialize

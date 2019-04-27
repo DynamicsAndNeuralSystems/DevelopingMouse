@@ -8,7 +8,7 @@ function [distances_all,corrCoeff_all]=makeSpatialData(whatNumData)
     load(filename);
     [distances_all{i},corrCoeff_all{i}]=sampleGridData(voxGeneMat,coOrds,whatNumData,timePoints{i});
   end
-  str=fullfile('Matlab_variables',strcat('spatialData_',timePoints{i},'_NumData',...
+  str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
                                           num2str(whatNumData),'.mat'));
   save(str,'distances_all','corrCoeff_all')
 end
