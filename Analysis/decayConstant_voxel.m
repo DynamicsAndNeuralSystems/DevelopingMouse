@@ -1,14 +1,14 @@
 clear
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-load('fitting.mat','maxDistance','decayConstant')
+load('fitting_NumData_1000.mat','maxDistance','decayConstant')
 
 f=figure('color','w');
-plot(log(maxDistance.voxel),log(decayConstant.voxel),'ok','DisplayName','data1');
+plot(log(maxDistance),log(decayConstant),'ok','DisplayName','data1');
 axis square
 xlabel('log (length scale)');
 ylabel('log (decay constant)');
 hold on
-[f_handle,stats,c]=GiveMeFit(log(maxDistance.voxel),log(decayConstant.voxel),'linear');
+[f_handle,stats,c]=GiveMeFit(log(maxDistance),log(decayConstant),'linear');
 Gradient = c.p1; Intercept = c.p2;
 plot(linspace(8.4,9.6,5),f_handle(linspace(8.4,9.6,5)),'DisplayName','linear');
 str=sprintf('y=%fx+%f',Gradient,Intercept);

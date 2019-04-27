@@ -1,4 +1,10 @@
-function [f,F] = plotFitting_twoDataTypes(first_xData_all,second_xData_all, fitType,fitting_stat_all, firstDataType, secondDataType)
+function [f,F] = plotFitting_twoDataTypes(first_xData_all,...
+                                          second_xData_all,...
+                                          fitType,...
+                                          first_fitting_stat_all,...
+                                          second_fitting_stat_all,...
+                                          firstDataType,...
+                                          secondDataType)
   % thisDataType: 'voxel' or 'structure'
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   % get colors
@@ -13,19 +19,19 @@ function [f,F] = plotFitting_twoDataTypes(first_xData_all,second_xData_all, fitT
 
       switch fitType
           case 'exp'
-              p=plot(xData,fitting_stat_all.(firstDataType).(timePoints{i}).fHandle.exp(xData),'-x','MarkerEdgeColor',theColor);
+              p=plot(xData,first_fitting_stat_all.(timePoints{i}).fHandle.exp(xData),'-x','MarkerEdgeColor',theColor);
               p.Color=theColor;
               % legend(p,sprintf('Exponential fit (exp), %s', firstDataType))
           case 'exp1'
-              p=plot(xData,fitting_stat_all.(firstDataType).(timePoints{i}).fHandle.exp1(xData),'-x','MarkerEdgeColor',theColor);
+              p=plot(xData,first_fitting_stat_all.(timePoints{i}).fHandle.exp1(xData),'-x','MarkerEdgeColor',theColor);
               p.Color=theColor;
               % legend(p,sprintf('Exponential fit (exp1), %s', firstDataType))
           case 'exp_1_0'
-              p=plot(xData,fitting_stat_all.(firstDataType).(timePoints{i}).fHandle.exp_1_0(xData),'-x','MarkerEdgeColor',theColor);
+              p=plot(xData,first_fitting_stat_all.(timePoints{i}).fHandle.exp_1_0(xData),'-x','MarkerEdgeColor',theColor);
               p.Color=theColor;
               % legend(p,sprintf('Exponential fit (exp_1_0), %s', firstDataType))
           case 'linear'
-              p=plot(xData,fitting_stat_all.(firstDataType).(timePoints{i}).fHandle.linear(xData),'-x','MarkerEdgeColor',theColor);
+              p=plot(xData,first_fitting_stat_all.(timePoints{i}).fHandle.linear(xData),'-x','MarkerEdgeColor',theColor);
               p.Color=theColor;
               % legend(p,sprintf('Linear fit, %s', firstDataType))
           otherwise
@@ -37,19 +43,19 @@ function [f,F] = plotFitting_twoDataTypes(first_xData_all,second_xData_all, fitT
       xData=linspace(min(xDataNow),max(xDataNow),0.1*length(xDataNow));
       switch fitType
           case 'exp'
-              u=plot(xData,fitting_stat_all.(secondDataType).(timePoints{i}).fHandle.exp(xData),'-o','MarkerEdgeColor',theColor);
+              u=plot(xData,second_fitting_stat_all.(timePoints{i}).fHandle.exp(xData),'-o','MarkerEdgeColor',theColor);
               u.Color=theColor;
               legend([p,u],sprintf('Exponential fit (exp), %s', firstDataType),sprintf('Exponential fit (exp), %s', secondDataType))
           case 'exp1'
-              u=plot(xData,fitting_stat_all.(secondDataType).(timePoints{i}).fHandle.exp1(xData),'-o','MarkerEdgeColor',theColor);
+              u=plot(xData,second_fitting_stat_all.(timePoints{i}).fHandle.exp1(xData),'-o','MarkerEdgeColor',theColor);
               u.Color=theColor;
               legend([p,u],sprintf('Exponential fit (exp1), %s', firstDataType),sprintf('Exponential fit (exp1), %s', secondDataType))
           case 'exp_1_0'
-              u=plot(xData,fitting_stat_all.(secondDataType).(timePoints{i}).fHandle.exp_1_0(xData),'-o','MarkerEdgeColor',theColor);
+              u=plot(xData,second_fitting_stat_all.(timePoints{i}).fHandle.exp_1_0(xData),'-o','MarkerEdgeColor',theColor);
               u.Color=theColor;
               legend([p,u],sprintf('Exponential fit (exp_1_0), %s', firstDataType),sprintf('Exponential fit (exp_1_0), %s', secondDataType))
           case 'linear'
-              u=plot(xData,fitting_stat_all.(secondDataType).(timePoints{i}).fHandle.linear(xData),'-o','MarkerEdgeColor',theColor);
+              u=plot(xData,second_fitting_stat_all.(timePoints{i}).fHandle.linear(xData),'-o','MarkerEdgeColor',theColor);
               u.Color=theColor;
               legend([p,u],sprintf('Linear fit, %s', firstDataType),sprintf('Linear fit, %s', secondDataType))
           otherwise

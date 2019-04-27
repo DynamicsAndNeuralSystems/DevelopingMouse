@@ -1,11 +1,22 @@
+timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 filestr='spatialData_NumData_1000';
 load(strcat(filestr,'.mat'));
 file_parts=strsplit(filestr,'_');
 NumData=file_parts{3};
-% create spatial data
+% create fitting
 [fitting_stat_all, decayConstant, maxDistance]=getFitting(distances_all,corrCoeff_all);
 str=fullfile('Matlab_variables',strcat('fitting_NumData_',NumData,'.mat'));
 save(str,'fitting_stat_all','decayConstant','maxDistance');
+
+% create fitting (scaled x distance)
+% first scale the distances
+distances_all_scaled=cell(length(timePoints),1);
+for i=1:length(timePoints)
+  distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
+end
+[fitting_stat_all, decayConstant, ~]=getFitting(distances_all_scaled,corrCoeff_all);
+str=fullfile('Matlab_variables',strcat('fitting_NumData_',NumData,'_scaled','.mat'));
+save(str,'fitting_stat_all','decayConstant','maxDistance'); % still save the original max distance
 % makeFitting_voxelOnly('corrCoeffAll_distancesAll_voxelGeneCoexpression_all', 0, 'allGenes') % non-scaled distance
 % makeFitting_voxelOnly('corrCoeffAll_distancesAll', 1, 'allGenes') % scaled distance
 % makeFitting_voxelOnly('corrCoeffAll_distancesAll_voxelGeneCoexpression_all_subsetGenes', 0, ...
