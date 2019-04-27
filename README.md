@@ -53,7 +53,7 @@ Convert downloaded data into Matlab variables, fills the `DataRendering` [`Proce
 * `createSpatialData_2BrainDiv.m` computes correlation coefficients and distances from pairs of brain divisions (forebrain, midbrain and hindbrain), creating `spatialData_2brainDiv.mat`
 * `createCellSpecificGenes.m` creates `enrichedGenes.mat` containing the struct `enrichedGenes` (the abbreviations of Allen data gene that are enriched in developing and mature astrocytes, and progenitor and postmitotic oligodendrocytes), `geneID` and `geneAbbreviation` for later use (mapping gene abbreviation to ID) 
 * `createGeneList_gridExpression.m` obtains a list of gene IDs from the downloaded Grid Expression Data, storing them in `geneID_gridExpression.mat`
-* `createBinnedData.m` bins the correlation and distance data by quantiles and save them in `binnedData_numThresholds100.mat`
+* `createBinnedData.m` bins the correlation and distance data by quantiles and save them in `binnedData_NumData_(number)_numThresholds_number.mat`
 
 * Matlab variables are saved in the folder `Matlab_variables`
 * csv files are saved in the folder `Processed`
@@ -80,23 +80,29 @@ Note: the `.csv` files are stored in `Data` folder
 * `createVariance.m` plots variance in estimation of decay constant against the number of voxels used in the analysis.
 * `createGeneExpressionMatrix.m` creates the gene expression matrix for each time point, storing them in `voxelGeneCoexpression_(timepoint).mat`
 * `createSpatialData.m` computes correlation coefficient and distances for a given number of voxels, saving them in `spatialData_NumData_(number).mat`
-* `createFitting.m` fits the voxel data to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number).mat`
+* `createFitting.m` fits the voxel data to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number).mat`; also fits scaled distance, saving the resut to `fitting_NumData(number)_scaled.mat`
+* `createFitting_structures.m` does the same thing as `createFitting.m` except it works on structural-level data, saving result in `fitting_structures.mat`
 * `geneCoexpression_scatter_voxel.m` (matlab 2015b or later only) plots gene coexpression against distance separation at the voxel level 
 * `createDecayConstantPlot` plots decay constant against max distance
-
-* `createCorrCoeffAll_distancesAll.m` computes correlation, distance and scaled distance from voxGeneMat and distMat (with dataIndSelect), saving them into `corrCoeffAll_distancesAll.mat`
 * `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
+* `createBinnedData.m` bins the voxel data, saving the results in `binnedData_NumData_(number)_numThresholds_(number).m`
+* `createBinnedFitting.m` does the same thing as `createFitting.m` except it works on binned data from `createBinnedData.m`; it creates `fitting_NumData_1000_binnedData_numThresholds_100.mat` and `fitting_NumData_1000_binnedData_numThresholds_100_scaled.mat`
+* `createExponentialPlot.m` plots 3 term exponential of voxel data
+* `createExponentialPlot_scaled.m` plots 3 term exponential of voxel data with distance scaled
+* `createExponentialPlot_plusStructures.m` plots 3 term exponential of voxel plus structure data
+* `createBinnedExponentialPlot.m` plots the exponential fitting of the binned data (with and without distance scaled)
+
+
+To be deleted:
+* `createCorrCoeffAll_distancesAll.m` computes correlation, distance and scaled distance from voxGeneMat and distMat (with dataIndSelect), saving them into `corrCoeffAll_distancesAll.mat`
 * `GeneCoexpression_scatter.m` plots gene coexpression against distance separation at the structure level; also create `'corrCoeff_distances_ontoDist_clean.mat` which contains distances, correlation coefficient and ontological distances at the structural level
 * `compareDistanceMatrix.m` serves to validate the accuracy of our methodology of querying the API; it plots the MDS of API and Oh et al data, scatter3 plot of API data, and % error in distance (Oh et al as gold standard) against distance 
-* `createExponentialPlot.m` plots 1) 3 term exponential of voxel data 2) the former plus 3 term exponential of structure data
-* `createBinningPlot.m` uses voxel data and plots gene coexpression in bins against distance separation
 * `GeneCoexpression_ontologicalDistance.m` plots gene coexpression against ontological distance at the structural level (ontological distance between structure x and y is calculated as: steps of x from nearest common ancestor + steps of y from nearest common ancestor)
 * `GeneCoexpression_scatter_voxel_brainDiv.m` plots gene coexpression against distance separation at the voxel level for forebrain, midbrain and hindbrain
 * `createFitting_brainDiv.m` has the similar function as `createFitting.m` except it is for forebrain, midbrain and hindbrain separately; saves the fitting statistic, decay constant and maximum distance to `fitting_brainDiv.mat`
 * `decayConstant_voxel_brainDiv.m`  plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance separately for forebrain, midbrain and hindbrain 
 * `GeneCoexpression_Binning_voxel_2brainDiv.m` plots forebrain-midbrain, forebrain-hindbrain and midbrain-hindbrain coexpression against distance for all time points
-* `createBinnedFitting.m` does the same thing as `createFitting.m` except it works on binned data from `createBinnedData.m`; it creates `fitting_binned.mat`
-* `createBinnedExponentialPlot.m` plots the exponential fitting of the binned data
+
 * `createFitting_scaledDistance.m` does the same thing as `createFitting.m` except it works on scaled distance; saves data to `fitting_scaled.mat`
 
 
