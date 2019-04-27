@@ -1,6 +1,8 @@
 % create correlation coefficient and distances
-makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all','wholeBrain')
-makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all_subsetGenes','wholeBrain')
+[~,~]=makeSpatialData(10);
+
+% makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all','wholeBrain')
+% makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all_subsetGenes','wholeBrain')
 % %---------------------------------------------------------------------
 % % initialize and load variables
 % %---------------------------------------------------------------------

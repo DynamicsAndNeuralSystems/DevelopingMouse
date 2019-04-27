@@ -10,8 +10,8 @@ function [adjRSquare,fitObject,fHandle]=fitting_stat(whatfitMethods, xData, yDat
         fitObject.(whatfitMethods{j})=c;
         fHandle.(whatfitMethods{j})=f_handle;
         adjRSquare.(whatfitMethods{j})=Stats.adjrsquare;
-        confInt.(whatfitMethods{j})=confint(c,0.95);
-        coeffValue.(whatfitMethods{j})=coeffvalues(c);
+        % confInt.(whatfitMethods{j})=confint(c,0.95);
+        % coeffValue.(whatfitMethods{j})=coeffvalues(c);
     end
 %     %%
 %     matAdjRSquare=zeros(length(timePointNow),length(whatfitMethods));
