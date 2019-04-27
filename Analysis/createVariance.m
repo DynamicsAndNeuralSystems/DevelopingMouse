@@ -19,31 +19,40 @@ for k=1:length(incrementVector) % for each sampling size
                                                                       distMat_all{i},...
                                                                       dataIndSelect_all{i});
     end
+    clear voxGeneMat_all distMat_all dataIndSelect_all
+    decayConstant_samples{k}=cell(length(samplingNum),1);
     % fit and obtain correlation coefficient (all time points included)
-    [~, decayConstant_samples{k}, ~]=getFitting(distances_all,corrCoeff_all);
+    [~, decayConstant_samples{k}{j}, ~]=getFitting(distances_all,corrCoeff_all);
+    % decayConstant_samples{k}{j} is a vector with decay constants for 7 time points
+    clear distances_all corrCoeff_all % saves memory
   end
 end
 % calculate variance for each time point
 for i=1:length(timePoints)
   variance{i}=zeros(length(incrementVector),1);
-  for k=1:length(incrementVector)
-    variance{i}(k)=var(decayConstant_samples{k});
+  % Regroup decay constants in each sampling size (number of decay constants=samplingNum)
+  for k=1:length(incrementVector) % for each sample size
+    vec=zeros(samplingNum,1);
+    for j=1:samplingNum % for each sampling trial
+      vec(j)=decayConstant_samples{k}{j}(i);
+    end
+    variance{i}(k)=var(vec);
   end
 end
 
 % plot variance against sampling size
-for i=1:length(timePoints)
-  f=figure('color','w','Position',get(0, 'Screensize'));
-  plot(incrementVector,variance{i})
-  xLabel('Sample size','FontSize',16)
-  ylabel('Variance in decay constant','FontSize',13)
-  str=sprintf('Variance in decay constant against sample size, %s',timePoints{i});
-  title(str,'FontSize',19)
-  F=getframe(f);
-  filename=strcat(sprintf('decay_constant_variance_%s',timePoints{i}),'.jpeg');
-  str=fullfile('Outs','decay_constant_variance',filename);
-  imwrite(F.cdata,str,'jpeg');
-end
+% for i=1:length(timePoints)
+%   f=figure('color','w','Position',get(0, 'Screensize'));
+%   plot(incrementVector,variance{i})
+%   xLabel('Sample size','FontSize',16)
+%   yLabel('Variance in decay constant','FontSize',13)
+%   str=sprintf('Variance in decay constant against sample size, %s',timePoints{i});
+%   title(str,'FontSize',19)
+%   F=getframe(f);
+%   filename=strcat(sprintf('decay_constant_variance_%s',timePoints{i}),'.jpeg');
+%   str=fullfile('Outs','decay_constant_variance',filename);
+%   imwrite(F.cdata,str,'jpeg');
+% end
 
 % while (numData(1)<5031 | numData(2)<9471 | numData(3)<11314 | numData(4)<11288 | numData(5)<19754 | numData(6)<21557 | numData(7)<24826)
 

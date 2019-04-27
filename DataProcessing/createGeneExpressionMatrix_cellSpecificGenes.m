@@ -9,15 +9,16 @@ numData_brainDiv=[587,1000,1000,1000,1000,1000,1000]; % number of data ...
 %for each time point when division of brain is under question...
 %(instead of all brain)
 whatNorm='scaledSigmoid'; % normalizing method for makeGridData
-brainDivisions={'forebrain','midbrain','hindbrain'};
+% brainDivisions={'forebrain','midbrain','hindbrain'};
 voxelGeneCoexpression_all_cellSpecificGenes=struct();
 voxelGeneCoexpression_all_brainDiv_cellSpecificGenes=struct();
 
-%
+% get the required gene ID
+
 % create gene expression matrix for whole brain
 for i=1:length(timePoints)
     readGridData(timePoints{i});
-    [voxGeneMat, distMat, dataIndSelect] = makeGridData(timePoints{i}, numData, whatNorm, 0.3,'all');
+    [voxGeneMat, distMat, dataIndSelect] = makeGridData_subsetGenes(timePoints{i}, numData, whatNorm, 0.3,'all');
     voxelGeneCoexpression_all.wholeBrain.voxGeneMat_all{i} = voxGeneMat;
     voxelGeneCoexpression_all.wholeBrain.distMat_all{i} = distMat;
     voxelGeneCoexpression_all.wholeBrain.dataIndSelect_all{i} = dataIndSelect;
