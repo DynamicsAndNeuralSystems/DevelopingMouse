@@ -1,6 +1,7 @@
 function [voxGeneMat, distMat, dataIndSelect] = makeGridData_subsetGenes(whatTimePointNow, ...
                                                             whatNumData, whatNorm, ...
-                                                            whatVoxelThreshold, thisBrainDiv, geneIDs)
+                                                            whatVoxelThreshold, ...
+                                                            thisBrainDiv, geneIDs)
   % for whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
   % for thisBrainDiv: 'forebrain', 'midbrain' or 'hindbrain'; if left out, all brain divisions included
   % for whatNumData: either input 'all' or the number of voxels to be included
@@ -8,8 +9,6 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData_subsetGenes(whatTim
     %% Sets background variables
     % current time point
     timePointNow=whatTimePointNow;
-    % matlab variable directory
-    varDir=fullfile('Matlab_variables');
     % % change thisBrainDiv to a cell for later referencing use
     % thisBrainDiv_cell=cell(1,1);
     % thisBrainDiv_cell{1}=thisBrainDiv;
@@ -22,11 +21,11 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData_subsetGenes(whatTim
         'P14',200,'P28',200);
     %% load matlab variables
     filename=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
-    str=fullfile(varDir,filename);
-    load(str)
+    load(filename)
     load('annotationGrids.mat')
     load('spinalCord_ID.mat')
     load('brainDivision.mat')
+    load(strcat('geneIDInfo_',timePoints{timePointIndex},'.mat'))
     %% Create the matrix
     % filters off spinal cord voxels
     isSpinalCord=ismember(annotationGrids{timePointIndex},spinalCord_ID);
@@ -49,14 +48,17 @@ function [voxGeneMat, distMat, dataIndSelect] = makeGridData_subsetGenes(whatTim
     else
       error('Invalid brain division input')
     end
-    % end
+    % turn geneIDs into a vector
+    geneIDs=cellfun(@(x) {x}, geneIDs);
+    % get the index of genes to be included
+    ixGeneSubset=find(ismember(geneIDInfo,geneIDs));
     % make voxel x gene matrix
-    voxGeneMat=zeros(nnz(isAnno & ~isSpinalCord & isIncluded),length(energyGrids));
+    voxGeneMat=zeros(nnz(isAnno & ~isSpinalCord & isIncluded),length(geneIDs));
 
     h = waitbar(0,'Computing voxel x gene expression matrix...');
-    steps=length(energyGrids);
+    steps=size(voxGeneMat,2);
     for j=1:size(voxGeneMat,2) % for each gene
-        energyGridsNow=energyGrids{j};
+        energyGridsNow=energyGrids{ixGeneSubset(j)};
         energyGridsNow=energyGridsNow(isAnno & ~isSpinalCord & isIncluded);
         for k=1:size(voxGeneMat,1) % for each voxel
             if energyGridsNow(k)<0
