@@ -82,7 +82,7 @@ Note: the `.csv` files are stored in `Data` folder
 * `createSpatialData.m` computes correlation coefficient and distances for a given number of voxels, saving them in `spatialData_NumData_(number).mat`
 * `createFitting.m` fits the voxel data to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number).mat`
 * `geneCoexpression_scatter_voxel.m` (matlab 2015b or later only) plots gene coexpression against distance separation at the voxel level 
-
+* `createDecayConstantPlot` plots decay constant against max distance
 
 * `createCorrCoeffAll_distancesAll.m` computes correlation, distance and scaled distance from voxGeneMat and distMat (with dataIndSelect), saving them into `corrCoeffAll_distancesAll.mat`
 * `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
