@@ -8,7 +8,7 @@ load('fitting_NumData_1000.mat');
 
 % exponential fit (3 term) on same plot (voxel data)
 [~,F]= plotFitting(distances_all,'exp',fitting_stat_all,'voxel',...
-                    'Separation Distance (um)',0.1,'original');
+                    'Separation Distance (um)',0.1,'original','allDirections');
 str = fullfile('Outs','exponential_plot','voxel_expFit.jpeg');
 imwrite(F.cdata, str, 'jpeg');
 

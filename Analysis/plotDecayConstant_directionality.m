@@ -20,6 +20,7 @@ function plotDecayConstant_directionality(first_fitting_stat_all,...
   err=zeros(length(timePoints),length(directionNames));
   decayConstant=zeros(length(timePoints),length(directionNames));
   maxDistance=zeros(length(timePoints),length(directionNames));
+  adjustedRsquare=zeros(length(timePoints),length(directionNames));
   for i=1:length(timePoints)
     % obtain errors of the decay constants (95% CI)
     CI=confint(first_fitting_stat_all.(timePoints{i}).fitObject.exp);
@@ -36,6 +37,10 @@ function plotDecayConstant_directionality(first_fitting_stat_all,...
     maxDistance(i,1)=first_maxDistance(i);
     maxDistance(i,2)=second_maxDistance(i);
     maxDistance(i,3)=third_maxDistance(i);
+    % collect adjusted R square
+    adjustedRsquare(i,1)=first_fitting_stat_all.(timePoints{i}).adjRSquare.exp;
+    adjustedRsquare(i,2)=second_fitting_stat_all.(timePoints{i}).adjRSquare.exp;
+    adjustedRsquare(i,3)=third_fitting_stat_all.(timePoints{i}).adjRSquare.exp;
   end
 
   % get the colours needed for plotting
@@ -55,7 +60,7 @@ function plotDecayConstant_directionality(first_fitting_stat_all,...
         p1=errorbar(maxDistance(i,j),...
                     decayConstant(i,j),...
                     err(i,j),'o','MarkerSize',10,...
-                    'LineStyle','none','LineWidth',3,'Color',theColor);
+                    'LineStyle','none','LineWidth',5*adjustedRsquare(i,j),'Color',theColor);
         text(maxDistance(i,j),...
             decayConstant(i,j)+0.25*10^(-3),num2str(decayConstant(i,j)),...
             'HorizontalAlignment','center','VerticalAlignment','bottom');

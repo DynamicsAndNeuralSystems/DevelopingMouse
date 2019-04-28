@@ -1,7 +1,8 @@
-function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, xLabel, xDataDensity, dataProcessing)
+function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, xLabel, xDataDensity, dataProcessing,direction)
   % thisDataType: 'voxel' or 'structure'
   % F is the getframe object for setting figure saving size
   % xDataDensity: >0 and <=1; indicates the proportion of xData to use in plotting
+  % direction: 'sagittal', 'coronal','axial' or 'allDirections'
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   % get colors
   cmapOut = BF_getcmap('dark2',7,0,0);
@@ -43,15 +44,15 @@ function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, x
   ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
   switch fitType
       case 'exp'
-          str = sprintf('Developing Mouse 3 parameter exponential fit, %s',dataProcessing);
+          str = sprintf('Developing Mouse 3 parameter exponential fit, %s, %s',dataProcessing,direction);
       case 'exp1'
-          str = sprintf('Developing Mouse 2 parameter exponential fit, %s',dataProcessing);
+          str = sprintf('Developing Mouse 2 parameter exponential fit, %s, %s',dataProcessing,direction);
       case 'exp_1_0'
-          str = sprintf('Developing Mouse 1 parameter exponential fit, %s',dataProcessing);
+          str = sprintf('Developing Mouse 1 parameter exponential fit, %s, %s',dataProcessing,direction);
       case 'linear'
-          str = sprintf('Developing Mouse linear fit, %s',dataProcessing);
+          str = sprintf('Developing Mouse linear fit, %s, %s',dataProcessing,direction);
       otherwise
-          str = sprintf('Developing Mouse unknown fit, %s',dataProcessing);
+          str = sprintf('Developing Mouse unknown fit, %s, %s',dataProcessing,direction);
   end
   title(str,'Fontsize',19);
   % f=figureFullScreen(f,true);

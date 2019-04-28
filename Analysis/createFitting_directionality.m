@@ -1,31 +1,33 @@
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-load('directionalityIndex.mat')
+load('directionalityData.mat')
 filestr='spatialData_NumData_1000';
 load(strcat(filestr,'.mat'));
 file_parts=strsplit(filestr,'_');
 NumData=file_parts{3};
-directions={'Coronal','Axial','Sagittal'};
+% directions={'Coronal','Axial','Sagittal'};
 % initialize
 distances_all_scaled=cell(length(timePoints),1);
-distances_direction=struct();
-corrCoeff_direction=struct();
-distances_direction_scaled=struct();
-distances_sagittal=cell(length(timePoints),1);
-corrCoeff_sagittal=cell(length(timePoints),1);
+% distances_direction=struct();
+% corrCoeff_direction=struct();
+% distances_direction_scaled=struct();
 
-for i=1:length(timePoints)
-  distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
-end
 % extract distances and correlation coefficients
 for i=1:length(timePoints)
-  distances_sagittal{i}=distances_all{i}(isSagittal{i});
-  corrCoeff_sagittal{i}=corrCoeff_all{i}(isSagittal{i});
+  % calculate scaled distance
+  distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
 end
-% try sagittal only (troubleshooting)
+% sagittal info fitting
 [fitting_stat_all, decayConstant, maxDistance]=getFitting(distances_sagittal,corrCoeff_sagittal);
   str=fullfile('Matlab_variables',strcat('fitting_NumData_',NumData,'_sagittal','.mat'));
   save(str,'fitting_stat_all','decayConstant','maxDistance');
-
+% axial info fitting
+[fitting_stat_all, decayConstant, maxDistance]=getFitting(distances_axial,corrCoeff_axial);
+  str=fullfile('Matlab_variables',strcat('fitting_NumData_',NumData,'_axial','.mat'));
+  save(str,'fitting_stat_all','decayConstant','maxDistance');
+% coronal info fitting
+[fitting_stat_all, decayConstant, maxDistance]=getFitting(distances_coronal,corrCoeff_coronal);
+  str=fullfile('Matlab_variables',strcat('fitting_NumData_',NumData,'_coronal','.mat'));
+  save(str,'fitting_stat_all','decayConstant','maxDistance');
 % for j=1:length(directions)
 %   distances_direction.(directions{j})=cell(length(timePoints),1);
 %   corrCoeff_direction.(directions{j})=cell(length(timePoints),1);
