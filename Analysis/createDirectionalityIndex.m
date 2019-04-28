@@ -1,0 +1,19 @@
+timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+load('spatialData_NumData_1000.mat')
+isCoronal=cell(length(timePoints),1);
+isAxial=cell(length(timePoints),1);
+isSagittal=cell(length(timePoints),1);
+for i=1:length(timePoints)
+  % get indices of voxel pairs in axial direction
+  isCoronal{i}=(angle_coronal_all{i}<=(1/4)|...
+                ((angle_coronal_all{i}>=(3/4))&(angle_coronal_all{i}<=(5/4)))|...
+                (angle_coronal_all{i}>=(7/4)));
+  isAxial{i}=(angle_axial_all{i}<=(1/4)|...
+                ((angle_axial_all{i}>=(3/4))&(angle_axial_all{i}<=(5/4)))|...
+                (angle_axial_all{i}>=(7/4)));
+  isSagittal{i}=(angle_sagittal_all{i}<=(1/4)|...
+                ((angle_sagittal_all{i}>=(3/4))&(angle_sagittal_all{i}<=(5/4)))|...
+                (angle_sagittal_all{i}>=(7/4)));
+end
+str=fullfile('Matlab_variables','directionalityIndex.mat');
+save(str,'isCoronal','isAxial','isSagittal')

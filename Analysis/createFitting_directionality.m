@@ -6,24 +6,10 @@ NumData=file_parts{3};
 directions={'Coronal','Axial','Sagittal'};
 % initialize
 distances_all_scaled=cell(length(timePoints),1);
-isCoronal=cell(length(timePoints),1);
-isAxial=cell(length(timePoints),1);
-isSagittal=cell(length(timePoints),1);
 distances_direction=struct();
 corrCoeff_direction=struct();
 distances_direction_scaled=struct();
 for i=1:length(timePoints)
-  % get indices of voxel pairs in axial direction
-  isCoronal{i}=(angle_coronal_all{i}<=(1/4)|...
-                ((angle_coronal_all{i}>=(3/4))&(angle_coronal_all{i}<=(5/4)))|...
-                (angle_coronal_all{i}>=(7/4)));
-  isAxial{i}=(angle_axial_all{i}<=(1/4)|...
-                ((angle_axial_all{i}>=(3/4))&(angle_axial_all{i}<=(5/4)))|...
-                (angle_axial_all{i}>=(7/4)));
-  isSagittal{i}=(angle_sagittal_all{i}<=(1/4)|...
-                ((angle_sagittal_all{i}>=(3/4))&(angle_sagittal_all{i}<=(5/4)))|...
-                (angle_sagittal_all{i}>=(7/4)));
-  % calculate the scaled distance
   distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
 end
 
