@@ -81,13 +81,16 @@ Note: the `.csv` files are stored in `Data` folder
 * `createVariance.m` plots variance in estimation of decay constant against the number of voxels used in the analysis.
 * `createGeneExpressionMatrix.m` creates the gene expression matrix for each time point, storing them in `voxelGeneCoexpression_(timepoint).mat`
 * `createSpatialData.m` computes correlation coefficient and distances for a given number of voxels, saving them in `spatialData_NumData_(number).mat`
+* `createSpatialData_subsetGenes.m` computes correlation coefficient and distances for a given number of voxels using a subset of genes only, saving them in `spatialData_NumData_(number)_subsetGenes.mat`
 * `createFitting.m` fits the voxel data to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number).mat`; also fits scaled distance, saving the resut to `fitting_NumData(number)_scaled.mat`
 * `createFitting_structures.m` does the same thing as `createFitting.m` except it works on structural-level data, saving result in `fitting_structures.mat`
+* `createFitting_subsetGenes.m` fits the voxel data of a subset of genes to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number)_subsetGenes.mat`; also fits scaled distance, saving the resut to `fitting_NumData(number)_subsetGenes_scaled.mat`
 * `geneCoexpression_scatter_voxel.m` (matlab 2015b or later only) plots gene coexpression against distance separation at the voxel level 
 * `createDecayConstantPlot.m` plots decay constant against max distance at voxel level
 * `createDecayConstantPlot_binned.m` plots decay constant against max distance at voxel level for binned data
 * `createDecayConstantPlot_binned_scaled.m` plots decay constant against max distance at voxel level for binned data, with distance scaled
 * `createDecayConstantPlot_strutures.m` plots decay constant against max distance at structural level
+* `createDecayConstantPlot_subsetGenes.m` plots decay constant against max distance at voxel level for a subset of genes
 * `decayConstant_voxel.m` plots the logarithm of decay constant (3 parameter exponential fitting) against maximum distance
 * `createBinnedData.m` bins the voxel data, saving the results in `binnedData_NumData_(number)_numThresholds_(number).m`
 * `createBinnedFitting.m` does the same thing as `createFitting.m` except it works on binned data from `createBinnedData.m`; it creates `fitting_NumData_1000_binnedData_numThresholds_100.mat` and `fitting_NumData_1000_binnedData_numThresholds_100_scaled.mat`
@@ -95,6 +98,7 @@ Note: the `.csv` files are stored in `Data` folder
 * `createExponentialPlot_scaled.m` plots 3 term exponential of voxel data with distance scaled
 * `createExponentialPlot_plusStructures.m` plots 3 term exponential of voxel plus structure data
 * `createBinnedExponentialPlot.m` plots the exponential fitting of the binned data (with and without distance scaled)
+* `createExponentialPlot_subsetGenes.m` plots 3 term exponential of voxel data of a subset of genes
 
 
 To be deleted:
