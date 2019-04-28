@@ -1,5 +1,5 @@
 % create correlation coefficient and distances
-[~,~]=makeSpatialData(50,1);
+[distances_all,corrCoeff_all]=makeSpatialData_subSetGenes(1000);
 
 % makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all','wholeBrain')
 % makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all_subsetGenes','wholeBrain')

@@ -7,7 +7,7 @@ function [f, F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,da
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   % obtain error of the decay constants (95% CI)
   err=zeros(length(timePoints),1);
-  for i=1:length(timePoints)
+  for i=1%:length(timePoints)
     CI=confint(fitting_stat_all.(timePoints{i}).fitObject.exp);
     err(i)=CI(2,3)-CI(1,3);
   end
@@ -18,7 +18,7 @@ function [f, F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,da
   % theLineWidth = 2;
   %% Plot decay constant of exponential fit (3 parameter)
   f=figure('color','w','Position', get(0, 'Screensize'));
-  for i=1:length(timePoints)
+  for i=1%:length(timePoints)
       % set the color
       theColor=cmapOut(i,:);
       % plot
