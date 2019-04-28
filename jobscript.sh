@@ -8,6 +8,5 @@
 #SBATCH --export=NONE
 
 module load matlab/r2015b
-srun matlab
-srun startup
-srun createVariance
+./startup.m
+./DataProcessing/createGeneExpressionMatrix_subsetGenes.m
