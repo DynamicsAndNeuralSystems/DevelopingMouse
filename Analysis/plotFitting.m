@@ -7,7 +7,7 @@ function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, x
   cmapOut = BF_getcmap('dark2',7,0,0);
   % plot
   f=figure('color','w','Position', get(0, 'Screensize')); % create new figure
-  for i=1%:length(timePoints)
+  for i=1:length(timePoints)
       xDataNow=xData_all{i};
       theColor=cmapOut(i,:);
       xData=linspace(min(xDataNow),max(xDataNow),xDataDensity*length(xDataNow));
