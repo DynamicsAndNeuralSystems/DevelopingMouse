@@ -81,11 +81,11 @@ Note: the `.csv` files are stored in `Data` folder
 * `createVariance.m` plots variance in estimation of decay constant against the number of voxels used in the analysis.
 * `createGeneExpressionMatrix.m` creates the gene expression matrix for each time point, storing them in `voxelGeneCoexpression_(timepoint).mat`
 * `createSpatialData.m` computes correlation coefficient and distances for a given number of voxels, and determines the direction vector of voxel pairs, saving everything in `spatialData_NumData_(number).mat`
-* `createSpatialData_subsetGenes.m` computes correlation coefficient and distances for a given number of voxels using a subset of genes only, saving them in `spatialData_NumData_(number)_subsetGenes.mat`
+* `createSpatialData_subsetGenes.m` computes correlation coefficient and distances for a given number of voxels using a subset of genes only, saving them in `spatialData_NumData_(number)_subsetGenes.mat` (gene subset used: oligodendrocyte progenitor)
 * `createDirectionalityData.m` obtains the logical vectors for indexing out voxel pairs in particular directions, and get their distances and correlation coefficients; saves data in `directionalityData.mat`
 * `createFitting.m` fits the voxel data to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number).mat`; also fits scaled distance, saving the resut to `fitting_NumData(number)_scaled.mat`
 * `createFitting_structures.m` does the same thing as `createFitting.m` except it works on structural-level data, saving result in `fitting_structures.mat`
-* `createFitting_subsetGenes.m` fits the voxel data of a subset of genes to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number)_subsetGenes.mat`; also fits scaled distance, saving the resut to `fitting_NumData(number)_subsetGenes_scaled.mat`
+* `createFitting_subsetGenes.m` fits the voxel data of a subset of genes to the 3 parameter exponential curve, and save the fitting statistic, decay constant and maximum distance to `fitting_NumData(number)_subsetGenes.mat`; also fits scaled distance, saving the resut to `fitting_NumData(number)_subsetGenes_scaled.mat` [not yet complete since no computer memory to run the full data; only ran i=1]
 * `createFitting_directionality.m` does the same thing as `createFitting.m` except it separately fits data in different directions, saving result in `fitting_NumData_(number)_sagittal.mat`
 * `geneCoexpression_scatter_voxel.m` (matlab 2015b or later only) plots gene coexpression against distance separation at the voxel level 
 * `createDecayConstantPlot.m` plots decay constant against max distance at voxel level
@@ -101,7 +101,7 @@ Note: the `.csv` files are stored in `Data` folder
 * `createExponentialPlot_scaled.m` plots 3 term exponential of voxel data with distance scaled
 * `createExponentialPlot_plusStructures.m` plots 3 term exponential of voxel plus structure data
 * `createBinnedExponentialPlot.m` plots the exponential fitting of the binned data (with and without distance scaled)
-* `createExponentialPlot_subsetGenes.m` plots 3 term exponential of voxel data of a subset of genes
+* `createExponentialPlot_subsetGenes.m` plots 3 term exponential of voxel data of a subset of genes [not complete, only plotted i=1]
 * `createExponentialPlot_directionality.m` plots 3 term exponential of voxel data in different directions separately
 
 To be deleted:
