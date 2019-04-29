@@ -1,6 +1,6 @@
-function [f,F]=plotGeneCoexpression_scatter_voxel(...
-                                            corrCoeff,distances,fitting_stat_all,...
-                                            timePointNow,brainDiv,densityOn)
+function [f,F]=plotGeneCoexpression_scatter_voxel(corrCoeff,distances,fitting_stat_all,...
+                                                  timePointNow,brainDiv,densityOn, ...
+                                                  numThresholds)
                                             % densityOn = 1 if density is needed, 0 otherwise
   % % extract the correlation coefficients
   % geneCorr=corrcoef((voxGeneMat(dataIndSelect,:))','rows','pairwise');
@@ -15,7 +15,11 @@ function [f,F]=plotGeneCoexpression_scatter_voxel(...
     % xBin_num=0.1*(max(distances_all)-min(distances_all));
     % yBin_num=xBin_num;
     % nbins=[0.01*length(distances_all(:)) 0.01*length(corrCoeff_all(:))]
-    [N,Xedges,Yedges] = histcounts2(distances(:),corrCoeff(:),[30,20]);
+    xThresholds = arrayfun(@(x)quantile(distances,x),linspace(0,1,numThresholds));
+    xThresholds(end) = xThresholds(end) + eps;
+    yThresholds = arrayfun(@(x)quantile(corrCoeff,x),linspace(0,1,numThresholds));
+    yThresholds(end) = yThresholds(end) + eps;
+    [N,Xedges,Yedges] = histcounts2(distances,corrCoeff,xThresholds,yThresholds);
     % xBin=linspace(min(distances_all),max(distances_all),xBin_num);
     % yBin=linspace(min(corrCoeff_all),max(corrCoeff_all),yBin_num);
     % Bin the data:

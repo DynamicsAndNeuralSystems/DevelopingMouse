@@ -16,7 +16,8 @@ for i = 1:length(timePoints)
                                             fitting_stat_all,...
                                             timePoints{i},...
                                             'wholeBrain',....
-                                            1); % plot density too
+                                            1,... % plot density too
+                                            20);
     filename=strcat('scatter_voxel','_',timePoints{i},'.jpeg');
     str=fullfile('Outs','scatter_voxel',filename);
     imwrite(F.cdata,str,'jpeg');
