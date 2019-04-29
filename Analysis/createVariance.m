@@ -28,7 +28,7 @@ for i=1:length(timePoints) % for each time point
     variance{i}(k)=var(decayConstant_timePoint);
   end
 end
-
+%%
 % plot variance against sampling size
 for i=1:length(timePoints)
   f=figure('color','w','Position',get(0, 'Screensize'));
