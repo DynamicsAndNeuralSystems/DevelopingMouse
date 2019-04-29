@@ -74,6 +74,12 @@ switch normMethod
             dataMatrixNorm(:,i) = UnityRescale(dataMatrix(:,i));
         end
 
+    case 'divideByMax'
+        % divide by the max element
+        for i = 1:numFeatures
+            dataMatrixNorm(:,i) = dataMatrix(:,i)/max(dataMatrix(:,i));
+        end
+
     case 'zscore'
         for i = 1:numFeatures
             dataMatrixNorm(:,i) = ZScore(dataMatrix(:,i));
