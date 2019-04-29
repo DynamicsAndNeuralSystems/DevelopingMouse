@@ -36,6 +36,7 @@ hold on
 theStyle = '-';
 theLineWidth = 2;
 theColor = colorScheme(timePointIndex,:);
+offsetRange = 100;
 % cmapOut = BF_getcmap('dark2',7,0,0);
 % if alsoScatter
 %     nodeSize = 10;
@@ -55,7 +56,13 @@ for k = 1:numThresholds-1
     % else
     %     xRand = rand([length(dataCell{i}),1])*offsetRange-offsetRange/2;
     % end
-    plot(mean(xThresholds(k:k+1)),dataCell{k},'.','color',theColor)
+    xRand = rand([length(dataCell{k}),1])*offsetRange-offsetRange/2;
+    plot(mean(xThresholds(k:k+1))+xRand,dataCell{k},'.','color',theColor)
+    % plot means
+    plot([mean(xThresholds(k:k+1)) - offsetRange/2,...
+          mean(xThresholds(k:k+1)) + offsetRange/2],...
+          nanmean(dataCell{k})*ones(2,1),'-',...
+          'color','k','LineWidth',5)
 end
 
 % for k = 1:numThresholds-1
