@@ -77,7 +77,8 @@ switch normMethod
     case 'divideByMax'
         % divide by the max element
         for i = 1:numFeatures
-            dataMatrixNorm(:,i) = dataMatrix(:,i)/max(dataMatrix(:,i));
+            columnMax=max(dataMatrix);
+            dataMatrixNorm(:,i) = dataMatrix(:,i)/columnMax(i);
         end
 
     case 'zscore'
