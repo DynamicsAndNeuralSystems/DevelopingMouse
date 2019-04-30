@@ -11,13 +11,13 @@ paths = arrayfun(@(x)fullfile(directories(x).name),1:length(directories),'Unifor
 for j = 1:length(paths)
     if strcmp(paths{j},'Data')
         % no nested subdirectories
-        addpath(paths{j})
+        addpath(paths{j});
         % add path to a directory containing allen data
-        addpath(fullfile('Data','API','Structures'))
-        addpath(fullfile('Data','API','Unionizes'))
-        addpath(fullfile('Data','API','Filtering'))
+        addpath(fullfile('Data','API','Structures'));
+        addpath(fullfile('Data','API','Unionizes'));
+        addpath(fullfile('Data','API','Filtering'));
         % add path to a directory containing other raw data
-        addpath(fullfile('Data','Others'))
+        addpath(fullfile('Data','Others'));
     else
         % add any nested subdirectories
         addpath(genpath(paths{j}));

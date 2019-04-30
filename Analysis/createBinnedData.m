@@ -3,7 +3,7 @@ filestr='spatialData_NumData_1000';
 load(strcat(filestr,'.mat'));
 C=strsplit(filestr,'_');
 numData=C{3};
-numThresholds=100;
+numThresholds=20;
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 xPlotDataAll_scaled=cell(length(timePoints),1);
 % Bin

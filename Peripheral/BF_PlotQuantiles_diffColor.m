@@ -40,6 +40,8 @@ yStds = arrayfun(@(x)std(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))
 % Plot:
 if makeNewFigure
     f = figure('color','w','Position',get(0,'Screensize')); box('on');
+else
+    f = NaN;
 end
 hold on
 %theColor = 'k';
@@ -66,5 +68,8 @@ t.Units='normalized';
 t.Position=[1 yPosition(timePointIndex)];
 str=sprintf('Developing Mouse %s binning with threshold number=%d',timePointNow,numThresholds);
 title(str,'Fontsize',18)
-F=getframe(f);
+if makeNewFigure
+    F=getframe(f);
+else
+    F=NaN;
 end

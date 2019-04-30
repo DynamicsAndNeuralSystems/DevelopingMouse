@@ -1,6 +1,6 @@
 % initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-filestr='binnedData_NumData_1000_numThresholds_100';
+filestr='binnedData_NumData_1000_numThresholds_20';
 load(strcat(filestr,'.mat'));
 file_parts=strsplit(filestr,'_');
 NumData=file_parts{3};
