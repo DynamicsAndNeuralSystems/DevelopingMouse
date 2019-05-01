@@ -111,7 +111,12 @@ Workflow for good gene subset only:
 * `createVoxGeneMatStats_geneAcrossTime.m`
 * `createEnergyGrid_goodGeneSubset.m`
 * `createGeneExpressionMatrix_goodGeneSubset.m`
-
+* `createSpatialData_goodGeneSubset.m`
+* `createBinnedData_goodGeneSubset.m`
+* `createBinnedFitting_goodGeneSubset.m`
+* `createBinningPlot_withExponential_goodGeneSubset.m`
+* `createDecayConstantPlot_goodGeneSubset.m`
+* `createDecayConstant_voxel_goodGeneSubset.m`
 
 To be deleted:
 * `createCorrCoeffAll_distancesAll.m` computes correlation, distance and scaled distance from voxGeneMat and distMat (with dataIndSelect), saving them into `corrCoeffAll_distancesAll.mat`
