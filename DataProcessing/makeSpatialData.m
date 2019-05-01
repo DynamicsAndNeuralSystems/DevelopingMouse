@@ -1,23 +1,25 @@
 % create correlation coefficient and distances
-function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sagittal_all]=makeSpatialData(whatNumData)
+function [distances_all,corrCoeff_all,annotation_pair_all,angle_coronal_all,angle_axial_all,angle_sagittal_all]=makeSpatialData(whatNumData)
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   distances_all=cell(length(timePoints),1);
   corrCoeff_all=cell(length(timePoints),1);
   angle_coronal_all=cell(length(timePoints),1);
   angle_axial_all=cell(length(timePoints),1);
   angle_sagittal_all=cell(length(timePoints),1);
+  annotation_pair_all=cell(length(timePoints),1);
   for i=1:length(timePoints)
     filename=strcat('voxelGeneCoexpression','_',timePoints{i},'.mat');
     load(filename);
     [distances_all{i},...
     corrCoeff_all{i},...
+    annotation_pair_all{i},...
     angle_coronal_all{i},...
     angle_axial_all{i},...
-    angle_sagittal_all{i}]=sampleGridData(voxGeneMat,coOrds,whatNumData,timePoints{i});
+    angle_sagittal_all{i}]=sampleGridData(voxGeneMat,coOrds,annotation_grid,whatNumData,timePoints{i});
   end
   str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
                                           num2str(whatNumData),'.mat'));
-  save(str,'distances_all','corrCoeff_all','angle_coronal_all','angle_axial_all','angle_sagittal_all')
+  save(str,'distances_all','corrCoeff_all','annotation_pair_all','angle_coronal_all','angle_axial_all','angle_sagittal_all')
 end
 % makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all','wholeBrain')
 % makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all_subsetGenes','wholeBrain')

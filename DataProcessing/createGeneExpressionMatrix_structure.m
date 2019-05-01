@@ -18,12 +18,12 @@ for i=1:length(timePoints) % for each time point
     % match the structure regions (because not all time points have all region coordinates available)
     [~,ia,ib]=intersect(char(structures(~isMissing)),...
                         dataDevMouse.(timePoints{i}).acronym,'stable');
-    [~,ix,iy]=intersect(char(structures(~isMissing)),acronym,'stable');
+    % [~,ix,iy]=intersect(char(structures(~isMissing)),acronym,'stable');
     % only structures in which coordinates are available are used
     slice_clean=slice_clean(:,ia);
     voxGeneMat_structure{i}=slice_clean;
     % get the structure labels
-    acronyms{i}=acronym(iy);
+    acronyms{i}=dataDevMouse.(timePoints{i}).acronym(ib);
 end
 % save variables
 str=fullfile('Matlab_variables','voxGeneMat_structures_all.mat');

@@ -17,13 +17,13 @@ whatVoxelThreshold = 0.3;
 
 % create gene coexpression matrix
 for i=1:length(timePoints)
-    [voxGeneMat, coOrds] = makeGridData(timePoints{i}, ...
+    [voxGeneMat, coOrds, annotation_grid] = makeGridData(timePoints{i}, ...
                                         whatNorm, ...
                                         whatVoxelThreshold,...
                                         'wholeBrain');
     str=fullfile('Matlab_variables', strcat('voxelGeneCoexpression','_',timePoints{i},'.mat'));
-    save(str,'voxGeneMat','coOrds','-v7.3');
-    clear voxGeneMat coOrds
+    save(str,'voxGeneMat','coOrds','annotation_grid','-v7.3');
+    clear voxGeneMat coOrds annotation
 end
 %% save variables
 

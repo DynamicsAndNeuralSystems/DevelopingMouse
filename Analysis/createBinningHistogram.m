@@ -3,6 +3,8 @@ load('spatialData_NumData_1000.mat');
 numThresholds=30;
 % make binned data
 binnedDataCell_all=cell(length(timePoints),1);
+isNormal=cell(length(timePoints),1);
+p_values=cell(length(timePoints),1);
 for i=1:length(timePoints)
   f=figure('color','w','Position',get(0, 'Screensize'));
   [binnedDataCell_all{i}]=makeBinnedData(distances_all{i},corrCoeff_all{i},numThresholds);
@@ -11,6 +13,10 @@ for i=1:length(timePoints)
     subplot(ceil(sqrt(numThresholds)),floor(sqrt(numThresholds)),j)
     histogram(binnedDataCell_all{i}{j})
     title(sprintf('Bin %d',j))
+    % isNormal{i}=zeros(length(numThresholds-1),1);
+    % p_values{i}=zeros(length(numThresholds-1),1);
+    % % check if each bin is normally distributed or not
+    % [isNormal{i}(j),p_values{i}(j),~,~] = adtest(binnedDataCell_all{i}{j});
   end
   mtit(f,sprintf('Distribution of bins, developing mouse %s',timePoints{i}))
   str=fullfile('Outs','bins_histogram',strcat('bins_histogram_',timePoints{i},'.jpeg'));
