@@ -104,6 +104,15 @@ Note: the `.csv` files are stored in `Data` folder
 * `createExponentialPlot_subsetGenes.m` plots 3 term exponential of voxel data of a subset of genes [not complete, only plotted i=1]
 * `createExponentialPlot_directionality.m` plots 3 term exponential of voxel data in different directions separately
 
+Workflow for good gene subset only:
+* `createGeneExpressionMatrix.m`
+* `createVoxGeneMatStats_NaNGene_histogram (histogram of NanGene proprotion).m`
+* `createGeneList_gridExpression.m`
+* `createVoxGeneMatStats_geneAcrossTime.m`
+* `createEnergyGrid_goodGeneSubset.m`
+* `createGeneExpressionMatrix_goodGeneSubset.m`
+
+
 To be deleted:
 * `createCorrCoeffAll_distancesAll.m` computes correlation, distance and scaled distance from voxGeneMat and distMat (with dataIndSelect), saving them into `corrCoeffAll_distancesAll.mat`
 * `GeneCoexpression_scatter.m` plots gene coexpression against distance separation at the structure level; also create `'corrCoeff_distances_ontoDist_clean.mat` which contains distances, correlation coefficient and ontological distances at the structural level
