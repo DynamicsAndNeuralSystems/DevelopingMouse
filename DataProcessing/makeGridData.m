@@ -1,7 +1,9 @@
-function [voxGeneMat, coOrds, annotation_grid] = makeGridData(whatTimePointNow, ...
-                                            whatNorm, ...
-                                            whatVoxelThreshold,...
-                                            thisBrainDiv)
+function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(whatTimePointNow, ...
+                                                                      whatNorm, ...
+                                                                      whatVoxelThreshold,...
+                                                                      whatGeneThreshold,...
+                                                                      thisBrainDiv,...
+                                                                      useGoodGeneSubset)
   % for whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
   % for thisBrainDiv: 'forebrain', 'midbrain', 'hindbrain' or 'wholeBrain'
   % for whatNumData: either input 'all' or the number of voxels to be included
@@ -10,9 +12,6 @@ function [voxGeneMat, coOrds, annotation_grid] = makeGridData(whatTimePointNow, 
     timePointNow=whatTimePointNow;
     % matlab variable directory
     varDir=fullfile('Matlab_variables');
-    % % change thisBrainDiv to a cell for later referencing use
-    % thisBrainDiv_cell=cell(1,1);
-    % thisBrainDiv_cell{1}=thisBrainDiv;
     % this script creates a voxel x gene matrix with irrelevant voxels filtered out
     sizeGrids=struct('E11pt5',[70,75,40],'E13pt5',[89,109,69],'E15pt5',[94,132,65],'E18pt5',[67,43,40],'P4',[77,43,50],...
         'P14',[68,40,50],'P28',[73,41,53]);
@@ -21,7 +20,11 @@ function [voxGeneMat, coOrds, annotation_grid] = makeGridData(whatTimePointNow, 
     resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,...
         'P14',200,'P28',200);
     %% load matlab variables
-    filename=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
+    if useGoodGeneSubset
+        filename=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
+    else
+        filename=strcat('energyGrids_goodGeneSubset',timePoints{timePointIndex},'.mat');
+    end
     str=fullfile(varDir,filename);
     load(str)
     load('annotationGrids.mat')
@@ -31,11 +34,7 @@ function [voxGeneMat, coOrds, annotation_grid] = makeGridData(whatTimePointNow, 
     % filters off spinal cord voxels
     isSpinalCord=ismember(annotationGrids{timePointIndex},spinalCord_ID);
     isAnno=annotationGrids{timePointIndex}>0;
-    % if nargin<5 % all brain divisions
-    %     isIncluded=union(union(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
-    %                     ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
-    %                     ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID));
-    % else % only a particular brain division
+
     if strcmp(thisBrainDiv,'wholeBrain')
         isIncluded=or(or(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
                           ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
@@ -70,6 +69,12 @@ function [voxGeneMat, coOrds, annotation_grid] = makeGridData(whatTimePointNow, 
     close(h)
 
     clear energyGrids
+
+    % get the proportion of NaN genes of each voxel
+    propNanGenes=sum(isnan(voxGeneMat),2)/size(voxGeneMat,2);
+    % index of genes that are not nan in at least a reasonable proportion of voxels
+    isGoodGene=(sum(isnan(voxGeneMat),1) < whatGeneThreshold*size(voxGeneMat,1));
+
     %% only keep good voxels
     isGoodVoxel=(sum(isnan(voxGeneMat),2) < whatVoxelThreshold*size(voxGeneMat,2));
     voxGeneMat=voxGeneMat(isGoodVoxel,:);
@@ -83,6 +88,6 @@ function [voxGeneMat, coOrds, annotation_grid] = makeGridData(whatTimePointNow, 
     % only keep good voxels
     coOrds=coOrds(isGoodVoxel,:);
     % get the annotations
-    annotation_grid=annotationGrids{timePointIndex}(isAnno & ~isSpinalCord & isIncluded);
-    annotation_grid=annotation_grid(isGoodVoxel);
+    % annotation_grid=annotationGrids{timePointIndex}(isAnno & ~isSpinalCord & isIncluded);
+    % annotation_grid=annotation_grid(isGoodVoxel);
 end
