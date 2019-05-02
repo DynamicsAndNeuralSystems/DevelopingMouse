@@ -21,11 +21,11 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
   end
   if useGoodGeneSubset
     str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                          num2str(whatNumData),'.mat'));
+                                        num2str(whatNumData),'_goodGeneSubset','.mat'));
   else
     str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                        num2str(whatNumData),'_goodGeneSubset','.mat'));
-  end                                    
+                                          num2str(whatNumData),'.mat'));
+  end
   save(str,'distances_all','corrCoeff_all','angle_coronal_all','angle_axial_all','angle_sagittal_all')
 end
 % makeCorrCoeffAll_distancesAll('voxelGeneCoexpression_all','wholeBrain')

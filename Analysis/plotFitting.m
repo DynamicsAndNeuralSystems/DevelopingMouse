@@ -17,22 +17,22 @@ function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, .
       switch fitType
           case 'exp'
               p=plot(xData,fitting_stat_all.(timePoints{i}).fHandle.exp(xData),...
-                    '-x','MarkerEdgeColor',theColor);
+                    '-x','MarkerEdgeColor',theColor,'LineWidth',3);
               p.Color=theColor;
               legend(p,sprintf('Exponential fit (exp), %s', thisDataType))
           case 'exp1'
               p=plot(xData,fitting_stat_all.(timePoints{i}).fHandle.exp1(xData),...
-                    '-x','MarkerEdgeColor',theColor);
+                    '-x','MarkerEdgeColor',theColor,'LineWidth',3);
               p.Color=theColor;
               legend(p,sprintf('Exponential fit (exp1), %s', thisDataType))
           case 'exp_1_0'
               p=plot(xData,fitting_stat_all.(timePoints{i}).fHandle.exp_1_0(xData),...
-                    '-x','MarkerEdgeColor',theColor);
+                    '-x','MarkerEdgeColor',theColor,'LineWidth',3);
               p.Color=theColor;
               legend(p,sprintf('Exponential fit (exp_1_0), %s', thisDataType))
           case 'linear'
               p=plot(xData,fitting_stat_all.(timePoints{i}).fHandle.linear(xData),...
-                    '-x','MarkerEdgeColor',theColor);
+                    '-x','MarkerEdgeColor',theColor,'LineWidth',3);
               p.Color=theColor;
               legend(p,sprintf('Linear fit, %s', thisDataType))
           otherwise

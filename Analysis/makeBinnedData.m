@@ -1,16 +1,29 @@
-function [binnedDataCell,binnedAnnotationCell]=makeBinnedData(xData,...
-                                                              yData,...
-                                                              numThresholds,...
-                                                              annotation_pair)
-% separate data into bins
-xThresholds = arrayfun(@(x)quantile(xData,x),linspace(0,1,numThresholds));
-xThresholds(end) = xThresholds(end) + eps; % make sure all data included in final bin
-binnedDataCell=cell(numThresholds,1);
-binnedAnnotationCell=cell(numThresholds,1);
-k=1;
-for j=1:numThresholds-1
-  binnedDataCell{j}=yData(xData>=xThresholds(j) & xData < xThresholds(j+1));
-  binnedAnnotationCell{j}=annotation_pair(k:(k+length(binnedDataCell{j})-1));
-  k=k+length(binnedDataCell{j});
+function makeBinnedData(numData,numThresholds,useGoodGeneSubset)
+if useGoodGeneSubset
+  filestr=strcat('spatialData_NumData_',num2str(numData),'.mat');
+else
+  filestr=strcat('spatialData_NumData_',num2str(numData),'_goodGeneSubset','.mat');
 end
+load(filestr);
+timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+distances_all_scaled=cell(length(timePoints),1);
+% Bin the unscaled data
+[~,~,xPlotDataAll,yPlotDataAll] = plotBinning(distances_all,corrCoeff_all,...
+                                              numThresholds,false);
+% scale the distance and bin again
+for i=1:length(timePoints)
+  distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
+end
+[~,~,xPlotDataAll_scaled,yPlotDataAll_scaled] = plotBinning(distances_all_scaled,corrCoeff_all,...
+                                              numThresholds,false);
+% save variable
+if useGoodGeneSubset
+  str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+                'numThresholds','_',num2str(numThresholds),'_goodGeneSubset','.mat'));
+else
+  str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+              'numThresholds','_',num2str(numThresholds),'.mat'));
+end
+save(str,'xPlotDataAll','yPlotDataAll',...
+          'xPlotDataAll_scaled','yPlotDataAll_scaled','numThresholds');
 end
