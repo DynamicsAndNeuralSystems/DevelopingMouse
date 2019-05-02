@@ -105,7 +105,10 @@ Note: the `.csv` files are stored in `Data` folder
 * `createExponentialPlot_directionality.m` plots 3 term exponential of voxel data in different directions separately
 
 Workflow for good gene subset only:
-* `createGeneExpressionMatrix.m`
+* `createAnnotationGrids_SpinalCordID.m`
+* `createGeneExpressionMatrix (gets the good genes).m`
+* `createEnergyGrid_goodGeneSubset.m`
+* `createGeneExpressionMatrix_goodGeneSubset.m`
 * `createVoxGeneMatStats_NaNGene_histogram (histogram of NanGene proprotion).m`
 * `createGeneList_gridExpression.m`
 * `createVoxGeneMatStats_geneAcrossTime.m`
