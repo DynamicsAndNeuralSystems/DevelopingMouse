@@ -1,1 +1,1 @@
-makeBinnedData(1000,20,true)
+makeBinnedData(1000,20,true,'wholeBrain')

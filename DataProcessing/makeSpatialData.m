@@ -7,6 +7,11 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
   angle_axial_all=cell(length(timePoints),1);
   angle_sagittal_all=cell(length(timePoints),1);
   for i=1:length(timePoints)
+    if (i==1 & strcmp(thisBrainDiv,'midbrain'))
+      numData=587; % only 587 voxels are available in the midbrain in E11.5
+    else
+      numData=whatNumData;
+    end
     if useGoodGeneSubset
       if strcmp(thisBrainDiv,'wholeBrain')
         filename=strcat('voxelGeneCoexpression_goodGeneSubset','_',timePoints{i},'.mat');
@@ -26,23 +31,23 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
     corrCoeff_all{i},...
     angle_coronal_all{i},...
     angle_axial_all{i},...
-    angle_sagittal_all{i}]=sampleGridData(voxGeneMat,coOrds,whatNumData,timePoints{i});
+    angle_sagittal_all{i}]=sampleGridData(voxGeneMat,coOrds,numData,timePoints{i});
   end
   if useGoodGeneSubset
     if strcmp(thisBrainDiv,'wholeBrain')
       str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                        num2str(whatNumData),'_goodGeneSubset','.mat'));
+                                        num2str(numData),'_goodGeneSubset','.mat'));
     else
       str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                        num2str(whatNumData),'_',thisBrainDiv,'_goodGeneSubset','.mat'));
+                                        num2str(numData),'_',thisBrainDiv,'_goodGeneSubset','.mat'));
     end
   else
     if strcmp(thisBrainDiv,'wholeBrain')
       str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                          num2str(whatNumData),'.mat'));
+                                          num2str(numData),'.mat'));
     else
       str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                          num2str(whatNumData),'_',thisBrainDiv,'.mat'));
+                                          num2str(numData),'_',thisBrainDiv,'.mat'));
     end
   end
   save(str,'distances_all','corrCoeff_all','angle_coronal_all','angle_axial_all','angle_sagittal_all')

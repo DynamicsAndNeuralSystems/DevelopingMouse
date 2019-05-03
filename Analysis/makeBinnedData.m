@@ -1,4 +1,4 @@
-function makeBinnedData(numData,numThresholds,useGoodGeneSubset)
+function makeBinnedData(numData,numThresholds,useGoodGeneSubset,thisBrainDiv)
 if useGoodGeneSubset
   filestr=strcat('spatialData_NumData_',num2str(numData),'.mat');
 else
