@@ -53,16 +53,16 @@ function [f,F] = plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all,
 
   t1=text(0.5,0.5,sprintf('Adjusted R square = %d',...
                           fitting_stat_all.(timePoints{timePointIndex}).adjRSquare.exp),...
-                          'color','k','FontSize',14);
+                          'color','k','FontSize',20);
   t1.Units='normalized';
-  t1.Position=[0.4 yPosition(2)];
+  t1.Position=[0.3 yPosition(2)];
   coeff=coeffvalues(fitting_stat_all.(timePoints{timePointIndex}).fitObject.exp);
 
   t2=text(0.5,0.5,strcat('y= ',num2str(coeff(1)),'*','exp(-',num2str(coeff(3)),'*x)',...
                           '+',num2str(coeff(2))),...
-                          'color','k','FontSize',14);
+                          'color','k','FontSize',20);
   t2.Units='normalized';
-  t2.Position=[0.4 yPosition(2)-0.1];
+  t2.Position=[0.3 yPosition(2)-0.1];
 
   xlabel(xLabel,'FontSize',16)
   ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)

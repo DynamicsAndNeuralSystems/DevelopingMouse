@@ -1,3 +1,4 @@
+function makeBrainDivision()
 % initialize
 brainDivision=struct();
 % divisions={'forebrain','midbrain','hindbrain'};
@@ -17,3 +18,4 @@ brainDivision.hindbrain.color=importfile_structure('structure_H.csv');
 
 str=fullfile('Matlab_variables','brainDivision.mat');
 save(str,'brainDivision')
+end

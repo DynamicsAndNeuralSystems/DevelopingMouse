@@ -1,1 +1,1 @@
-makeGeneExpressionMatrix('scaledSigmoid',0.3,0.3,true); % use good gene subset only
+makeGeneExpressionMatrix('scaledSigmoid',0.3,0.3,true,'wholeBrain'); % use good gene subset only
