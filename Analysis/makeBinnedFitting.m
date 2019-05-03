@@ -42,12 +42,14 @@ load(strcat(filestr,'.mat'));
 if removeBadBin
   if strcmp(thisBrainDiv,'hindbrain')
     xPlotDataAll{5}(19)=[];
+    yPlotDataAll{5}(19)=[];
   elseif strcmp(thisBrainDiv,'midbrain')
     xPlotDataAll{4}(19)=[];
+    yPlotDataAll{4}(19)=[];
   end
 end
 % create fitting
-[fitting_stat_all, decayConstant, maxDistance]=getFitting(xPlotDataAll,yPlotDataAll,removeBadBin);
+[fitting_stat_all, decayConstant, maxDistance]=getFitting(xPlotDataAll,yPlotDataAll);
 
 if useGoodGeneSubset
   if strcmp(thisBrainDiv,'wholeBrain')
