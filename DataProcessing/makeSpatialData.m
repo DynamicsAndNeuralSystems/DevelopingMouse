@@ -1,5 +1,5 @@
 % create correlation coefficient and distances
-function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sagittal_all]=makeSpatialData(whatNumData,useGoodGeneSubset)
+function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sagittal_all]=makeSpatialData(whatNumData,useGoodGeneSubset,thisBrainDiv)
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   distances_all=cell(length(timePoints),1);
   corrCoeff_all=cell(length(timePoints),1);
@@ -8,9 +8,18 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
   angle_sagittal_all=cell(length(timePoints),1);
   for i=1:length(timePoints)
     if useGoodGeneSubset
-      filename=strcat('voxelGeneCoexpression_goodGeneSubset','_',timePoints{i},'.mat');
+      if strcmp(thisBrainDiv,'wholeBrain')
+        filename=strcat('voxelGeneCoexpression_goodGeneSubset','_',timePoints{i},'.mat');
+      else
+        filename=strcat('voxelGeneCoexpression_',brainDiv,'_','goodGeneSubset','_',...
+                        timePoints{i},'.mat');
+      end
     else
-      filename=strcat('voxelGeneCoexpression','_',timePoints{i},'.mat');
+      if strcmp(thisBrainDiv,'wholeBrain')
+        filename=strcat('voxelGeneCoexpression','_',timePoints{i},'.mat');
+      else
+        filename=strcat('voxelGeneCoexpression_',brainDiv,'_',timePoints{i},'.mat');
+      end
     end
     load(filename);
     [distances_all{i},...
