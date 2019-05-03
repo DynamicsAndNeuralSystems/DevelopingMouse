@@ -67,6 +67,7 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
       else
         str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
                                           num2str(numData),'.mat'));
+      end
     else
       if scaledDistance
         str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
