@@ -29,11 +29,21 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
     angle_sagittal_all{i}]=sampleGridData(voxGeneMat,coOrds,whatNumData,timePoints{i});
   end
   if useGoodGeneSubset
-    str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+    if strcmp(thisBrainDiv,'wholeBrain')
+      str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
                                         num2str(whatNumData),'_goodGeneSubset','.mat'));
+    else
+      str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+                                        num2str(whatNumData),'_',thisBrainDiv,'_goodGeneSubset','.mat'));
+    end
   else
-    str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+    if strcmp(thisBrainDiv,'wholeBrain')
+      str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
                                           num2str(whatNumData),'.mat'));
+    else
+      str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+                                          num2str(whatNumData),'_',thisBrainDiv,'.mat'));
+    end                                                                            
   end
   save(str,'distances_all','corrCoeff_all','angle_coronal_all','angle_axial_all','angle_sagittal_all')
 end

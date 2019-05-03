@@ -1,2 +1,2 @@
 % create correlation coefficient and distances
-[~,~,~,~,~]=makeSpatialData(1000,true);
+[~,~,~,~,~]=makeSpatialData(1000,true,'wholeBrain');
