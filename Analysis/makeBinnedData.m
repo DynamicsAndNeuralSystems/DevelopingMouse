@@ -31,7 +31,7 @@ end
 load(filestr);
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 distances_all_scaled=cell(length(timePoints),1);
-% Bin the unscaled data
+% Bin the data
 [~,~,xPlotDataAll,yPlotDataAll] = plotBinning(distances_all,corrCoeff_all,...
                                               numThresholds,false);
 % scale the distance and bin again
@@ -50,6 +50,15 @@ if useGoodGeneSubset
       str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
                 'numThresholds','_',num2str(numThresholds),'_goodGeneSubset','.mat'));
     end
+  else
+    if scaledDistance
+      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+                'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'_scaled','_goodGeneSubset','.mat'));
+    else
+      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+                'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'_goodGeneSubset','.mat'));
+    end
+  end
 else
   if strcmp(thisBrainDiv,'wholeBrain')
     if scaledDistance

@@ -1,6 +1,6 @@
 function [f,F] = plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all, thisDataType, ...
                             xLabel, xDataDensity, dataProcessing,direction, ...
-                            timePointNow,makeNewFigure)
+                            timePointNow,makeNewFigure,thisBrainDiv)
   % thisDataType: 'voxel' or 'structure'
   % F is the getframe object for setting figure saving size
   % xDataDensity: >0 and <=1; indicates the proportion of xData to use in plotting
@@ -68,20 +68,20 @@ function [f,F] = plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all,
   ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
   switch fitType
       case 'exp'
-          str = sprintf('Developing Mouse 3 parameter exponential fit, %s, %s',...
-                        dataProcessing,direction);
+          str = sprintf('Developing Mouse 3 parameter exponential fit, %s, %s, %s',...
+                        dataProcessing,direction,thisBrainDiv);
       case 'exp1'
-          str = sprintf('Developing Mouse 2 parameter exponential fit, %s, %s',...
-                        dataProcessing,direction);
+          str = sprintf('Developing Mouse 2 parameter exponential fit, %s, %s, %s',...
+                        dataProcessing,direction,thisBrainDiv);
       case 'exp_1_0'
-          str = sprintf('Developing Mouse 1 parameter exponential fit, %s, %s',...
-                        dataProcessing,direction);
+          str = sprintf('Developing Mouse 1 parameter exponential fit, %s, %s, %s',...
+                        dataProcessing,direction,thisBrainDiv);
       case 'linear'
-          str = sprintf('Developing Mouse linear fit, %s, %s',dataProcessing,direction);
+          str = sprintf('Developing Mouse linear fit, %s, %s, %s',dataProcessing,direction,thisBrainDiv);
       otherwise
-          str = sprintf('Developing Mouse unknown fit, %s, %s',dataProcessing,direction);
+          str = sprintf('Developing Mouse unknown fit, %s, %s, %s',dataProcessing,direction);
   end
-  title(str,'Fontsize',17);
+  title(str,'Fontsize',16);
   % f=figureFullScreen(f,true);
   % set(f, 'PaperPositionMode', 'auto')
   if makeNewFigure

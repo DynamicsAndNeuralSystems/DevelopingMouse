@@ -1,5 +1,5 @@
 function [f,F] = BF_PlotQuantiles_diffColor(xData,yData,numThresholds,alsoScatter,...
-                                    colorScheme,makeNewFigure,timePointNow)
+                                    colorScheme,makeNewFigure,timePointNow,thisBrainDiv)
 % Plots x-y scatter, but with mean of y plotted in quantiles of x
 % Ben Fulcher
 %-------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k','FontSize',14,'Backg
         colorScheme(timePointIndex,:));
 t.Units='normalized';
 t.Position=[1 yPosition(timePointIndex)];
-str=sprintf('Developing Mouse %s binning with threshold number=%d',timePointNow,numThresholds);
+str=sprintf('Developing Mouse %s %s binning with threshold number=%d',timePointNow,thisBrainDiv,numThresholds);
 title(str,'Fontsize',18)
 if makeNewFigure
     F=getframe(f);
