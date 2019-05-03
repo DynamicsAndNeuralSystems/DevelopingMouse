@@ -11,14 +11,14 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
       if strcmp(thisBrainDiv,'wholeBrain')
         filename=strcat('voxelGeneCoexpression_goodGeneSubset','_',timePoints{i},'.mat');
       else
-        filename=strcat('voxelGeneCoexpression_',brainDiv,'_','goodGeneSubset','_',...
+        filename=strcat('voxelGeneCoexpression_',thisBrainDiv,'_','goodGeneSubset','_',...
                         timePoints{i},'.mat');
       end
     else
       if strcmp(thisBrainDiv,'wholeBrain')
         filename=strcat('voxelGeneCoexpression','_',timePoints{i},'.mat');
       else
-        filename=strcat('voxelGeneCoexpression_',brainDiv,'_',timePoints{i},'.mat');
+        filename=strcat('voxelGeneCoexpression_',thisBrainDiv,'_',timePoints{i},'.mat');
       end
     end
     load(filename);
@@ -43,7 +43,7 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
     else
       str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
                                           num2str(whatNumData),'_',thisBrainDiv,'.mat'));
-    end                                                                            
+    end
   end
   save(str,'distances_all','corrCoeff_all','angle_coronal_all','angle_axial_all','angle_sagittal_all')
 end
