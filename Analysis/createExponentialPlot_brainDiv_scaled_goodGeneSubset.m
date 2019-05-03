@@ -1,4 +1,6 @@
-makeExponentialPlot(1000,20,true,'wholeBrain',false)
+makeExponentialPlot(1000,20,true,'forebrain',true)
+makeExponentialPlot(1000,20,true,'midbrain',true)
+makeExponentialPlot(1000,20,true,'hindbrain',true)
 % clear
 % load('spatialData_NumData_1000.mat');
 % load('fitting_NumData_1000.mat');

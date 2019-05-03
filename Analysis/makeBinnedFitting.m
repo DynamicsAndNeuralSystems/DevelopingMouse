@@ -1,4 +1,5 @@
-function makeBinnedFitting(numData,numThresholds,useGoodGeneSubset,thisBrainDiv,scaledDistance, removeBadBin)
+function makeBinnedFitting(numData,numThresholds,useGoodGeneSubset,thisBrainDiv,...
+                          scaledDistance, removeBadBin)
 % initialize
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 if useGoodGeneSubset
@@ -40,6 +41,11 @@ else
 end
 load(strcat(filestr,'.mat'));
 if removeBadBin
+  % get the max distance first, then remove the bad bin
+  maxDistance = zeros(length(timePoints),1);
+  for i=1:length(timePoints)
+    maxDistance(i)=max(xPlotDataAll{i});
+  end
   if strcmp(thisBrainDiv,'hindbrain')
     xPlotDataAll{5}(19)=[];
     yPlotDataAll{5}(19)=[];
@@ -47,9 +53,11 @@ if removeBadBin
     xPlotDataAll{4}(19)=[];
     yPlotDataAll{4}(19)=[];
   end
+  [fitting_stat_all, decayConstant, ~]=getFitting(xPlotDataAll,yPlotDataAll);
+else
+  % create fitting
+  [fitting_stat_all, decayConstant, maxDistance]=getFitting(xPlotDataAll,yPlotDataAll);
 end
-% create fitting
-[fitting_stat_all, decayConstant, maxDistance]=getFitting(xPlotDataAll,yPlotDataAll);
 
 if useGoodGeneSubset
   if strcmp(thisBrainDiv,'wholeBrain')
