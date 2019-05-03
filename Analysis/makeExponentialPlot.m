@@ -1,22 +1,25 @@
 function makeExponentialPlot(numData,numThresholds,useGoodGeneSubset,scaledDistance)
 if useGoodGeneSubset
-    filestr1=strcat('binnedData_NumData_',num2str(numData),'_numThresholds_',...
-                  num2str(numThresholds),'_goodGeneSubset','.mat');
-
     if scaledDistance
+      filestr1=strcat('binnedData_NumData_',num2str(numData),'_numThresholds_',...
+                    num2str(numThresholds),'_scaled_goodGeneSubset','.mat');
       filestr2=strcat('fitting_NumData_',num2str(numData),...
-                  '_binnedData_numThresholds_',num2str(numThresholds),'_goodGeneSubset_scaled','.mat');
+                  '_binnedData_numThresholds_',num2str(numThresholds),'_scaled_goodGeneSubset','.mat');
     else
+      filestr1=strcat('binnedData_NumData_',num2str(numData),'_numThresholds_',...
+                    num2str(numThresholds),'_goodGeneSubset','.mat');
       filestr2=strcat('fitting_NumData_',num2str(numData),...
                   '_binnedData_numThresholds_',num2str(numThresholds),'_goodGeneSubset','.mat');
     end
 else
-  filestr1=strcat('binnedData_NumData_',num2str(numData),'_numThresholds_',...
-                  num2str(numThresholds),'.mat');
   if scaledDistance
+    filestr1=strcat('binnedData_NumData_',num2str(numData),'_numThresholds_',...
+                    num2str(numThresholds),'_scaled','.mat');
     filestr2=strcat('fitting_NumData_',num2str(numData),...
                   '_binnedData_numThresholds_',num2str(numThresholds),'_scaled','.mat');
   else
+    filestr1=strcat('binnedData_NumData_',num2str(numData),'_numThresholds_',...
+                    num2str(numThresholds),'.mat');
     filestr2=strcat('fitting_NumData_',num2str(numData),...
                   '_binnedData_numThresholds_',num2str(numThresholds),'.mat');
   end
@@ -25,13 +28,9 @@ load(filestr1);
 load(filestr2);
 
 % exponential fit (3 term) on same plot (voxel data)
-if scaledDistance
-  [~,F]= plotFitting(xPlotDataAll_scaled,'exp',fitting_stat_all,'voxel',...
-                      'Separation Distance/maxDistance',1,'original','allDirections');
-else
-  [~,F]= plotFitting(xPlotDataAll,'exp',fitting_stat_all,'voxel',...
+[~,F]= plotFitting(xPlotDataAll,'exp',fitting_stat_all,'voxel',...
                       'Separation Distance (um)',1,'original','allDirections');
-end
+
 if useGoodGeneSubset
   if scaledDistance
     str=fullfile('Outs','exponential_plot_all_scaled_goodGeneSubset',...

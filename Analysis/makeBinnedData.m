@@ -1,15 +1,31 @@
-function makeBinnedData(numData,numThresholds,useGoodGeneSubset,thisBrainDiv)
+function makeBinnedData(numData,numThresholds,useGoodGeneSubset,thisBrainDiv,scaledDistance)
 if useGoodGeneSubset
   if strcmp(thisBrainDiv,'wholeBrain')
-    filestr=strcat('spatialData_NumData_',num2str(numData),'_goodGeneSubset','.mat');
+    if scaledDistance
+      filestr=strcat('spatialData_NumData_',num2str(numData),'_scaled','_goodGeneSubset','.mat');
+    else
+      filestr=strcat('spatialData_NumData_',num2str(numData),'_goodGeneSubset','.mat');
+    end
   else
-    filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_goodGeneSubset','.mat');
+    if scaledDistance
+      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_scaled','_goodGeneSubset','.mat');
+    else
+      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_goodGeneSubset','.mat');
+    end
   end
 else
   if strcmp(thisBrainDiv,'wholeBrain')
-    filestr=strcat('spatialData_NumData_',num2str(numData),'.mat');
+    if scaledDistance
+      filestr=strcat('spatialData_NumData_',num2str(numData),'_scaled','.mat');
+    else
+      filestr=strcat('spatialData_NumData_',num2str(numData),'.mat');
+    end
   else
-    filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'.mat');
+    if scaledDistance
+      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_scaled','.mat');
+    else
+      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'.mat');
+    end
   end
 end
 load(filestr);
@@ -19,19 +35,39 @@ distances_all_scaled=cell(length(timePoints),1);
 [~,~,xPlotDataAll,yPlotDataAll] = plotBinning(distances_all,corrCoeff_all,...
                                               numThresholds,false);
 % scale the distance and bin again
-for i=1:length(timePoints)
-  distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
-end
-[~,~,xPlotDataAll_scaled,yPlotDataAll_scaled] = plotBinning(distances_all_scaled,corrCoeff_all,...
-                                                numThresholds,false);
+% for i=1:length(timePoints)
+%   distances_all_scaled{i}=distances_all{i}/max(distances_all{i});
+% end
+% [~,~,xPlotDataAll_scaled,yPlotDataAll_scaled] = plotBinning(distances_all_scaled,corrCoeff_all,...
+%                                                 numThresholds,false);
 % save variable
 if useGoodGeneSubset
-  str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+  if strcmp(thisBrainDiv,'wholeBrain')
+    if scaledDistance
+      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+                'numThresholds','_',num2str(numThresholds),'_scaled','_goodGeneSubset','.mat'));
+    else
+      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
                 'numThresholds','_',num2str(numThresholds),'_goodGeneSubset','.mat'));
+    end
 else
-  str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+  if strcmp(thisBrainDiv,'wholeBrain')
+    if scaledDistance
+      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+              'numThresholds','_',num2str(numThresholds),'_scaled','.mat'));
+    else
+      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
               'numThresholds','_',num2str(numThresholds),'.mat'));
+    end
+  else
+    if scaledDistance
+      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+              'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'_scaled','.mat'));
+    else
+      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+              'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'.mat'));
+    end
+  end
 end
-save(str,'xPlotDataAll','yPlotDataAll',...
-          'xPlotDataAll_scaled','yPlotDataAll_scaled','numThresholds');
+save(str,'xPlotDataAll','yPlotDataAll','numThresholds');
 end

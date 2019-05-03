@@ -1,15 +1,29 @@
-function makeBinningPlot_withExponential(numData,numThresholds,useGoodGeneSubset)
+function makeBinningPlot_withExponential(numData,numThresholds,useGoodGeneSubset,scaledDistance)
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 if useGoodGeneSubset
-  filestr1=strcat('spatialData_NumData_',num2str(numData),'_goodGeneSubset','.mat');
+  if scaledDistance
+    filestr1=strcat('spatialData_NumData_',num2str(numData),'_scaled','_goodGeneSubset','.mat');
 
-  filestr2=strcat('fitting_NumData_',num2str(numData),...
-                  '_binnedData_numThresholds_',num2str(numThresholds),'_goodGeneSubset','.mat');
+    filestr2=strcat('fitting_NumData_',num2str(numData),...
+                    '_binnedData_numThresholds_',num2str(numThresholds),'_scaled','_goodGeneSubset','.mat');
+  else
+    filestr1=strcat('spatialData_NumData_',num2str(numData),'_goodGeneSubset','.mat');
+
+    filestr2=strcat('fitting_NumData_',num2str(numData),...
+                    '_binnedData_numThresholds_',num2str(numThresholds),'_goodGeneSubset','.mat');
+  end
 else
+  if scaledDistance
+    filestr1=strcat('spatialData_NumData_',num2str(numData),'_scaled','.mat');
+
+    filestr2=strcat('fitting_NumData_',num2str(numData),...
+                    '_binnedData_numThresholds_',num2str(numThresholds),'_scaled','.mat');
+  else
   filestr1=strcat('spatialData_NumData_',num2str(numData),'.mat');
 
   filestr2=strcat('fitting_NumData_',num2str(numData),...
                   '_binnedData_numThresholds_',num2str(numThresholds),'.mat');
+  end
 end
 load(filestr1);
 load(filestr2);
@@ -23,11 +37,21 @@ for i=1:length(timePoints)
                               sprintf('binned numThresholds=%d',numThresholds),...
                               'allDirections', timePoints{i},false)
   if useGoodGeneSubset
-    str=fullfile('Outs','binning_plot_withExponential_goodGeneSubset',...
+    if scaledDistance
+      str=fullfile('Outs','binning_plot_withExponential_scaled_goodGeneSubset',...
+                strcat('voxel_binning_withExponential_scaled_goodGeneSubset_',timePoints{i},'.jpeg'));
+    else
+      str=fullfile('Outs','binning_plot_withExponential_goodGeneSubset',...
                 strcat('voxel_binning_withExponential_goodGeneSubset_',timePoints{i},'.jpeg'));
+    end
   else
-    str=fullfile('Outs','binning_plot_withExponential',...
+    if scaledDistance
+      str=fullfile('Outs','binning_plot_withExponential',...
+                strcat('voxel_binning_withExponential_scaled_',timePoints{i},'.jpeg'));
+    else
+      str=fullfile('Outs','binning_plot_withExponential',...
                 strcat('voxel_binning_withExponential_',timePoints{i},'.jpeg'));
+    end
   end
   F=getframe(f);
   imwrite(F.cdata, str, 'jpeg');
