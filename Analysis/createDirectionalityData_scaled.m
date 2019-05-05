@@ -1,4 +1,4 @@
-makeDirectionalityData(1000,false);
+makeDirectionalityData(1000,true);
 % timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 % load('spatialData_NumData_1000.mat')
 % isCoronal=cell(length(timePoints),1);

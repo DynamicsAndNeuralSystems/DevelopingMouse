@@ -61,8 +61,13 @@ load(filestr1);
 load(filestr2);
 
 % exponential fit (3 term) on same plot (voxel data)
+if scaledDistance
+  xLabeling='Separation Distance/maxDistance';
+else
+  xLabeling='Separation Distance (um)';
+end
 [~,F]= plotFitting(xPlotDataAll,'exp',fitting_stat_all,'voxel',...
-                      'Separation Distance (um)',1,'original','allDirections',thisBrainDiv);
+                      xLabeling,1,'original','allDirections',thisBrainDiv);
 
 if useGoodGeneSubset
   if strcmp(thisBrainDiv,'wholeBrain')

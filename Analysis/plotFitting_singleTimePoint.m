@@ -1,6 +1,7 @@
-function [f,F] = plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all, thisDataType, ...
-                            xLabel, xDataDensity, dataProcessing,direction, ...
-                            timePointNow,makeNewFigure,thisBrainDiv)
+function [f,F] = plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all, ...
+                                              thisDataType,xLabel,xDataDensity, ...
+                                              dataProcessing,thisDirection,timePointNow,...
+                                              makeNewFigure,thisBrainDiv)
   % thisDataType: 'voxel' or 'structure'
   % F is the getframe object for setting figure saving size
   % xDataDensity: >0 and <=1; indicates the proportion of xData to use in plotting
@@ -46,8 +47,8 @@ function [f,F] = plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all,
           error ('Unknown fit type: ''%s''',fitType);
   end
   yPosition=linspace(1,0.4,length(timePoints));
-  t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k','FontSize',14,'BackgroundColor',...
-          cmapOut(timePointIndex,:));
+  t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k','FontSize',14,...
+          'BackgroundColor',cmapOut(timePointIndex,:));
   t.Units='normalized';
   t.Position=[1 yPosition(timePointIndex)];
 
@@ -69,17 +70,17 @@ function [f,F] = plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all,
   switch fitType
       case 'exp'
           str = sprintf('Developing Mouse 3 parameter exponential fit, %s, %s, %s',...
-                        dataProcessing,direction,thisBrainDiv);
+                        dataProcessing,thisDirection,thisBrainDiv);
       case 'exp1'
           str = sprintf('Developing Mouse 2 parameter exponential fit, %s, %s, %s',...
-                        dataProcessing,direction,thisBrainDiv);
+                        dataProcessing,thisDirection,thisBrainDiv);
       case 'exp_1_0'
           str = sprintf('Developing Mouse 1 parameter exponential fit, %s, %s, %s',...
-                        dataProcessing,direction,thisBrainDiv);
+                        dataProcessing,thisDirection,thisBrainDiv);
       case 'linear'
-          str = sprintf('Developing Mouse linear fit, %s, %s, %s',dataProcessing,direction,thisBrainDiv);
+          str = sprintf('Developing Mouse linear fit, %s, %s, %s',dataProcessing,thisDirection,thisBrainDiv);
       otherwise
-          str = sprintf('Developing Mouse unknown fit, %s, %s, %s',dataProcessing,direction);
+          str = sprintf('Developing Mouse unknown fit, %s, %s, %s',dataProcessing,thisDirection);
   end
   title(str,'Fontsize',16);
   % f=figureFullScreen(f,true);

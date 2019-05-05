@@ -54,12 +54,12 @@ if scaledDistance
 end
 
 [~,F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,'voxel',thisBrainDiv,...
-                  'original',numData,numThresholds,useGoodGeneSubset);
+                  'original',numData,numThresholds,true,true);
 % save figure
 if useGoodGeneSubset
   if strcmp(thisBrainDiv,'wholeBrain')
     if scaledDistance
-      str=fullfile('Outs', 'decay_constant_goodGeneSubset_scaled',...
+      str=fullfile('Outs', 'decay_constant_scaled_goodGeneSubset',...
                 'decayConstant_voxel_scaled_goodGeneSubset.jpeg');
     else
       str=fullfile('Outs', 'decay_constant_goodGeneSubset',...

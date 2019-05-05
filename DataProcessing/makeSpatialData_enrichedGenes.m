@@ -1,5 +1,8 @@
 % create correlation coefficient and distances
-function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sagittal_all]=makeSpatialData(whatNumData,useGoodGeneSubset,thisBrainDiv,scaledDistance)
+function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sagittal_all]=makeSpatialData_enrichedGenes(whatNumData,...
+                                                                                                                          thisBrainDiv,...
+                                                                                                                          thisCellType,...
+                                                                                                                          scaledDistance)
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   distances_all=cell(length(timePoints),1);
   corrCoeff_all=cell(length(timePoints),1);
@@ -12,19 +15,12 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
     else
       numData=whatNumData;
     end
-    if useGoodGeneSubset
-      if strcmp(thisBrainDiv,'wholeBrain')
-        filename=strcat('voxelGeneCoexpression_goodGeneSubset','_',timePoints{i},'.mat');
-      else
-        filename=strcat('voxelGeneCoexpression_',thisBrainDiv,'_','goodGeneSubset','_',...
-                        timePoints{i},'.mat');
-      end
+
+    if strcmp(thisBrainDiv,'wholeBrain')
+      filename=strcat('voxelGeneCoexpression','_',thisCellType,'_',timePoints{i},'.mat');
     else
-      if strcmp(thisBrainDiv,'wholeBrain')
-        filename=strcat('voxelGeneCoexpression','_',timePoints{i},'.mat');
-      else
-        filename=strcat('voxelGeneCoexpression_',thisBrainDiv,'_',timePoints{i},'.mat');
-      end
+      filename=strcat('voxelGeneCoexpression_',thisBrainDiv,'_',...
+                      thisCellType,'_',timePoints{i},'.mat');
     end
     load(filename);
     if scaledDistance
@@ -41,44 +37,23 @@ function [distances_all,corrCoeff_all,angle_coronal_all,angle_axial_all,angle_sa
       angle_sagittal_all{i}]=sampleGridData(voxGeneMat,coOrds,numData,timePoints{i},false);
     end
   end
-  if useGoodGeneSubset
-    if strcmp(thisBrainDiv,'wholeBrain')
-      if scaledDistance
-        str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                          num2str(numData),'_scaled','_goodGeneSubset','.mat'));
-      else
-        str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                        num2str(numData),'_goodGeneSubset','.mat'));
-      end
+  if strcmp(thisBrainDiv,'wholeBrain')
+    if scaledDistance
+      str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+                                        num2str(numData),'_',thisCellType,'_scaled','.mat'));
     else
-      if scaledDistance
-        str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                        num2str(numData),'_',thisBrainDiv,'_scaled',...
-                                        '_goodGeneSubset','.mat'));
-      else
-        str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                        num2str(numData),'_',thisBrainDiv,...
-                                        '_goodGeneSubset','.mat'));
-      end
+      str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+                                        num2str(numData),'_',thisCellType,'.mat'));
     end
   else
-    if strcmp(thisBrainDiv,'wholeBrain')
-      if scaledDistance
-        str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                          num2str(numData),'_scaled','.mat'));
-      else
-        str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                          num2str(numData),'.mat'));
-      end
+    if scaledDistance
+      str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+                                              num2str(numData),'_',thisBrainDiv,...
+                                              '_',thisCellType,'_scaled','.mat'));
     else
-      if scaledDistance
-        str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                                num2str(numData),'_',thisBrainDiv,...
-                                                '_scaled','.mat'));
-      else
-        str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
-                                          num2str(numData),'_',thisBrainDiv,'.mat'));
-      end
+      str=fullfile('Matlab_variables',strcat('spatialData_NumData','_',...
+                                            num2str(numData),'_',thisBrainDiv,'_',...
+                                            thisCellType,'.mat'));
     end
   end
   save(str,'distances_all','corrCoeff_all','angle_coronal_all','angle_axial_all',...

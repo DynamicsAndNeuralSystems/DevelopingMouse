@@ -1,4 +1,4 @@
-makeGeneExpressionMatrix('scaledSigmoid',0.3,0.3,false); % use all genes
+makeGeneExpressionMatrix('scaledSigmoid',0.3,0.3,false,'wholeBrain'); % use all genes
 %%
 
 % %-------------------------------------------------------------------------------

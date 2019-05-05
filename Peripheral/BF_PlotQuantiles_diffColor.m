@@ -1,5 +1,6 @@
-function [f,F] = BF_PlotQuantiles_diffColor(xData,yData,numThresholds,alsoScatter,...
-                                    colorScheme,makeNewFigure,timePointNow,thisBrainDiv)
+function [f,F] = BF_PlotQuantiles_diffColor(xData,yData,numData,numThresholds,alsoScatter,...
+                                            colorScheme,makeNewFigure,timePointNow,...
+                                            thisBrainDiv,thisDirection)
 % Plots x-y scatter, but with mean of y plotted in quantiles of x
 % Ben Fulcher
 %-------------------------------------------------------------------------------
@@ -33,8 +34,10 @@ timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 timePointIndex=find(cellfun(@(x) strcmp(timePointNow,x), timePoints));
 xThresholds = arrayfun(@(x)quantile(xData,x),linspace(0,1,numThresholds));
 xThresholds(end) = xThresholds(end) + eps; % make sure all data included in final bin
-yMeans = arrayfun(@(x)mean(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),1:numThresholds-1);
-yStds = arrayfun(@(x)std(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),1:numThresholds-1);
+yMeans = arrayfun(@(x)mean(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),...
+                  1:numThresholds-1);
+yStds = arrayfun(@(x)std(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),...
+                  1:numThresholds-1);
 
 % ------------------------------------------------------------------------------
 % Plot:
@@ -56,17 +59,22 @@ if alsoScatter
 end
 
 for k = 1:numThresholds-1
-    plot(xThresholds(k:k+1),ones(2,1)*yMeans(k),'LineStyle',theStyle,'LineWidth',theLineWidth,'Color',theColor)
-    plot(xThresholds(k:k+1),ones(2,1)*(yMeans(k)+yStds(k)),'LineStyle','--','LineWidth',theLineWidth,'Color',theColor)
-    plot(xThresholds(k:k+1),ones(2,1)*(yMeans(k)-yStds(k)),'LineStyle','--','LineWidth',theLineWidth,'Color',theColor)
-    plot(mean(xThresholds(k:k+1)),yMeans(k),'o','MarkerSize',5,'LineStyle',theStyle,'LineWidth',theLineWidth,'Color',theColor)
+    plot(xThresholds(k:k+1),ones(2,1)*yMeans(k),'LineStyle',theStyle,...
+        'LineWidth',theLineWidth,'Color',theColor)
+    plot(xThresholds(k:k+1),ones(2,1)*(yMeans(k)+yStds(k)),'LineStyle','--',...
+        'LineWidth',theLineWidth,'Color',theColor)
+    plot(xThresholds(k:k+1),ones(2,1)*(yMeans(k)-yStds(k)),'LineStyle','--',...
+        'LineWidth',theLineWidth,'Color',theColor)
+    plot(mean(xThresholds(k:k+1)),yMeans(k),'o','MarkerSize',5,'LineStyle',theStyle,...
+        'LineWidth',theLineWidth,'Color',theColor)
 end
 yPosition=linspace(1,0.4,length(timePoints));
-t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k','FontSize',14,'BackgroundColor',...
-        colorScheme(timePointIndex,:));
+t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k','FontSize',14,...
+      'BackgroundColor',colorScheme(timePointIndex,:));
 t.Units='normalized';
 t.Position=[1 yPosition(timePointIndex)];
-str=sprintf('Developing Mouse %s %s binning with threshold number=%d',timePointNow,thisBrainDiv,numThresholds);
+str=sprintf('Developing Mouse %s %s %s numData=%d threshold number=%d',...
+            timePointNow,thisBrainDiv,thisDirection,numData,numThresholds);
 title(str,'Fontsize',18)
 if makeNewFigure
     F=getframe(f);
