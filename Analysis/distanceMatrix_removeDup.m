@@ -1,5 +1,5 @@
 %% acronym file opening
-% open acronym file with one word name (if the current acronym file has 2 word names, make them one word by hyphen to avoid error ('acronym_onewordname.csv' is the file with acronyms of all regions downloaded from Allen server with names changed to one word)  
+% open acronym file with one word name (if the current acronym file has 2 word names, make them one word by hyphen to avoid error ('acronym_onewordname.csv' is the file with acronyms of all regions downloaded from Allen server with names changed to one word)
 if exist('acronym_AdultMouse.csv','file')
     fid = fopen('acronym_AdultMouse.csv','r');
     structAcronyms = textscan(fid,'%s');
@@ -37,9 +37,9 @@ else
 %     ID_Oh_combined_1=vertcat(ID_Oh_1_1,ID_Oh_2_1,ID_Oh_3_1);
 %     ID=ID_Oh_combined_1;
 end
-    
-    
-%% 
+
+
+%%
 %find out duplicate rows
 [~,ia,~] = unique(coOrds,'rows','stable');
 ixDupRows = setdiff(1:size(coOrds,1), ia);
@@ -88,7 +88,7 @@ coOrds_clean(ixDupID,:)=repmat([NaN,NaN,NaN],length(ixDupID),1);
 structAcronyms_clean=structAcronyms;
 structAcronyms_clean(ixDupID)={''};
 
-%% turn duplicate rows from coOrds_clean into [NaN,NaN,NaN], and their corresponding ID into Nan, abbre to empty string 
+%% turn duplicate rows from coOrds_clean into [NaN,NaN,NaN], and their corresponding ID into Nan, abbre to empty string
 coOrds_clean(ixDupRows,:)=repmat([NaN,NaN,NaN],length(ixDupRows),1);
 ID_clean(ixDupRows,:)=NaN;
 structAcronyms_clean(ixDupRows)={''};
@@ -113,7 +113,7 @@ if exist('structInfo.mat','file')
 else
     error('structInfo.mat is missing')
 end
-%%
+%%.
 % Match:
 [~,ia,ib] = intersect(structInfo.acronym,structAcronyms_clean,'stable');
 %%
@@ -290,7 +290,7 @@ set(t,'Fontsize',18)
 % % check whether IDs are the same
 % original_Oh_ID=csvread('ID_Oh.csv');
 % [C,iq,ir]=intersect(original_Oh_ID,ID,'rows','stable');
-% 
+%
 % %% troubleshooting
 % centre_Oh_1_original=csvread('centre_Oh_1.csv');
 % centre_Oh_1_new=csvread('centre_Oh_1_1.csv');

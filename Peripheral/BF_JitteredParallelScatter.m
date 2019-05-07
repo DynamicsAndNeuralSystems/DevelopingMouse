@@ -166,10 +166,14 @@ end
 brightenAmount = -0.3;
 if any(cellfun(@(x)any(isnan(x)),dataCell)), warning('NaNs in data'); end
 for i = 1:numGroups
-    try
-        brightColor = brighten(theColors{i},brightenAmount);
-    catch
-        brightColor = theColors{i};
+    if sum(cellfun(@(x) isequal([0 0 0]',x), theColors))==length(theColors) % if all the dots are black
+        brightColor = [0 0 1]; % set the mean bar color to blue
+    else
+        try
+            brightColor = brighten(theColors{i},brightenAmount);
+        catch
+            brightColor = theColors{i};
+        end
     end
 
     plot([customOffset + i - offsetRange/2,customOffset + i + offsetRange/2],nanmean(dataCell{i})*ones(2,1),'-',...

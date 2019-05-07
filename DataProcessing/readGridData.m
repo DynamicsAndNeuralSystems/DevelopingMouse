@@ -1,349 +1,58 @@
-% read in the raw files one by one, registering the 3D position, geneID and expression value
-%------------
-% Download and unzip the energy grid file for P4 Rora Pdyn SectionDataSet
-% -----------
-% sizeGrids=struct('E11pt5',[70,75,40],'E13pt5',[89,109,69],'E15pt5',[94,132,65],'E18pt5',[67,43,40],'P4',[77,43,50],...
-%     'P14',[68,40,50],'P28',[73,41,53]);
-%timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-sizeGrid = [89,109,69];
-resolutionGrid=100;
-% user input: number of data used in analysis
-numData=1000;
-% user input: 1=filter out spinal cord data, 0=NOT filter out spinal cord data
-
-timePoints={'E13pt5'};
-%% load variables
-load('energyGrids_E13pt5.mat')
-load('geneIDInfo_E13pt5.mat')
-load('timePointInfo_E13pt5.mat')
-
+function readGridData(whatTimePointNow)
 %%
-% make voxel x gene matrix
-% voxGeneMat=cell(1);% initialize
-% 
-% 
-% voxGeneMat{1}=zeros(numVoxel,length(energyGrids)); % initialize voxel x gene matrix
-% for j=1:length(energyGrids) % for each gene
-%     for k=1:numVoxel % for each voxel
-%         % record the expression data into the matrix
-%         voxGeneMat{1}(k,j)=energyGrids{j}(k);
-%     end
-% end
-
-
-
-% clear energyGrids
-
-
-    
+fileTimePoints={'E11.5','E13.5','E15.5','E18.5','P4','P14','P28'};
+timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+timePointIndex=find(cellfun(@(c)strcmp(whatTimePointNow,c),timePoints)); %match index to the chosen timepoint
+sizeGrids=struct('E11pt5',[70,75,40],'E13pt5',[89,109,69],'E15pt5',[94,132,65],'E18pt5',[67,43,40],'P4',[77,43,50],...
+    'P14',[68,40,50],'P28',[73,41,53]);
+%% specify directories
+% Location of saved API gene expression data expressed in a cell
+expression_loc=fullfile('Data','API','GridData',fileTimePoints{timePointIndex});
 %%
-%compute correlation coefficient matrix
+A=dir(expression_loc);
+% remove hidden files
+A=A(arrayfun(@(A) A.name(1), A) ~= '.');
+% initialize variables
+energyGrids=cell(length(A),1);
+timePointInfo=cell(length(A),1);
+geneIDInfo=zeros(length(A),1);
 
-% initialize
-% corrCoeffMat=cell(1); 
-% voxGeneMat_clean=cell(1);
-% distMat=cell(1);
-% coOrds_clean=cell(1);
+% store original directory and move to new directory (necessitated by
+% filepath problems)
+currentFolder = pwd;
+cd(expression_loc);
 
+h = waitbar(0,'Compiling energy grid...');
+steps=length(A);
+%%
+for j=1:length(A)
 
-% 
-% % filter out voxels with more than 10% genes missing
-% isGoodVoxel=(sum(isnan(voxGeneMat{1}),2)<=0.3*length(geneIDInfo));
-% voxGeneMat_clean{1}=voxGeneMat{1}(isGoodVoxel,:);
-% coOrds_clean{1}=coOrds{1}(isGoodVoxel,:);
-% dataIndSelect=randi([1 nnz(isGoodVoxel)],1000,1); %random 1000 data points
-% distMat{1}=squareform(pdist(coOrds_clean{1}(dataIndSelect,:),'euclidean')*resolutionGrid.(timePoints{1}));
-% voxGeneMat_clean{1}=BF_NormalizeMatrix(voxGeneMat_clean{1},'scaledSigmoid');
-% corrCoeffMat{1}=corrcoef((voxGeneMat_clean{1}(dataIndSelect,:))','rows','pairwise');
-
-numVoxel=sizeGrid(1)*sizeGrid(2)*sizeGrid(3);
-countVoxel=1;
-countLoop=1;
-isGoodVoxel=zeros(numVoxel,1);
-
-numLoop=ceil(numVoxel/10000);
-geneMat=cell(numLoop,1);
-goodBatch=[];
-tic
-while countVoxel < numVoxel 
-    coOrdsLowRange=countVoxel;
-    if (numVoxel-countVoxel+1)>10000 % if no. of remaining voxel>10000
-        coOrdsUpRange=(countVoxel-1)+10000;
-        geneMat{countLoop}=zeros(10000,length(geneIDInfo));
-    else
-        coOrdsUpRange=numVoxel;
-        geneMat{countLoop}=zeros((numVoxel-countVoxel+1),length(geneIDInfo)); 
-    end
-% create matrix of voxel x gene expression
-    
-%     geneMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
-%     distMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
-    h = waitbar(0,'Computing voxel x gene expression matrix...');
-    steps=length(geneIDInfo);
-    for j=1:length(geneIDInfo) % for each gene (i.e. each 3D grid)
-        for k=1:size(geneMat{countLoop},1) % for each voxel
-            % replace negative gene expression values with NaN (because -1 indicate absent data)
-            isAbsent=(energyGrids{j}(coOrdsLowRange+(k-1))<0);
-            if isAbsent
-                geneMat{countLoop}(k,j)=NaN;
-            else
-                geneMat{countLoop}(k,j)=energyGrids{j}(coOrdsLowRange+(k-1));
-            end
-        end
-        waitbar(j/steps)
-    end
-    close(h)
-
-% GoodVoxel=voxels that have less than 30% of genes absent
-    isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1)=(sum(isnan(geneMat{countLoop}),2) < 0.3*length(geneIDInfo));
-    if nnz(isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1))==0
-        fprintf('Batch %d has no good voxels\n',countLoop)
-    else
-        % filter the good batches
-        goodBatch=vertcat(goodBatch,countLoop);
-        geneMatNow=geneMat{countLoop};
-        geneMat{countLoop}=geneMatNow(logical(isGoodVoxel(coOrdsLowRange:coOrdsUpRange,1)),:);
-    end
-    countVoxel=countVoxel+10000;
-    countLoop=countLoop+1;
+    fileStr=fullfile(A(j).name,'energy.raw');
+    % ENERGY = 3-D matrix of expression energy grid volume
+    % load files
+    fid = fopen(fileStr, 'r', 'l' );
+    energyGrids{j} = fread( fid, prod(sizeGrids.(timePoints{timePointIndex})), 'float' );
+    fclose( fid );
+    energyGrids{j} = reshape(energyGrids{j},sizeGrids.(timePoints{timePointIndex}));
+    infoStr=strsplit(A(j).name,'_');
+    % timePointInfo{j}=infoStr{1};
+    geneIDInfo(j)=str2double(infoStr{2});
+    waitbar(j/steps)
 end
-toc
-%% calculate gene coexpression of good voxels
-% create matrix of good voxel x gene
-geneMatAll=vertcat(geneMat{goodBatch});
+close(h)
+
+%% redirect to home directory
+cd(currentFolder);
 %%
-% only keep good voxel rows
+var_name1=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
+str=fullfile('Matlab_variables',var_name1);
+save(str,'energyGrids','-v7.3')
+%
+% var_name2=strcat('timePointInfo_',timePoints{timePointIndex},'.mat');
+% str=fullfile('Matlab_variables',var_name2);
+% save(str,'timePointInfo')
 
-% only keep those in good batchs
-% goodBatchInd=cell(length(goodBatch),1);
-% for j=1:length(goodBatch)
-%     goodBatchInd{j}=((goodBatch(j)-1)*10000+1):goodBatch(j)*10000;
-% end
-%%
-% add good voxels 
-% geneMatAll_new=[];
-% 
-% 
-% 
-% geneMatAll_new=zeros(length(goodBatch)*10000,length(geneIDInfo));
-% for j=1:length(goodBatch)
-%     geneMatAll_new((j-1)*10000+1:j*10000,:)=geneMatAll(goodBatchInd{j},:);
-% end
-
-areGoodVoxels=(sum(isnan(geneMatAll),2) < 0.3*length(geneIDInfo));
-geneMatAll=geneMatAll(areGoodVoxels,:);
-% normalize
-geneMatAll_new=BF_NormalizeMatrix(geneMatAll,'scaledSigmoid');
-
-%% calculate gene coexpression 
-% analyze a submatrix of geneMatAll_clean (due to memory problem)
-tic
-if numData>size(geneMatAll_new,1)
-    error('number of data analyzed cannot be larger than number of available voxels')
+var_name3=strcat('geneIDInfo_',timePoints{timePointIndex},'.mat');
+str=fullfile('Matlab_variables',var_name3);
+save(str,'geneIDInfo')
 end
-[dataIndSelect,~]=datasample([1:size(geneMatAll_new,1)],numData,'replace',false);
-geneCorr=corrcoef((geneMatAll_new(dataIndSelect,:))','rows','pairwise');
-toc
-%% find out coordinates of the good voxels
-
-ind=find(isGoodVoxel);
-[xCoOrd,yCoOrd,zCoOrd]=ind2sub(sizeGrid,ind);
-coOrds=horzcat(xCoOrd,yCoOrd,zCoOrd);
-
-% coOrds_new=[];
-% for j=1:length(goodBatch)
-%     coOrds_new=vertcat(coOrds_new,coOrds(goodBatchInd{j},:));
-% end
-% 
-% coOrds_new=zeros(length(goodBatch)*10000,length(geneIDInfo));
-% for j=1:length(goodBatch)
-%     coOrds_new((j-1)*10000+1:j*10000,:)=coOrds(goodBatchInd{j},:);
-% end
-% 
-% coOrds_new=coOrds_new(areGoodVoxels,:);
-
-% select a subset for analysis (due to memory problem)
-distMat=squareform(pdist(coOrds(dataIndSelect,:),'euclidean')*resolutionGrid);
-%%
-
-% extract the correlation coefficients
-
-
-
-%corrCoeff=zeros((((size(geneCorr,1))^2)-size(geneCorr,1))/2,1); % no. of upper triangular elements
-
-corrCoeff=geneCorr(find(triu(ones(size(geneCorr)),1)));
-%distance=zeros((((size(distMat{1},1))^2)-size(distMat{1},1))/2,1);
-
-distance=distMat(find(triu(ones(size(distMat)),1)));
-
-%% plot coexpression against distance
-f=figure('color','w');
-gcf;
-scatter(distance,corrCoeff,'.')
-xlabel('Separation Distance (um)','FontSize',16)
-ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',16)
-str = sprintf('Developing Mouse %s',timePoints{1});
-title(str,'Fontsize',19);
-
-%% fitting
-adjRSquare=struct();
-confInt=struct();
-coeffValue=struct();
-
-fitMethods={'linear','exp_1_0','exp1','exp',};
-
-
-
-for j=1:length(fitMethods)
-    [~,Stats,c] = GiveMeFit(distance,corrCoeff,fitMethods{j},true);
-    adjRSquare.(fitMethods{j})=Stats.adjrsquare;
-    confInt.(fitMethods{j})=confint(c,0.95);
-    coeffValue.(fitMethods{j})=coeffvalues(c);
-end
-    
-%%
-
-matAdjRSquare=zeros(length(timePoints),length(fitMethods)); % +1 because of global
-%%
-for i=1:length(timePoints)
-    for j=1:length(fitMethods)
-        matAdjRSquare(i,j)=adjRSquare.(fitMethods{j})(i);
-    end
-end
-
-%%
-% User input; must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
-whatNorm=' ';
-% User input: which field from DevMouseGeneExpression you want to use: 'norm' or normStructure';
-% 'norm' is normalized across genes using a method specified in file name,
-% or otherwise ScaledSigmoid; if normStructure is chosen, it doesn't matter
-% what "whatNorm" is as long as the DevMouseGeneExpression.mat is up to
-% date (i.e. contains the field "normStructure") [at the moment, only whatNorm='log2' is up to date]
-% User input: Choose whether to plot the graph, which takes much longer running time) (plot=1;no plot=0)
-plotGraph=0;
-
-
-g=figure('color','w');
-xAxis=[1:length(timePoints)];
-%BarChart=bar(matAdjRSquare,'grouped');
-BarChart=bar(vertcat(matAdjRSquare,nan(size(matAdjRSquare))));
-
-BarChat.BarWidth = 0.4;
-ax = gca;
-
-ax.XTick=[1];
-ax.XTickLabel=timePoints;
-
-xt=[1];
-
-if whatNorm==' ';
-    str=sprintf('Degree of freedom adjusted R-square, scaled sigmoid');
-else
-    str=sprintf('Degree of freedom adjusted R-square, %s',whatNorm);
-end
-Title=title(str);
-set(Title, 'FontSize', 16)
-grid on
-grid minor
-
-L = cell(1,4);
-L{1}='linear';
-L{2}='1 parameter exponential';
-L{3}='2 parameter exponential';
-L{4}='3 parameter exponential';
-legend(BarChart,L,'Location','northeast')
-hold on
-
-%%
-% isGoodBatch=zeros(numLoop,1);
-% for i=1:length(isGoodBatch)
-%     isGoodBatch(i)=nnz((sum(isnan(geneMat{1}),2) < 0.3*length(geneIDInfo)))~=0;
-%     
-% end
-%% compute everything in voxel batches of 10000 to avoid crashes
-% tic
-% countVoxel=1;
-% countLoop=1;
-% distMat={};
-% geneMat={};
-% geneMat_clean=cell(1,1);
-% distMat_clean=cell(1,1);
-% geneCorr={};
-% corrCoeffAll=[];
-% distanceAll=[];
-% while countVoxel < numVoxel 
-%     coOrdsLowRange=countVoxel;
-%     if (numVoxel-countVoxel)>10000
-%         coOrdsUpRange=(countVoxel-1)+10000;
-%     else
-%         coOrdsUpRange=numVoxel;
-%     end
-%     distMat{countLoop}=squareform(pdist(coOrds(coOrdsLowRange:coOrdsUpRange,:),'euclidean')...
-%         *resolutionGrid);
-% 
-%     % create matrix of voxel x gene expression
-%     geneMat{countLoop}=zeros(10000,length(geneIDInfo)); 
-% %     geneMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
-% %     distMat_clean{countLoop}=zeros(10000,length(geneIDInfo)); 
-%     h = waitbar(0,'Computing voxel x gene expression matrix...');
-%     steps=length(geneIDInfo);
-%     for j=1:length(geneIDInfo) % for each gene (i.e. each 3D grid)
-%         for k=1:10000 % for each voxel
-%             % replace negative gene expression values with NaN (because -1 indicate absent data)
-%             isAbsent=(energyGrids{j}(coOrdsLowRange+(k-1))<0);
-%             if isAbsent
-%                 geneMat{countLoop}(k,j)=NaN;
-%             else
-%                 geneMat{countLoop}(k,j)=energyGrids{j}(coOrdsLowRange+(k-1));
-%             end
-%         end
-%         waitbar(j/steps)
-%     end
-%     close(h)
-%     % filter off voxels with more than 90% gene missing
-%     geneMissing=(sum(~isnan(geneMat{countLoop}),2) <= 0.9*length(geneIDInfo));
-%     if nnz(geneMissing)>0.95*numVoxel
-%         error('More than 95% of the voxels have more than 90% gene missing, cannot proceed')
-%     end
-%     geneMat_clean{countLoop}=geneMat{countLoop}(~isMissing,:);
-%     distMat_clean{countLoop}=distMat{countLoop}(~isMissing,:);
-%     % compute the gene coexpression between voxels
-%     geneCorr{countLoop}=corrcoef((geneMat_clean{countLoop})','rows','pairwise');
-%     
-%     % extract the correlation coefficients
-%     corrCoeff=[];
-%     h = waitbar(0,'Extracting correlation coefficients...');
-%     steps=size(geneCorr{countLoop},2)-1;
-%     for g=2:size(geneCorr{countLoop},2)
-%         corrCoeff=[corrCoeff;geneCorr{countLoop}(1:(g-1),g)];
-%         waitbar((g-1)/steps)
-%     end
-%     close(h)
-%     % extract the distances
-%     distance=distMat_clean{countLoop}(find(triu(distMat_clean{countLoop},1)));
-
-%     % filter off data points with NaN in gene coexpression
-%     isMissing=isnan(corrCoeff);
-%     corrCoeff_clean=corrCoeff(~isMissing);
-%     distance_clean=distance(~isMissing);
-%     
-%     corrCoeffAll=[corrCoeffAll;corrCoeff_clean];
-%     distanceAll=[distanceAll;distance_clean];
-%     % increment the counting variables   
-%     countVoxel=countVoxel+10000;
-%     countLoop=countLoop+1;
-% end
-% toc    
-%%
-% f=figure('color','w');
-% scatter(distance_clean,corrCoeff_clean,'.')
-% 
-% %     h = waitbar(0,'Extracting distances...');
-% %     steps=size(distMat{countLoop},2)-1;
-% %     for g=2:size(distMat{countLoop},2)
-% %         distance=[distance;distMat{countLoop}(1:(g-1),g)];
-% %         waitbar((g-1)/steps)
-% %     end
-% %      close(h)
-%     % add the distance and correlation coefficients to the global variable

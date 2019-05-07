@@ -35,7 +35,7 @@ for i=1:7
     xThresholds = arrayfun(@(x)quantile(xData,x),linspace(0,1,numThresholds));
     xThresholds(end) = xThresholds(end) + eps;
     yMeans = arrayfun(@(x)mean(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),1:numThresholds-1);
-    
+
     xPlotData=zeros(numThresholds-1,1);
     yPlotData=zeros(numThresholds-1,1);
     for g = 1:numThresholds-1
@@ -45,7 +45,7 @@ for i=1:7
     end
     d2ydx2All{i} = (diff(yPlotData(:))./diff(xPlotData(:)))./diff(xPlotData(:)); % calculate second derivative (later use)
     plot(xPlotData,yPlotData,'-o','MarkerSize',5,'LineStyle',theStyle,'LineWidth',theLineWidth,'Color',theColor)
-    
+
     yPosition=linspace(1,0.4,length(timePoints));
     t=text(0.5,0.5,char(timePoints{i}),'color','k','FontSize',14,'BackgroundColor',...
             cmapOut(i,:));
@@ -100,8 +100,8 @@ for i=1:7
     distanceNow=extractfield(distanceAll.(timePoints{i}),'distance');
     theColor=cmapOut(i,:);
     xData=linspace(min(distanceNow),max(distanceNow),0.1*length(distanceNow));
-    p=plot(xData,fHandleAll.(timePoints{i}).fHandle.exp(xData),'-x','MarkerEdgeColor',theColor); 
-    
+    p=plot(xData,fHandleAll.(timePoints{i}).fHandle.exp(xData),'-x','MarkerEdgeColor',theColor);
+
     legend(p,'Exponential fit')
     yPosition=linspace(1,0.4,length(timePoints));
     t=text(0.5,0.5,char(timePoints{i}),'color','k','FontSize',14,'BackgroundColor',...
@@ -124,10 +124,10 @@ for i=1:7
     distanceNow=extractfield(distanceAll.(timePoints{i}),'distance');
     theColor=cmapOut(i,:);
     xData=linspace(min(distanceNow),max(distanceNow),0.1*length(distanceNow));
-    p=plot(xData,fHandleAll.(timePoints{i}).fHandle.exp(xData),'-x','MarkerEdgeColor',theColor); 
+    p=plot(xData,fHandleAll.(timePoints{i}).fHandle.exp(xData),'-x','MarkerEdgeColor',theColor);
 
     hold on
-    % plot structureUnionize exponential fit   
+    % plot structureUnionize exponential fit
     nodeSize = 10;
 
     slice=squeeze(gene3D(i,:,:))'; % makes a matrix of 78 (structure) x 2100 (genes)
@@ -160,15 +160,15 @@ for i=1:7
     isMissing_coexpress=isnan(corrCoeff);
     corrCoeff_clean=(corrCoeff(~isMissing_coexpress));
     distance_clean=distance(~isMissing_coexpress);
-    
+
     % exponential fitting
     [f_handle,~,~] = GiveMeFit(distance_clean,corrCoeff_clean,'exp',1);
     fHand.(timePoints{i}).fHandle.exp=f_handle;
-     
+
     % plot dots
     xData=linspace(min(distance_clean),max(distance_clean),0.1*length(distance_clean));
-    
-    u=plot(xData,fHand.(timePoints{i}).fHandle.exp(xData),'-o','MarkerEdgeColor',theColor); % remove constant term 
+
+    u=plot(xData,fHand.(timePoints{i}).fHandle.exp(xData),'-o','MarkerEdgeColor',theColor); % remove constant term
 
     legend([p u],'Exponential fit, Voxel','Exponential fit, Structure')
     str=sprintf('Developing Mouse all time points');
@@ -187,13 +187,13 @@ xlabel('Separation Distance (um)','FontSize',16)
 ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
 str = sprintf('Developing Mouse 3 parameter exponential fit');
 title(str,'Fontsize',19);
-q=figureFullScreen(q,true); 
+q=figureFullScreen(q,true);
 
 %% exponential fit (3 parameter)
 % collect fit objects
 decayConstant=struct();
 b=figure('color','w');
-for i=1:7  
+for i=1:7
     temp=fitObjectHere.(timePoints{i}).fitObject.exp;
     decayConstant.(timePoints{i})=temp.n;
     theColor=cmapOut(i,:);
@@ -201,7 +201,7 @@ for i=1:7
     plot(max(extractfield(distanceAll.(timePoints{i}),'distance')),decayConstant.(timePoints{i}),'-o','MarkerSize',10,'LineStyle',theStyle,...
         'LineWidth',theLineWidth,'Color',theColor)
     yPosition=linspace(1,0.4,length(timePoints));
-    
+
     t=text(0.5,0.5,char(timePoints{i}),'color','k','FontSize',14,'BackgroundColor',...
             cmapOut(i,:));
     t.Units='normalized';
@@ -225,14 +225,14 @@ b=figureFullScreen(b,true);
 %     maxDistanceAll(i)=max(extractfield(distanceAll.(timePoints{i}),'distance'));
 %     decayConstantAll(i)=decayConstant.(timePoints{i});
 % end
-% 
+%
 % [fHandle,Stats,c]=GiveMeFit(maxDistanceAll,decayConstantAll,'decayEta');
-% 
+%
 % % exponential fit (3 parameter)
 % % collect fit objects
 % decayConstant=struct();
 % b=figure('color','w');
-% for i=1:7  
+% for i=1:7
 %     temp=fitObjectHere.(timePoints{i}).fitObject.exp;
 %     decayConstant.(timePoints{i})=temp.n;
 %     theColor=cmapOut(i,:);
@@ -241,7 +241,7 @@ b=figureFullScreen(b,true);
 %     plot(max(extractfield(distanceAll.(timePoints{i}),'distance')),decayConstant.(timePoints{i}),'-o','MarkerSize',10,'LineStyle',theStyle,...
 %         'LineWidth',theLineWidth,'Color',theColor)
 %     yPosition=linspace(1,0.4,length(timePoints));
-%     
+%
 %     t=text(0.5,0.5,char(timePoints{i}),'color','k','FontSize',14,'BackgroundColor',...
 %             cmapOut(i,:));
 %     t.Units='normalized';
@@ -251,15 +251,15 @@ b=figureFullScreen(b,true);
 %         'HorizontalAlignment','center');
 %     hold on
 % end
-% 
+%
 % xlabel('Max distance (um)','FontSize',16)
 % ylabel('Decay constant','FontSize',13)
 % str=sprintf('Developing Mouse decay constant against max distance');
 % title(str,'Fontsize',16)
-% hold on 
+% hold on
 % % func=@(x) c.A.*x.^(-c.n) + c.B;
 % plot(maxDistanceAll,fHandle(maxDistanceAll),'-x','MarkerSize',10,'LineStyle',theStyle,'LineWidth',theLineWidth)
-% 
+%
 % b=figureFullScreen(b,true);
 
 %% compute the max log likelihood
@@ -267,4 +267,4 @@ b=figureFullScreen(b,true);
 % x=distanceAll.(timePoints{1}).distance;
 % func=@(x,a,n,b) a*exp(-n*x) + b;
 % p = mle(x,'pdf',func,'start',[c.A,c.n,c.B]); % estimate parameters
-% 
+%

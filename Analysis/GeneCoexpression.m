@@ -60,7 +60,7 @@ if plotGraph==1
     f=figure('color','w'); hold on
 end
 for i=1:7 % for each time point
-    slice=squeeze(gene3D(i,:,:))'; % makes a matrix of 78 (structure) x 2100 (genes)
+    slice=squeeze(gene3D(i,:,:)); % makes a matrix of 78 (structure) x 2100 (genes)
     % filter off structures with more than 10% of genes missing
     isMissing=(sum(~isnan(slice),2) <= 0.1*length(geneList));
     slice_clean=slice(~isMissing,:);
@@ -69,7 +69,7 @@ for i=1:7 % for each time point
     % only structures in which coordinates are available are used
     slice_clean=slice_clean(ia,:);
     % compute correlation coefficient between region pairs
-    geneCorr{i} = corrcoef(slice_clean','rows','pairwise');
+    geneCorr{i} = corrcoef('slice_clean','rows','pairwise');
     % extract the correlation coefficients
     corrCoeff=[];
     for j=2:size(geneCorr{i},2)
@@ -209,7 +209,7 @@ for i=1:7 % for each time point
 
     slice_clean=slice_clean(ia,:);
     % compute correlation coefficient between region pairs
-    geneCorr{i} = corrcoef(slice_clean','rows','pairwise');
+    geneCorr{i} = corrcoef('slice_clean','rows','pairwise');
     % extract the correlation coefficients
     corrCoeff=[];
     for j=2:size(geneCorr{i},2)
@@ -305,7 +305,7 @@ for i=1:7 % for each time point
         confInt.(fitMethods{j}){i}=confint(c,0.95);
         coeffValue.(fitMethods{j}){i}=coeffvalues(c);
     end
-   
+
 end
 
 %% save fitting info for the 7 time points
@@ -318,7 +318,7 @@ if strcmp(whichField{1},'normStructure')
     save(filename,'adjRSquare')
     filename=sprintf('coeffValue%s.mat',strcat('_',whichField{1}));
     save(filename,'coeffValue')
-    
+
 elseif whatNorm==' ';
     filename=sprintf('confInt.mat');
     save(filename,'confInt')
@@ -326,7 +326,7 @@ elseif whatNorm==' ';
     save(filename,'adjRSquare')
     filename=sprintf('coeffValue.mat');
     save(filename,'coeffValue')
-else    
+else
     filename=sprintf('confInt%s.mat',strcat('_',whatNorm));
     save(filename,'confInt')
     filename=sprintf('adjRSquare%s.mat',strcat('_',whatNorm));
