@@ -1,68 +1,10 @@
 function makeBinningPlot_withExponential(numData,numThresholds,useGoodGeneSubset,...
                                           thisBrainDiv,scaledDistance)
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-if useGoodGeneSubset
-  if strcmp(thisBrainDiv,'wholeBrain')
-    if scaledDistance
-    filestr1=strcat('spatialData_NumData_',num2str(numData),'_scaled','_goodGeneSubset','.mat');
 
-    filestr2=strcat('fitting_NumData_',num2str(numData),...
-                    '_binnedData_numThresholds_',num2str(numThresholds),'_scaled',...
-                    '_goodGeneSubset','.mat');
-    else
-      filestr1=strcat('spatialData_NumData_',num2str(numData),'_goodGeneSubset','.mat');
+[] = makeBinnedData(numData,numThresholds,true,thisBrainDiv,false);
+[] = makeBinnedFitting(numData,numThresholds,true,thisBrainDiv,false);
 
-      filestr2=strcat('fitting_NumData_',num2str(numData),...
-                      '_binnedData_numThresholds_',num2str(numThresholds),'_goodGeneSubset',...
-                      '.mat');
-    end
-  else
-    if scaledDistance
-    filestr1=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,...
-                    '_scaled','_goodGeneSubset','.mat');
-
-    filestr2=strcat('fitting_NumData_',num2str(numData),...
-                    '_binnedData_numThresholds_',num2str(numThresholds),'_',thisBrainDiv,...
-                    '_scaled','_goodGeneSubset','.mat');
-    else
-      filestr1=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,...
-                      '_goodGeneSubset','.mat');
-
-      filestr2=strcat('fitting_NumData_',num2str(numData),...
-                      '_binnedData_numThresholds_',num2str(numThresholds),'_',thisBrainDiv,...
-                      '_goodGeneSubset','.mat');
-    end
-  end
-else
-  if strcmp(thisBrainDiv,'wholeBrain')
-    if scaledDistance
-      filestr1=strcat('spatialData_NumData_',num2str(numData),'_scaled','.mat');
-
-      filestr2=strcat('fitting_NumData_',num2str(numData),...
-                      '_binnedData_numThresholds_',num2str(numThresholds),'_scaled','.mat');
-    else
-    filestr1=strcat('spatialData_NumData_',num2str(numData),'.mat');
-
-    filestr2=strcat('fitting_NumData_',num2str(numData),...
-                    '_binnedData_numThresholds_',num2str(numThresholds),'.mat');
-    end
-  else
-    if scaledDistance
-      filestr1=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,...
-                      '_scaled','.mat');
-
-      filestr2=strcat('fitting_NumData_',num2str(numData),...
-                      '_binnedData_numThresholds_',num2str(numThresholds),'_',...
-                      thisBrainDiv,'_scaled','.mat');
-    else
-    filestr1=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'.mat');
-
-    filestr2=strcat('fitting_NumData_',num2str(numData),...
-                    '_binnedData_numThresholds_',num2str(numThresholds),'_',...
-                    thisBrainDiv,'.mat');
-    end
-  end
-end
 load(filestr1);
 load(filestr2);
 cmapOut = BF_getcmap('dark2',7,0,0);
@@ -72,12 +14,17 @@ else
   xLabeling='Separation Distance (um)';
 end
 for i=1:length(timePoints)
-  f = figure('color','w','Position',get(0,'Screensize')); box('on');
-  [~,~] = BF_PlotQuantiles_diffColor(distances_all{i},corrCoeff_all{i},numData,...
+    f = figure('color','w','Position',get(0,'Screensize')); box('on');
+    % Binned data:
+    [~,~] = BF_PlotQuantiles_diffColor(distances_all{i},corrCoeff_all{i},numData,...
                                     numThresholds,0,cmapOut,false,...
                                     timePoints{i}, thisBrainDiv, 'allDirections');
+    ax = gca;
+    ax.XTick = 1:5;
+    ax.XTickLabel = timePoints;
 
-  [~,~] = plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all, 'voxel', ...
+    % Exponential fit:
+    [~,~] = plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all, 'voxel', ...
                                       xLabeling, 1, ...
                                       sprintf('binned numThresholds=%d',numThresholds),...
                                       'allDirections', timePoints{i},false, ...

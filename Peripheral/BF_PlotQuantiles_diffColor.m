@@ -29,7 +29,7 @@ elseif any(~goodBoth)
     fprintf(1,'Removed %u bad samples from x/y data\n',sum(~goodBoth));
 end
 
-% parameter for looping
+% Parameter for looping
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 timePointIndex=find(cellfun(@(x) strcmp(timePointNow,x), timePoints));
 xThresholds = arrayfun(@(x)quantile(xData,x),linspace(0,1,numThresholds));

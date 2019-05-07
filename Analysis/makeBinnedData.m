@@ -1,39 +1,26 @@
-function makeBinnedData(numData,numThresholds,useGoodGeneSubset,thisBrainDiv,scaledDistance)
-if useGoodGeneSubset
-  if strcmp(thisBrainDiv,'wholeBrain')
-    if scaledDistance
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_scaled','_goodGeneSubset','.mat');
-    else
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_goodGeneSubset','.mat');
-    end
-  else
-    if scaledDistance
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_scaled','_goodGeneSubset','.mat');
-    else
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_goodGeneSubset','.mat');
-    end
-  end
+function [xPlotDataAll,yPlotDataAll,numThresholds] = makeBinnedData(numData,numThresholds,useGoodGeneSubset,thisBrainDiv,scaledDistance)
+% <><><><><><><><><>
+
+if scaledDistance
+    distanceString = 'scaled';
 else
-  if strcmp(thisBrainDiv,'wholeBrain')
-    if scaledDistance
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_scaled','.mat');
-    else
-      filestr=strcat('spatialData_NumData_',num2str(numData),'.mat');
-    end
-  else
-    if scaledDistance
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_scaled','.mat');
-    else
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'.mat');
-    end
-  end
+    distanceString = 'goodGeneSubset';
 end
-load(filestr);
-timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+if useGoodGeneSubset
+    subsetString = '_goodGeneSubset';
+else
+    subsetString = '';
+end
+fileString = sprintf('spatialData_NumData_%u_%s_%s_%s.mat',numData,distanceString,thisBrainDiv,subsetString);
+load(fileString);
+
+timePoints = GiveMeParameter('timePoints');
 distances_all_scaled=cell(length(timePoints),1);
+
 % Bin the data
 [~,~,xPlotDataAll,yPlotDataAll] = plotBinning(distances_all,corrCoeff_all,...
                                               numThresholds,false);
+
 % scale the distance and bin again
 % for i=1:length(timePoints)
 %   distances_all_scaled{i}=distances_all{i}/max(distances_all{i});

@@ -9,7 +9,7 @@ function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal]=sampleGr
   resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,...
       'P14',200,'P28',200);
   timePointIndex=find(cellfun(@(c)strcmp(timePointNow,c),timePoints));
-  [dataIndSelect,~]=datasample([1:size(voxGeneMat,1)],whatNumData,'replace',false);
+  [dataIndSelect,~] = datasample([1:size(voxGeneMat,1)],whatNumData,'replace',false);
   distMat=squareform(pdist(coOrds(dataIndSelect,:),...
                         'euclidean')*resolutionGrid.(timePoints{timePointIndex}));
   % extract the correlation coefficients

@@ -10,29 +10,23 @@ samplingNum=100;
 % ------------------------------------------------------------------------------
 % Process raw data from Allen API
 % ------------------------------------------------------------------------------
-% these take a long time
-% create annotation grids and spinal cord ID
+% Save into .mat file in Matlab_variables (these take a long time)
+
+% Create annotation grids and spinal cord ID
 makeAnnotationGrids_SpinalCordID();
 
-% Create the energy grids using all genes, saving into .mat file in Matlab_variables
+% Create the energy grids using all genes
 makeEnergyGrid();
-% ------------------------------------------------------------------------------
 
-% plot variance in decay constant against number of data points used
-makeVariance(incrementVector,samplingNum);
-
-% create gene expression matrix from all genes (gets the good genes)
+% Create gene-expression matrix from all genes (gets the good genes)
 makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,false,'wholeBrain');
 
-% make histogram of proportion of NaN genes
-makeVoxGeneMatStats_NaNGene_histogram();
 % make a struct containing gene IDs from different time points
 makeGeneList_gridExpression();
-% make plot of gene status over time, and goodGeneSubset.mat containing IDs of ...
-% genes good in all time points
-makeVoxGeneMatStats_geneAcrossTime();
+
 % create the energy grids using good genes
 makeEnergyGrid_goodGeneSubset();
+
 % create gene expression matrix from good genes
 makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,true,'wholeBrain');
 % create distances (unscaled) and correlation from good genes
@@ -40,15 +34,29 @@ makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,true,'who
 % create distances (scaled) and correlation from good genes
 [~,~,~,~,~]=makeSpatialData(numData,true,'wholeBrain',true);
 
+% create matlab variable with IDs of brain subdivisions
+makeBrainDivision();
+% ------------------------------------------------------------------------------
+
+% plot variance in decay constant against number of data points used
+makeVariance(incrementVector,samplingNum);
+
+% make histogram of proportion of NaN genes
+makeVoxGeneMatStats_NaNGene_histogram();
+
+% make plot of gene status over time, and goodGeneSubset.mat containing IDs of ...
+% genes good in all time points
+makeVoxGeneMatStats_geneAcrossTime();
+
 % create binned data from good genes (distance unscaled)
 makeBinnedData(numData,numThresholds,true,'wholeBrain',false);
 % create binned data from good genes (distance scaled)
 makeBinnedData(numData,numThresholds,true,'wholeBrain',true);
-
 % perform exponential fitting on binned data from good genes (distance unscaled)
 makeBinnedFitting(numData,numThresholds,true,'wholeBrain',false);
 % perform exponential fitting on binned data (created from scaled distance data) from good genes
 makeBinnedFitting(numData,numThresholds,true,'wholeBrain',true);
+
 % plot the bins with fitted exponential curve (distance unscaled)
 makeBinningPlot_withExponential(numData,numThresholds,true,'wholeBrain',false);
 % plot the bins with fitted exponential curve (distance scaled)
@@ -68,8 +76,7 @@ makeExponentialPlot(numData,numThresholds,true,'wholeBrain',false);
 % plot exponential curves of all time points together, distance scaled
 makeExponentialPlot(numData,numThresholds,true,'wholeBrain',true);
 
-% create matlab variable with IDs of brain subdivisions
-makeBrainDivision();
+
 % make gene expression matrix of brain subdivisions
 makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,true,'forebrain'); % use good gene subset only
 makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,true,'midbrain');

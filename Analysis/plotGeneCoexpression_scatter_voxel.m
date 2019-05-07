@@ -35,7 +35,7 @@ function [f,F]=plotGeneCoexpression_scatter_voxel(distances,corrCoeff,fitting_st
     title(str,'Fontsize',19);
     % Plot heatmap:
     subplot(2, 1, 2);
-    imagesc(BF_NormalizeMatrix_v2(N,'divideByMax'));
+    imagesc(BF_NormalizeMatrix(N,'divideByMax'));
     % imagesc(Xedges, Yedges, N);
     colormap('hot')
     colorbar

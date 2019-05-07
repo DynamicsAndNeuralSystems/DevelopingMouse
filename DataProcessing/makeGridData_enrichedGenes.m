@@ -1,4 +1,4 @@
-function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData_enrichedGenes(whatTimePointNow, ...
+function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData_enrichedGenes(timePointNow, ...
                                                                                       whatNorm, ...
                                                                                       whatVoxelThreshold,...
                                                                                       whatGeneThreshold,...
@@ -9,19 +9,19 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData_enrichedG
   % for whatNumData: either input 'all' or the number of voxels to be included
     %% Sets background variables
     % current time point
-    timePointNow=whatTimePointNow;
     % this script creates a voxel x gene matrix with irrelevant voxels filtered out
-    sizeGrids=struct('E11pt5',[70,75,40],'E13pt5',[89,109,69],'E15pt5',[94,132,65],'E18pt5',[67,43,40],'P4',[77,43,50],...
-        'P14',[68,40,50],'P28',[73,41,53]);
-    timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-    timePointIndex=find(cellfun(@(c)strcmp(timePointNow,c),timePoints)); %match index to the chosen timepoint
-    resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,...
-        'P14',200,'P28',200);
+
+    sizeGrids = GiveMeParameter('sizeGrids');
+    timePoints = theParameter('timePoints');
+    resolutionGrid = theParameter('resolutionGrid');
+    timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chosen timepoint
+
     %% load matlab variables
-    str=strcat('energyGrids_',thisCellType,'_',timePoints{timePointIndex},'.mat');
+    str = sprintf('energyGrids_%s_%s.mat',thisCellType,timePoints{timePointIndex});
+    % strcat('energyGrids_',thisCellType,'_',timePoints{timePointIndex},'.mat');
     load(str)
-    load('annotationGrids.mat')
-    load('spinalCord_ID.mat')
+    gridData = load('annotationGrids.mat');
+    load('spinalCord_ID.mat','spinalCord_ID')
     load('brainDivision.mat')
     %% Create the matrix
     % filters off spinal cord voxels

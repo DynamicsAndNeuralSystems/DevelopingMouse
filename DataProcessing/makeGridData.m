@@ -17,8 +17,7 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(whatTimeP
         'P14',[68,40,50],'P28',[73,41,53]);
     timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
     timePointIndex=find(cellfun(@(c)strcmp(timePointNow,c),timePoints)); %match index to the chosen timepoint
-    resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,...
-        'P14',200,'P28',200);
+    resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,'P14',200,'P28',200);
     %% load matlab variables
     if useGoodGeneSubset
         filename=strcat('energyGrids_',timePoints{timePointIndex},'.mat');

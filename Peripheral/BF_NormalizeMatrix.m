@@ -16,7 +16,7 @@ function dataMatrixNorm = BF_NormalizeMatrix(dataMatrix,normMethod,isTraining)
 % NaNs are ignored -- only real data is used for the normalization
 
 % ------------------------------------------------------------------------------
-% Copyright (C) 2016, Ben D. Fulcher <ben.d.fulcher@gmail.com>,
+% Copyright (C) 2015, Ben D. Fulcher <ben.d.fulcher@gmail.com>,
 % <http://www.benfulcher.com>
 %
 % If you use this code for your research, please cite:
@@ -53,9 +53,6 @@ end
 if size(isTraining,2) > size(isTraining,1)
     isTraining = isTraining'; % should be a column vector
 end
-if size(isTraining,2)~=1
-    error('Logical specifying training indices should be a vector');
-end
 %-------------------------------------------------------------------------------
 
 numFeatures = size(dataMatrix,2);
@@ -67,10 +64,6 @@ numFeatures = size(dataMatrix,2);
 dataMatrixNorm = zeros(size(dataMatrix));
 
 switch normMethod
-    case 'log2'
-        % take log2 of the matrix
-        dataMatrixNorm = log2(dataMatrix);
-        
     case 'subtractMean'
         % Subtract the mean:
         dataMatrixNorm = bsxfun(@minus,dataMatrix,mean(dataMatrix));
@@ -79,6 +72,13 @@ switch normMethod
         % Linear rescaling to the unit interval
         for i = 1:numFeatures % cycle through the operations
             dataMatrixNorm(:,i) = UnityRescale(dataMatrix(:,i));
+        end
+
+    case 'divideByMax'
+        % divide by the max element
+        for i = 1:numFeatures
+            columnMax=max(dataMatrix);
+            dataMatrixNorm(:,i) = dataMatrix(:,i)/columnMax(i);
         end
 
     case 'zscore'
@@ -184,12 +184,16 @@ function xhat = RobustSigmoid(x,doScale)
     % Outlier-adjusted sigmoid (optionally scaled to unit interval)
     if nargin < 2, doScale = 1; end
 
-    goodVals = (~isnan(x) & isTraining);
+    try
+        goodVals = (~isnan(x) & isTraining);
+    catch
+        keyboard
+    end
     medianX = median(x(goodVals));
     iqrX = iqr(x(goodVals));
 
     if iqrX==0 % Can't apply an outlier-robust sigmoid meaningfully
-        xhat = nan(size(x));
+        xhat = ones(size(x))*NaN;
     else
         % Outlier-robust sigmoid:
         xhat = 1./(1 + exp(-(x-medianX)/(iqrX/1.35)));

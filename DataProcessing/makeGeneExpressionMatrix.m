@@ -8,8 +8,9 @@ function makeGeneExpressionMatrix(whatNorm,...
 % Create gene coexpression matrix
 %-------------------------------------------------------------------------------
 %%
-% initialize
-timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+% Initialize
+timePoints = GiveMeParameter('timePoints');
+
 % full size for 7 time points: 210000, 669369, 806520, 115240, 165550, 136000, 158629
 % after filtering off spinal cord, unannotated voxels and only including forebrain,midbrain and hindbrain
 % the number of voxels are (from voxelGeneCoexpression_all): 5031,9471,11314,11288,19754,21557,24826
