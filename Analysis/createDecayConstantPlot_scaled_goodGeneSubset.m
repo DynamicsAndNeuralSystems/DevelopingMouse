@@ -1,1 +1,1 @@
-makeDecayConstantPlot(1000,20,true,true)
+makeDecayConstantPlot(1000,20,true,'wholeBrain',true);
