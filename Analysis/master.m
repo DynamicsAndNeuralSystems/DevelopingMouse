@@ -7,6 +7,7 @@ numThresholds=20;
 incrementVector=100:100:1000;
 samplingNum=100;
 
+% these take a long time
 % plot variance in decay constant against number of data points used
 makeVariance(incrementVector,samplingNum);
 % create annotation grids and spinal cord ID

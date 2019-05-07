@@ -1,6 +1,6 @@
-makeExponentialPlot_direction(1000,20,false,'sagittal','wholeBrain')
-makeExponentialPlot_direction(1000,20,false,'coronal','wholeBrain')
-makeExponentialPlot_direction(1000,20,false,'axial','wholeBrain')
+makeExponentialPlot_direction(1000,20,false,'sagittal','wholeBrain');
+makeExponentialPlot_direction(1000,20,false,'coronal','wholeBrain');
+makeExponentialPlot_direction(1000,20,false,'axial','wholeBrain');
 % clear
 % load('spatialData_NumData_1000.mat');
 % load('fitting_NumData_1000.mat');

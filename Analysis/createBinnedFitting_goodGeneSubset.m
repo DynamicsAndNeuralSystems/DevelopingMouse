@@ -1,1 +1,1 @@
-makeBinnedFitting(1000,20,true,'wholeBrain',false,false);
+makeBinnedFitting(1000,20,true,'wholeBrain',false);

@@ -1,3 +1,3 @@
-makeBinnedFitting(1000,20,true,'forebrain',true,false);
-makeBinnedFitting(1000,20,true,'midbrain',true,false);
-makeBinnedFitting(1000,20,true,'hindbrain',true,false);
+makeBinnedFitting(1000,20,true,'forebrain',true);
+makeBinnedFitting(1000,20,true,'midbrain',true);
+makeBinnedFitting(1000,20,true,'hindbrain',true);

@@ -1,1 +1,1 @@
-makeBinningPlot_withExponential(1000,20,true,'wholeBrain',false,false)
+makeBinningPlot_withExponential(1000,20,true,'wholeBrain',false);
