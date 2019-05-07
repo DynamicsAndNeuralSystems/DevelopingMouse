@@ -20,7 +20,7 @@ else
                 num2str(numThresholds),'_',directions{j},'_goodGeneSubset','.mat');
     load(filestr)
     [~,~]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,'voxel','wholeBrain',...
-                            numData,numThresholds,true,false,directions{j});
+                            numData,numThresholds,true,false,directions{j},'allCellTypes');
     hold on
   end
 end

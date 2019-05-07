@@ -67,7 +67,7 @@ else
   xLabeling='Separation Distance (um)';
 end
 [~,F]= plotFitting(xPlotDataAll,'exp',fitting_stat_all,'voxel',...
-                      xLabeling,1,'original','allDirections',thisBrainDiv);
+                      xLabeling,1,'original','allDirections',thisBrainDiv,'allCellTypes');
 
 if useGoodGeneSubset
   if strcmp(thisBrainDiv,'wholeBrain')

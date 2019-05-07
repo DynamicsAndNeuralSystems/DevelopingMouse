@@ -1,37 +1,23 @@
 function makeBinnedData_enrichedGenes(numData,numThresholds,thisBrainDiv,...
                                       thisCellType,scaledDistance)
-if useGoodGeneSubset
-  if strcmp(thisBrainDiv,'wholeBrain')
-    if scaledDistance
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_scaled','_goodGeneSubset','.mat');
-    else
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_goodGeneSubset','.mat');
-    end
+
+if strcmp(thisBrainDiv,'wholeBrain')
+  if scaledDistance
+    filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisCellType,'_scaled','.mat');
   else
-    if scaledDistance
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_scaled','_goodGeneSubset','.mat');
-    else
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_goodGeneSubset','.mat');
-    end
+    filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisCellType,'.mat');
   end
 else
-  if strcmp(thisBrainDiv,'wholeBrain')
-    if scaledDistance
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_scaled','.mat');
-    else
-      filestr=strcat('spatialData_NumData_',num2str(numData),'.mat');
-    end
+  if scaledDistance
+    filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,...
+                  '_',thisCellType,'_scaled','.mat');
   else
-    if scaledDistance
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'_scaled','.mat');
-    else
-      filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,'.mat');
-    end
+    filestr=strcat('spatialData_NumData_',num2str(numData),'_',thisBrainDiv,...
+                  '_',thisCellType,'.mat');
   end
 end
 load(filestr);
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-distances_all_scaled=cell(length(timePoints),1);
 % Bin the data
 [~,~,xPlotDataAll,yPlotDataAll] = plotBinning(distances_all,corrCoeff_all,...
                                               numThresholds,false);
@@ -42,41 +28,23 @@ distances_all_scaled=cell(length(timePoints),1);
 % [~,~,xPlotDataAll_scaled,yPlotDataAll_scaled] = plotBinning(distances_all_scaled,corrCoeff_all,...
 %                                                 numThresholds,false);
 % save variable
-if useGoodGeneSubset
-  if strcmp(thisBrainDiv,'wholeBrain')
-    if scaledDistance
-      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
-                'numThresholds','_',num2str(numThresholds),'_scaled','_goodGeneSubset','.mat'));
-    else
-      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
-                'numThresholds','_',num2str(numThresholds),'_goodGeneSubset','.mat'));
-    end
+if strcmp(thisBrainDiv,'wholeBrain')
+  if scaledDistance
+    str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+            'numThresholds','_',num2str(numThresholds),'_',thisCellType,'_scaled','.mat'));
   else
-    if scaledDistance
-      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
-                'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'_scaled','_goodGeneSubset','.mat'));
-    else
-      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
-                'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'_goodGeneSubset','.mat'));
-    end
+    str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+            'numThresholds','_',num2str(numThresholds),'_',thisCellType,'.mat'));
   end
 else
-  if strcmp(thisBrainDiv,'wholeBrain')
-    if scaledDistance
-      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
-              'numThresholds','_',num2str(numThresholds),'_scaled','.mat'));
-    else
-      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
-              'numThresholds','_',num2str(numThresholds),'.mat'));
-    end
+  if scaledDistance
+    str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+                  'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'_',...
+                  thisCellType,'_scaled','.mat'));
   else
-    if scaledDistance
-      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
-              'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'_scaled','.mat'));
-    else
-      str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
-              'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'.mat'));
-    end
+    str=fullfile('Matlab_variables',strcat('binnedData_NumData_',num2str(numData),'_',...
+                'numThresholds','_',num2str(numThresholds),'_',thisBrainDiv,'_',...
+                thisCellType,'.mat'));
   end
 end
 save(str,'xPlotDataAll','yPlotDataAll','numThresholds');

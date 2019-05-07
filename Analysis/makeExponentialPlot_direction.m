@@ -22,7 +22,7 @@ else
   xLabeling='Separation Distance (um)';
 end
 [~,F]= plotFitting(xPlotDataAll,'exp',fitting_stat_all,'voxel',...
-                  xLabeling,1,'original',thisDirection,thisBrainDiv);
+                  xLabeling,1,'original',thisDirection,thisBrainDiv,'allCellTypes');
 
 if scaledDistance
   str=fullfile('Outs',strcat('exponential_plot_all_',thisDirection,'_scaled_goodGeneSubset'),...

@@ -1,4 +1,4 @@
-makeExponentialPlot(1000,20,true,true)
+makeExponentialPlot(1000,20,true,'wholeBrain',true);
 % clear
 % load('spatialData_NumData_1000.mat');
 % load('fitting_NumData_1000.mat');

@@ -1,5 +1,10 @@
 function makeDecayConstantPlot(numData,numThresholds,useGoodGeneSubset,...
                               thisBrainDiv,scaledDistance)
+% numData=1000;
+% numThresholds=20;
+% useGoodGeneSubset=true;
+% thisBrainDiv='wholeBrain';
+% scaledDistance=false;
 % plot decay constant against max distance
 if useGoodGeneSubset
   if strcmp(thisBrainDiv,'wholeBrain')
@@ -52,9 +57,10 @@ if scaledDistance
   % load the unscaled max distance to replace the original scaled max distance
   load(filestr2,'maxDistance')
 end
-
-[~,F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,'voxel',thisBrainDiv,...
-                  'original',numData,numThresholds,true,true);
+%%
+[~,F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,'voxel',...
+                        thisBrainDiv,numData,numThresholds,true,true,'allDirections',...
+                        'allCellTypes');
 % save figure
 if useGoodGeneSubset
   if strcmp(thisBrainDiv,'wholeBrain')
