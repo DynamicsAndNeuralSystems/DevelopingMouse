@@ -1,34 +1,24 @@
-function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(whatTimePointNow, ...
+function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePointNow, ...
                                                                       whatNorm, ...
                                                                       whatVoxelThreshold,...
                                                                       whatGeneThreshold,...
-                                                                      thisBrainDiv,...
-                                                                      useGoodGeneSubset)
+                                                                      thisBrainDiv)
+  % this script creates a voxel x gene matrix with irrelevant voxels filtered out
   % for whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
   % for thisBrainDiv: 'forebrain', 'midbrain', 'hindbrain' or 'wholeBrain'
   % for whatNumData: either input 'all' or the number of voxels to be included
     %% Sets background variables
-    % current time point
-    timePointNow=whatTimePointNow;
-    % matlab variable directory
-    varDir=fullfile('Matlab_variables');
-    % this script creates a voxel x gene matrix with irrelevant voxels filtered out
-    sizeGrids=struct('E11pt5',[70,75,40],'E13pt5',[89,109,69],'E15pt5',[94,132,65],'E18pt5',[67,43,40],'P4',[77,43,50],...
-        'P14',[68,40,50],'P28',[73,41,53]);
-    timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-    timePointIndex=find(cellfun(@(c)strcmp(timePointNow,c),timePoints)); %match index to the chosen timepoint
-    resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,'P14',200,'P28',200);
+    sizeGrids = GiveMeParameter('sizeGrids');
+    timePoints = GiveMeParameter('timePoints');
+    resolutionGrid = GiveMeParameter('resolutionGrid');
+    timePointIndex = GiveMeParameter('timePointIndex'); %match index to the chosen timepoint
+
     %% load matlab variables
-    if useGoodGeneSubset
-        filename=strcat('energyGrids_',timePoints{timePointIndex},'.mat');
-    else
-        filename=strcat('energyGrids_goodGeneSubset',timePoints{timePointIndex},'.mat');
-    end
-    str=fullfile(varDir,filename);
+    filename=sprintf('energyGrids_%s.mat',timePoints{timePointIndex});
     load(str)
-    load('annotationGrids.mat')
-    load('spinalCord_ID.mat')
-    load('brainDivision.mat')
+    load('annotationGrids.mat','annotationGrids')
+    load('spinalCord_ID.mat','spinalCord_ID')
+    load('brainDivision.mat','brainDivision')
     %% Create the matrix
     % filters off spinal cord voxels
     isSpinalCord=ismember(annotationGrids{timePointIndex},spinalCord_ID);
@@ -86,7 +76,4 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(whatTimeP
     coOrds=horzcat(a,b,c);
     % only keep good voxels
     coOrds=coOrds(isGoodVoxel,:);
-    % get the annotations
-    % annotation_grid=annotationGrids{timePointIndex}(isAnno & ~isSpinalCord & isIncluded);
-    % annotation_grid=annotation_grid(isGoodVoxel);
 end

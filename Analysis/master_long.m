@@ -14,28 +14,31 @@ samplingNum=100;
 
 % Create annotation grids and spinal cord ID
 makeAnnotationGrids_SpinalCordID();
+% make a matlab variable containing enriched genes
+makeEnrichedGenes();
 
 % Create the energy grids using all genes
-makeEnergyGrid();
+makeEnergyGrid(false);
 
 % Create gene-expression matrix from all genes (gets the good genes)
-makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,false,'wholeBrain');
+makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,'wholeBrain');
 
 % make a struct containing gene IDs from different time points
 makeGeneList_gridExpression();
 
-% create the energy grids using good genes
-makeEnergyGrid_goodGeneSubset();
+% Create the energy grids using all good genes, genes enriched in neurons, ...
+% oligodendrocytes and astrocytes
+makeEnergyGrid(true);
 
-% create gene expression matrix from good genes
-makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,true,'wholeBrain');
-% create distances (unscaled) and correlation from good genes
-[~,~,~,~,~]=makeSpatialData(numData,true,'wholeBrain',false);
-% create distances (scaled) and correlation from good genes
-[~,~,~,~,~]=makeSpatialData(numData,true,'wholeBrain',true);
+% repeat running this function to create gene expression matrix from good genes
+makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,'wholeBrain');
 
 % create matlab variable with IDs of brain subdivisions
 makeBrainDivision();
+
+% create distances, correlation and directions for different brain divisions, ...
+% cell types, using good gene subset, with or without directions
+createSpatialData(numData,true);
 % ------------------------------------------------------------------------------
 
 % plot variance in decay constant against number of data points used
@@ -47,15 +50,6 @@ makeVoxGeneMatStats_NaNGene_histogram();
 % make plot of gene status over time, and goodGeneSubset.mat containing IDs of ...
 % genes good in all time points
 makeVoxGeneMatStats_geneAcrossTime();
-
-% create binned data from good genes (distance unscaled)
-makeBinnedData(numData,numThresholds,true,'wholeBrain',false);
-% create binned data from good genes (distance scaled)
-makeBinnedData(numData,numThresholds,true,'wholeBrain',true);
-% perform exponential fitting on binned data from good genes (distance unscaled)
-makeBinnedFitting(numData,numThresholds,true,'wholeBrain',false);
-% perform exponential fitting on binned data (created from scaled distance data) from good genes
-makeBinnedFitting(numData,numThresholds,true,'wholeBrain',true);
 
 % plot the bins with fitted exponential curve (distance unscaled)
 makeBinningPlot_withExponential(numData,numThresholds,true,'wholeBrain',false);
@@ -81,10 +75,7 @@ makeExponentialPlot(numData,numThresholds,true,'wholeBrain',true);
 makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,true,'forebrain'); % use good gene subset only
 makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,true,'midbrain');
 makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,true,'hindbrain');
-% make distances and correlation coefficients for brain subdivisions
-[~,~,~,~,~]=makeSpatialData(numData,true,'forebrain',false);
-[~,~,~,~,~]=makeSpatialData(numData,true,'midbrain',false);
-[~,~,~,~,~]=makeSpatialData(numData,true,'hindbrain',false);
+
 % bin the data of brain subdivisions
 makeBinnedData(numData,numThresholds,true,'forebrain',false);
 makeBinnedData(numData,numThresholds,true,'midbrain',false);
@@ -101,10 +92,6 @@ makeBinningPlot_withExponential(numData,numThresholds,true,'hindbrain',false,fal
 makeExponentialPlot(numData,numThresholds,true,'forebrain',false);
 makeExponentialPlot(numData,numThresholds,true,'midbrain',false);
 makeExponentialPlot(numData,numThresholds,true,'hindbrain',false);
-% create correlation coefficient and distances (scaled distance)
-[~,~,~,~,~]=makeSpatialData(numData,true,'forebrain',true);
-[~,~,~,~,~]=makeSpatialData(numData,true,'midbrain',true);
-[~,~,~,~,~]=makeSpatialData(numData,true,'hindbrain',true);
 % bin the data of brain subdivisions (scaled distance)
 makeBinnedData(numData,numThresholds,true,'forebrain',true);
 makeBinnedData(numData,numThresholds,true,'midbrain',true);
@@ -171,8 +158,7 @@ makeExponentialPlot_direction(numData,numThresholds,true,'axial','wholeBrain');
 % plot decay constant of different directions against max distance (distance scaled)
 makeDecayConstantPlot_direction(numData,numThresholds,true);
 
-% make a matlab variable containing enriched genes
-makeEnrichedGenes();
+
 % make energy grids using enriched genes only
 makeEnergyGrid_enrichedGenes('neuron');
 makeEnergyGrid_enrichedGenes('oligodendrocyte');
@@ -181,10 +167,6 @@ makeEnergyGrid_enrichedGenes('astrocyte');
 makeGeneExpressionMatrix_enrichedGenes(whatNorm,whatVoxelThreshold,whatGeneThreshold,'wholeBrain','neuron'); % use all genes
 makeGeneExpressionMatrix_enrichedGenes(whatNorm,whatVoxelThreshold,whatGeneThreshold,'wholeBrain','oligodendrocyte');
 makeGeneExpressionMatrix_enrichedGenes(whatNorm,whatVoxelThreshold,whatGeneThreshold,'wholeBrain','astrocyte');
-% make distances and correlation coefficient of enriched gene data
-[~,~,~,~,~]=makeSpatialData_enrichedGenes(numData,'wholeBrain','neuron',false);
-[~,~,~,~,~]=makeSpatialData_enrichedGenes(numData,'wholeBrain','oligodendrocyte',false);
-[~,~,~,~,~]=makeSpatialData_enrichedGenes(numData,'wholeBrain','astrocyte',false);
 % bin the data of enriched genes
 makeBinnedData_enrichedGenes(numData,numThresholds,'wholeBrain','neuron',false);
 makeBinnedData_enrichedGenes(numData,numThresholds,'wholeBrain','oligodendrocyte',false);
@@ -206,10 +188,6 @@ makeExponentialPlot_enrichedGenes(numData,numThresholds,false,'oligodendrocyte')
 makeExponentialPlot_enrichedGenes(numData,numThresholds,false,'astrocyte');
 % plot decay constant of different directions against max distance
 makeDecayConstantPlot_enrichedGenes(numData,numThresholds,false);
-% create correlation coefficient and distances (distance scaled)
-[~,~,~,~,~]=makeSpatialData_enrichedGenes(numData,'wholeBrain','neuron',true);
-[~,~,~,~,~]=makeSpatialData_enrichedGenes(numData,'wholeBrain','oligodendrocyte',true);
-[~,~,~,~,~]=makeSpatialData_enrichedGenes(numData,'wholeBrain','astrocyte',true);
 % bin the data of enriched genes (distance scaled)
 makeBinnedData_enrichedGenes(numData,numThresholds,'wholeBrain','neuron',true);
 makeBinnedData_enrichedGenes(numData,numThresholds,'wholeBrain','oligodendrocyte',true);

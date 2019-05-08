@@ -3,7 +3,8 @@ function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal]=sampleGr
                                                                         coOrds,...
                                                                         whatNumData,...
                                                                         timePointNow,...
-                                                                        scaledDistance)
+                                                                        scaledDistance,..
+                                                                        withDirection)
   % Create distance matrix from only voxels selected for gene expression matrix
   timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
   resolutionGrid=struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,...
@@ -21,17 +22,14 @@ function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal]=sampleGr
   else
     distances=extractDistances(distMat);
   end
-  % determine directionality
-  [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds(dataIndSelect,:));
-  angle_coronal=extractDistances(squareform(angle_coronal));
-  angle_axial=extractDistances(squareform(angle_axial));
-  angle_sagittal=extractDistances(squareform(angle_sagittal));
-  % annotation_grid=annotation_grid(dataIndSelect);
-  % pairsIx=cell(length(corrCoeff),1);
-  % annotation_pair=cell(length(corrCoeff),1);
-  % for j=1:length(corrCoeff)
-  %     [iq,ir]=ind2sub4up(j);
-  %     pairsIx{j}=[iq,ir];
-  %     annotation_pair{j}=annotation_grid(pairsIx{j});
-  % end
+  if withDirection
+    % determine directionality
+    [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds(dataIndSelect,:));
+    angle_coronal=extractDistances(squareform(angle_coronal));
+    angle_axial=extractDistances(squareform(angle_axial));
+    angle_sagittal=extractDistances(squareform(angle_sagittal));
+  else
+    angle_coronal=NaN;
+    angle_axial=NaN;
+    angle_sagittal=NaN;
 end

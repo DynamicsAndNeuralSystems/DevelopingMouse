@@ -1,8 +1,16 @@
-function makeEnergyGrid()
+function makeEnergyGrid(useGoodGeneSubset)
 
 timePoints = GiveMeParameter('timePoints');
-for i=1:length(timePoints)
-    readGridData(timePoints{i});
+cellTypes = GiveMeParameter('cellTypes');
+if useGoodGeneSubset
+  for i=1:length(timePoints)
+      for j=length(cellTypes)
+        readGridData(timePoints{i},true,cellTypes{j});
+      end
+  end
+else 
+  for i=1:length(timePoints)
+    readGridData(timePoints{i},false,'allCellTypes');
+  end
 end
-
 end
