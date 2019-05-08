@@ -15,8 +15,6 @@ case 'timePoints'
     theParameter = {'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 case 'fileTimePoints'
     theParameter = {'E11.5','E13.5','E15.5','E18.5','P4','P14','P28'};
-% case 'timePointIndex'
-%     theParameter = find(strcmp(timePointNow,timePoints));
 case 'resolutionGrid'
     theParameter = struct('E11pt5',0.08,'E13pt5',0.1,'E15pt5',0.12,'E18pt5',0.14,'P4',0.16,'P14',0.2,'P28',0.2);
 case 'brainDivisions'
@@ -27,6 +25,8 @@ case 'useEnrichedGenes'
     theParameter = {true,false};
 case 'cellTypes'
     theParameter = {'allCellTypes','oligodendrocyte','neuron','astrocyte'};
+case 'constantTypes'
+    theParameter = {'decayConstant','multiplier','freeParameter'};
 end
 
 end

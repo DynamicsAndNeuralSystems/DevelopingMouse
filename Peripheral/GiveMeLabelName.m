@@ -17,6 +17,10 @@ case 'length'
     theParameter = 'Length scale';
 case 'decayConstant'
     theParameter = 'Decay Constant';
+case 'freeParameter'
+    theParameter = 'Free Parameter';
+case 'multiplier'
+    theParameter = 'Multiplier';
 case 'logLength'
     theParameter = 'log (Length scale)';
 case 'logDecayConstant'
