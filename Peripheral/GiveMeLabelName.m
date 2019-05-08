@@ -12,13 +12,15 @@ case 'scaledDistance'
 case 'originalDistance'
     theParameter = 'Separation Distance (um)';
 case 'length'
-    theParameter = 'length scale';
+    theParameter = 'Length scale';
 case 'decayConstant'
-    theParameter = 'decay constant';
+    theParameter = 'Decay constant';
 case 'logLength'
-    theParameter = 'log (length scale)';
+    theParameter = 'log (Length scale)';
 case 'logDecayConstant'
-    theParameter = 'log (decay constant)'
+    theParameter = 'log (Decay constant)'
+case 'maxDistance'
+    theParameter = 'Max distance (um)'
 end
 
 end

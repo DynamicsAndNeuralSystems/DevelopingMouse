@@ -1,7 +1,7 @@
-function [f,F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,dataType,...
-                                  brainDiv,numData,numThresholds,...
-                                  useGoodGeneSubset,makeNewFigure,...
-                                  thisDirection,thisCellType)
+function plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,...
+                            brainDiv,numData,numThresholds,...
+                            makeNewFigure,thisDirection,thisCellType)
+% this function plots decay constants with error bars against max distance
 % dataType='voxel';
 % brainDiv='wholeBrain';
 % numData=1000;
@@ -14,7 +14,7 @@ function [f,F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,dat
   % xData and yData are cells each containing distances and correlation coefficient of all time points
   % dataProcessing: 'original' or 'binned numThresholds=xx'
   % brainDiv: 'forebrain', 'midbrain','hindbrain' or 'wholeBrain'
-  timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+  timePoints=GiveMeParameter('timePoints');
   % obtain error of the decay constants (95% CI)
   err=zeros(length(timePoints),1);
   for i=1:length(timePoints)
@@ -25,10 +25,9 @@ function [f,F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,dat
   cmapOut = BF_getcmap('dark2',7,0,0);
   % Specify plotting style for later use
   theStyle = '-';
-  % theLineWidth = 2;
   %% Plot decay constant of exponential fit (3 parameter)
   if makeNewFigure
-    f=figure('color','w','Position', get(0, 'Screensize'));
+    f=figure('color','w');
   end
   for i=1:length(timePoints)
       % set the color
@@ -162,20 +161,8 @@ function [f,F]=plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,dat
       end
       hold on
   end
-  xlabel('Max distance (um)','FontSize',16)
-  ylabel('Decay constant','FontSize',13)
-  if useGoodGeneSubset
-    str=sprintf('Decay constant against max distance, %s, %s, numData=%d,numThresholds=%d, goodGeneSubset',...
-                dataType,brainDiv,numData,numThresholds);
-  else
-    str=sprintf('Decay constant against max distance, %s, %s, numData=%d,numThresholds=%d',...
-                dataType,brainDiv,numData,numThresholds);
-  end
-  title(str,'Fontsize',14)
-  if makeNewFigure
-    F=getframe(f);
-  else
-    F=NaN;
-    f=NaN;
-  end
+  xLabel = GiveMeParameter('maxDistance');
+  yLabel = GiveMeParameter('decayConstant');
+  xlabel(xLabel)
+  ylabel(yLabel)
 end
