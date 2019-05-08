@@ -16,3 +16,6 @@ for j=1:numSubplot1
                                   thisCellType,thisDirection,...
                                   timePoints{j},false);
 end
+str = fullfile('Outs','figure1','figure1.svg');
+F=getframe(f);
+imwrite(F.cdata,str,'svg');
