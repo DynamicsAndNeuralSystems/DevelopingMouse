@@ -43,7 +43,7 @@ end
 hold on
 %theColor = 'k';
 theStyle = '-';
-theLineWidth = 2;
+theLineWidth = 1;
 theColor = colorScheme(timePointIndex,:);
 % cmapOut = BF_getcmap('dark2',7,0,0);
 if alsoScatter
