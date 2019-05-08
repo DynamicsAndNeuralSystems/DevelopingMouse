@@ -38,7 +38,7 @@ yStds = arrayfun(@(x)std(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))
 % ------------------------------------------------------------------------------
 % Plot:
 if makeNewFigure
-    f = figure('color','w','Position',get(0,'Screensize')); box('on');
+    f = figure('color','w'); box('on');
 end
 hold on
 %theColor = 'k';

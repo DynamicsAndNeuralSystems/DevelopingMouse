@@ -18,7 +18,7 @@ case 'fileTimePoints'
 % case 'timePointIndex'
 %     theParameter = find(strcmp(timePointNow,timePoints));
 case 'resolutionGrid'
-    theParameter = struct('E11pt5',80,'E13pt5',100,'E15pt5',120,'E18pt5',140,'P4',160,'P14',200,'P28',200);
+    theParameter = struct('E11pt5',0.08,'E13pt5',0.1,'E15pt5',0.12,'E18pt5',0.14,'P4',0.16,'P14',0.2,'P28',0.2);
 case 'brainDivisions'
     theParameter = {'wholeBrain','forebrain','midbrain','hindbrain'};
 case 'scaledDistance'
