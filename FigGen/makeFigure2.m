@@ -11,16 +11,13 @@ subplot(2,2,1)
 makeExponentialPlot(numData,numThresholds,...
                     thisBrainDiv,false,...
                     thisDirection,thisCellType,false);
-LabelCurrentAxes('(a)')
 subplot(2,2,2)
 makeDecayConstantFit(numData,numThresholds,thisBrainDiv,...
                     thisCellType,thisDirection,false,true,false);
-LabelCurrentAxes('(b)')
 subplot(2,2,3)
 makeExponentialPlot(numData,numThresholds,...
                     thisBrainDiv,true,...
                     thisDirection,thisCellType,false);
-LabelCurrentAxes('(c)')
 str = fullfile('Outs','figure2','figure2.jpeg');
 F=getframe(f);
 imwrite(F.cdata,str,'jpeg');

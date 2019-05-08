@@ -45,9 +45,13 @@ else
 end
 
 str=sprintf('y = %fx+%f',Gradient,Intercept);
-text(5000,12,str);
-str=sprintf('Adjusted R square = %d',stats.adjrsquare);
-text(5000,11,str);
+t1=text(5000,12,str);
+t1.Units='normalized';
+t1.Position=[0.6 0.6];
+str=sprintf('Adj R square = %d',stats.adjrsquare);
+t2=text(5000,11,str);
+t1.Units='normalized';
+t1.Position=[0.6 0.5];
 
 legend('show')
 

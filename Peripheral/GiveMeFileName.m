@@ -35,5 +35,7 @@ switch whatParam
     theParameter = '_axial';
   case 'coronal'
     theParameter = '_coronal';
+  case 'allDirections'
+    theParameter = '';
 end
 end
