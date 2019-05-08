@@ -38,12 +38,12 @@ else
   xLabeling=GiveMeLabelName('originalDistance');
 end
 if makeNewFigure
-  f = figure('color','w','Position',get(0,'Screensize'));
+  f = figure('color','w');
 end
 for i=1:length(timePoints)
   plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all,...
                               xLabeling, 1, ...
-                              thisDirection, timePoints{i},false, ...
+                              thisDirection,timePoints{i},false, ...
                               thisBrainDiv,thisCellType,false);
   hold on
 end

@@ -42,7 +42,7 @@ else
 end
 for i=1:length(timePoints)
     if makeNewFigure
-      f = figure('color','w','Position',get(0,'Screensize')); box('on');
+      f = figure('color','w'); box('on');
     end
     % Binned data:
     PlotQuantiles_diffColor(distances_all{timePointIndex},corrCoeff_all{timePointIndex},...

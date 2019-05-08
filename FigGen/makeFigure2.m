@@ -5,19 +5,25 @@ thisBrainDiv='wholeBrain';
 thisCellType='allCellTypes';
 thisDirection='allDirections';
 timePoints = GiveMeParameter('timePoints');
-f=figure('color','w','Position',get(0,'Screensize'));
 
-subplot(2,2,1)
+%-------------------------------------------------------------------------------
+f = figure('color','w');
+
+subplot(1,3,1)
 makeExponentialPlot(numData,numThresholds,...
                     thisBrainDiv,false,...
                     thisDirection,thisCellType,false);
-subplot(2,2,2)
+subplot(1,3,2)
 makeDecayConstantFit(numData,numThresholds,thisBrainDiv,...
                     thisCellType,thisDirection,false,true,false);
-subplot(2,2,3)
+subplot(1,3,3)
 makeExponentialPlot(numData,numThresholds,...
                     thisBrainDiv,true,...
                     thisDirection,thisCellType,false);
-str = fullfile('Outs','figure2','figure2.jpeg');
-F=getframe(f);
-imwrite(F.cdata,str,'jpeg');
+
+
+f.Position = [198   984   893   207];
+%
+% str = fullfile('Outs','figure2','figure2.jpeg');
+% F=getframe(f);
+% imwrite(F.cdata,str,'jpeg');
