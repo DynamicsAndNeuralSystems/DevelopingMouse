@@ -54,14 +54,9 @@ for i=1:length(timePoints)
     plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all,...
                                 xLabeling, yLabeling, 1, ...
                                 thisDirection, timePointNow,false, ...
-                                thisBrainDiv,thisCellType,true);
-    % folderString = sprintf('binning_plot_withExponential%s%s',brainStr,distanceStr);
-    % fileString = sprintf('voxel_binning_withExponential%s%s_%s.jpeg',brainStr,...
-    %                     distanceStr,timePoints{i});
-    % str = fullfile(folderString,fileString);
-    % F=getframe(f);
-    % imwrite(F.cdata, str, 'jpeg');
+                                thisBrainDiv,thisCellType);
 end
+disp(sprintf('Adj R square = %d',fitting_stat_all.(timePointNow).adjRSquare.exp))
+coeff=coeffvalues(fitting_stat_all.(timePointNow).fitObject.exp);
+disp(sprintf('y = %d*exp(-%d*x) + %d',coeff(1),coeff(3),coeff(2)))
 end
-% str = fullfile('Outs','binning_plot','voxel_binning.jpeg');
-% imwrite(F.cdata, str, 'jpeg');

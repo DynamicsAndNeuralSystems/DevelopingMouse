@@ -37,14 +37,15 @@ if scaledDistance
 else
   xLabeling=GiveMeLabelName('originalDistance');
 end
+yLabeling=GiveMeLabelName('CGE');
 if makeNewFigure
   f = figure('color','w');
 end
 for i=1:length(timePoints)
   plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all,...
-                              xLabeling, 1, ...
+                              xLabeling, yLabeling, 1, ...
                               thisDirection,timePoints{i},false, ...
-                              thisBrainDiv,thisCellType,false);
+                              thisBrainDiv,thisCellType);
   hold on
 end
 end

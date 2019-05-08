@@ -1,7 +1,7 @@
 function plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all, ...
                                     xLabel,yLabel,xDataDensity, ...
                                     thisDirection,timePointNow,...
-                                    makeNewFigure,thisBrainDiv,thisCellType,showNum)
+                                    makeNewFigure,thisBrainDiv,thisCellType)
   % thisDataType: 'voxel' or 'structure'
   % F is the getframe object for setting figure saving size
   % xDataDensity: >0 and <=1; indicates the proportion of xData to use in plotting
@@ -44,14 +44,6 @@ function plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all, ...
       otherwise
           error('Unknown fit type: ''%s''',fitType);
   end
-  if showNum
-    disp(sprintf('Adj R square = %d',...
-                fitting_stat_all.(timePoints{timePointIndex}).adjRSquare.exp))
-    % t1.Position=[0.1 yPosition(2)];
-    coeff=coeffvalues(fitting_stat_all.(timePoints{timePointIndex}).fitObject.exp);
-    disp(sprintf('y = %d*exp(-%d*x) + %d',num2str(coeff(1)),...
-                num2str(coeff(3)),num2str(coeff(2))))
-  end
-  xlabel(xLabel)
-  ylabel(yLabel,'FontSize',10)
+  xlabel(xLabel,'FontSize',8.5)
+  ylabel(yLabel,'FontSize',8.5)
 end

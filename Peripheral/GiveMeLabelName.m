@@ -16,13 +16,13 @@ case 'CGE'
 case 'length'
     theParameter = 'Length scale';
 case 'decayConstant'
-    theParameter = 'Decay constant';
+    theParameter = 'Decay Constant';
 case 'logLength'
     theParameter = 'log (Length scale)';
 case 'logDecayConstant'
-    theParameter = 'log (Decay constant)'
+    theParameter = 'log (Decay constant)';
 case 'maxDistance'
-    theParameter = 'Max distance (mm)'
+    theParameter = 'Max Distance (mm)';
 end
 
 end

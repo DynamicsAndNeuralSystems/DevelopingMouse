@@ -1,5 +1,6 @@
 function makeDecayConstantPlot(numData,numThresholds,thisBrainDiv,...
-                              scaledDistance,thisCellType,thisDirection)
+                              scaledDistance,thisCellType,thisDirection,...
+                              makeNewFigure)
 % numData=1000;
 % numThresholds=20;
 % useGoodGeneSubset=true;
@@ -27,8 +28,8 @@ else
                                                                   yPlotDataAll,...
                                                                   numThresholds);
 end
-%%
+
 plotDecayConstant(fitting_stat_all,decayConstant, maxDistance,...
-                  thisBrainDiv,numData,numThresholds,true,...
-                  'allDirections','allCellTypes');
+                  thisBrainDiv,numData,numThresholds,makeNewFigure,...
+                  thisDirection,thisCellType);
 end
