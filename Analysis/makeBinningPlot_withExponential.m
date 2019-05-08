@@ -15,11 +15,7 @@ timePointIndex = find(strcmp(timePointNow,timePoints));
 [fitting_stat_all,decayConstant,maxDistance] = makeBinnedFitting(xPlotDataAll,...
                                                                   yPlotDataAll,...
                                                                   numThresholds);
-if scaledDistance
-    distanceString = GiveMeFileName('scaled');
-else
-    distanceString = GiveMeFileName('notScaled');
-end
+
 % set file name parameters
 brainStr = GiveMeFileName(thisBrainDiv);
 cellTypeStr = GiveMeFileName(thisCellType);
@@ -40,9 +36,9 @@ load(fileString,'distances_all','corrCoeff_all');
 
 cmapOut = BF_getcmap('dark2',7,0,0);
 if scaledDistance
-  xLabeling='Separation Distance/maxDistance';
+  xLabeling=GiveMeLabelName('scaledDistance');
 else
-  xLabeling='Separation Distance (um)';
+  xLabeling=GiveMeLabelName('originalDistance');
 end
 for i=1:length(timePoints)
     if makeNewFigure
@@ -51,14 +47,13 @@ for i=1:length(timePoints)
     % Binned data:
     PlotQuantiles_diffColor(distances_all{timePointIndex},corrCoeff_all{timePointIndex},...
                             numData,numThresholds,false,cmapOut,false,...
-                            timePointNow, thisBrainDiv, 'allDirections');
+                            timePointNow, thisBrainDiv, thisDirection);
 
     % Exponential fit:
-    plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all,'voxel', ...
+    plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all,...
                                 xLabeling, 1, ...
-                                sprintf('binned numThresholds=%d',numThresholds),...
-                                'allDirections', timePointNow,false, ...
-                                thisBrainDiv,'allCellTypes')
+                                thisDirection, timePointNow,false, ...
+                                thisBrainDiv,thisCellType,true);
     % folderString = sprintf('binning_plot_withExponential%s%s',brainStr,distanceStr);
     % fileString = sprintf('voxel_binning_withExponential%s%s_%s.jpeg',brainStr,...
     %                     distanceStr,timePoints{i});

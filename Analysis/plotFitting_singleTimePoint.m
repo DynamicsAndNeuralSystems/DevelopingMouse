@@ -1,14 +1,14 @@
 function plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all, ...
-                                    thisDataType,xLabel,xDataDensity, ...
-                                    dataProcessing,thisDirection,timePointNow,...
-                                    makeNewFigure,thisBrainDiv,thisCellType)
+                                    xLabel,xDataDensity, ...
+                                    thisDirection,timePointNow,...
+                                    makeNewFigure,thisBrainDiv,thisCellType,showNum)
   % thisDataType: 'voxel' or 'structure'
   % F is the getframe object for setting figure saving size
   % xDataDensity: >0 and <=1; indicates the proportion of xData to use in plotting
   % direction: 'sagittal', 'coronal','axial' or 'allDirections'
   % makeNewFigure: true if make new figure, false otherwise
-  timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-  timePointIndex=find(cellfun(@(x) strcmp(timePointNow,x), timePoints));
+  timePoints=GiveMeParameter('timePoints');
+  timePointIndex=find(strcmp(timePointNow,timePoints));
   % get colors
   cmapOut = BF_getcmap('dark2',7,0,0);
   % plot
@@ -47,55 +47,23 @@ function plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all, ...
   yPosition=linspace(1,0.4,length(timePoints));
   t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k',...
           'BackgroundColor',cmapOut(timePointIndex,:));
-  % t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k','FontSize',14,...
-  %         'BackgroundColor',cmapOut(timePointIndex,:));
   t.Units='normalized';
   t.Position=[1 yPosition(timePointIndex)];
+  if showNum
+    t1=text(0.5,0.5,sprintf('Adj R square = %d',...
+                            fitting_stat_all.(timePoints{timePointIndex}).adjRSquare.exp),...
+                            'color','k');
+    t1.Units='normalized';
+    t1.Position=[0.02 0.12];
+    % t1.Position=[0.1 yPosition(2)];
+    coeff=coeffvalues(fitting_stat_all.(timePoints{timePointIndex}).fitObject.exp);
 
-  t1=text(0.5,0.5,sprintf('Adj R square = %d',...
-                          fitting_stat_all.(timePoints{timePointIndex}).adjRSquare.exp),...
-                          'color','k');
-  % t1=text(0.5,0.5,sprintf('Adjusted R square = %d',...
-  %                         fitting_stat_all.(timePoints{timePointIndex}).adjRSquare.exp),...
-  %                         'color','k','FontSize',20);
-  t1.Units='normalized';
-  t1.Position=[0.02 0.12];
-  % t1.Position=[0.1 yPosition(2)];
-  coeff=coeffvalues(fitting_stat_all.(timePoints{timePointIndex}).fitObject.exp);
-
-  t2=text(0.5,0.5,strcat('y= ',num2str(coeff(1)),'*','exp(-',num2str(coeff(3)),'*x)',...
-                          '+',num2str(coeff(2))),...
-                          'color','k');
-  % t2=text(0.5,0.5,strcat('y= ',num2str(coeff(1)),'*','exp(-',num2str(coeff(3)),'*x)',...
-  %                         '+',num2str(coeff(2))),...
-  %                         'color','k','FontSize',20);
-  t2.Units='normalized';
-  t2.Position=[0.02 0.05];
-  % t2.Position=[0.1 yPosition(2)-0.1];
-
+    t2=text(0.5,0.5,strcat('y= ',num2str(coeff(1)),'*','exp(-',num2str(coeff(3)),'*x)',...
+                            '+',num2str(coeff(2))),...
+                            'color','k');
+    t2.Units='normalized';
+    t2.Position=[0.02 0.05];
+  end
   xlabel(xLabel)
-  % xlabel(xLabel,'FontSize',16)
   ylabel('Gene Coexpression')
-  % ylabel('Gene Coexpression (Pearson correlation coefficient)','FontSize',13)
-  % switch fitType
-  %     case 'exp'
-  %         str = sprintf('Developing Mouse 3 parameter exponential fit, %s, %s, %s, %s',...
-  %                       dataProcessing,thisDirection,thisBrainDiv,thisCellType);
-  %     case 'exp1'
-  %         str = sprintf('Developing Mouse 2 parameter exponential fit, %s, %s, %s, %s',...
-  %                       dataProcessing,thisDirection,thisBrainDiv,thisCellType);
-  %     case 'exp_1_0'
-  %         str = sprintf('Developing Mouse 1 parameter exponential fit, %s, %s, %s, %s',...
-  %                       dataProcessing,thisDirection,thisBrainDiv,thisCellType);
-  %     case 'linear'
-  %         str = sprintf('Developing Mouse linear fit, %s, %s, %s, %s',...
-  %                       dataProcessing,thisDirection,thisBrainDiv,thisCellType);
-  %     otherwise
-  %         str = sprintf('Developing Mouse unknown fit, %s, %s, %s, %s',...
-  %                       dataProcessing,thisDirection,thisCellType);
-  % end
-  % title(str);
-  % title(str,'Fontsize',16);
-  % f=figureFullScreen(f,true);
-  % set(f, 'PaperPositionMode', 'auto')
 end

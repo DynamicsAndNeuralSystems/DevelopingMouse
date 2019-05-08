@@ -1,6 +1,6 @@
-function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, ...
+function plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, ...
                             xLabel, xDataDensity, dataProcessing,thisDirection,...
-                            thisBrainDiv,thisCellType)
+                            thisBrainDiv,thisCellType,makeNewFigure)
   % thisDataType: 'voxel' or 'structure'
   % F is the getframe object for setting figure saving size
   % xDataDensity: >0 and <=1; indicates the proportion of xData to use in plotting
@@ -9,7 +9,9 @@ function [f,F] = plotFitting(xData_all,fitType,fitting_stat_all, thisDataType, .
   % get colors
   cmapOut = BF_getcmap('dark2',7,0,0);
   % plot
-  f=figure('color','w','Position', get(0, 'Screensize')); % create new figure
+  if makeNewFigure
+    f=figure('color','w','Position', get(0, 'Screensize')); % create new figure
+  end
   for i=1:length(timePoints)
       xDataNow=xData_all{i};
       theColor=cmapOut(i,:);
