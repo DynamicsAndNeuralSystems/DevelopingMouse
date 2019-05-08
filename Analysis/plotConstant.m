@@ -2,6 +2,7 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
                       brainDiv,numData,numThresholds,...
                       makeNewFigure,thisDirection,thisCellType)
 % this function plots decay constants with error bars against max distance
+
 % dataType='voxel';
 % brainDiv='wholeBrain';
 % numData=1000;

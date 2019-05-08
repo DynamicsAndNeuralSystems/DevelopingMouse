@@ -44,8 +44,8 @@ if alsoScatter
 end
 
 for k = 1:numThresholds-1
-    plot(xThresholds(k:k+1),ones(2,1)*yMeans(k),'LineStyle',theStyle,'LineWidth',theLineWidth,'Color', [.6 .6 .6]);
-    plot(mean(xThresholds(k:k+1)),yMeans(k),'o','MarkerSize',10,'LineStyle',theStyle,'LineWidth',theLineWidth,'MarkerFaceColor', [.89 0 .06], 'MarkerEdgeColor', [.6 .6 .6]); %z'Color',theColor)
+    plot(xThresholds(k:k+1),ones(2,1)*yMeans(k),'LineStyle',theStyle,'LineWidth',theLineWidth,'Color', [0 0 0]);
+    plot(mean(xThresholds(k:k+1)),yMeans(k),'o','MarkerSize',7,'LineStyle',theStyle,'LineWidth',theLineWidth,'MarkerFaceColor', [0 0 1], 'MarkerEdgeColor', [0 0 0]); %z'Color',theColor)
     hold on;
 end
 

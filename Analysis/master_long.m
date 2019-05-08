@@ -43,6 +43,9 @@ makeSpatialData(1000,'wholeBrain',false,'allCellTypes',true); % unscaled distanc
 makeSpatialData(1000,'wholeBrain',true,'allCellTypes',true); % scaled distance global data (in mm)
 % for later (not tested yet):
 createSpatialData(numData,true);
+
+% makes cgeMat and distMat for figure 1
+createSpatialMat('E11pt5','allCellTypes','wholeBrain',numData);
 % ------------------------------------------------------------------------------
 
 % plot variance in decay constant against number of data points used

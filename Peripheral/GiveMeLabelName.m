@@ -27,6 +27,10 @@ case 'logDecayConstant'
     theParameter = 'log (Decay constant)';
 case 'maxDistance'
     theParameter = 'Max Distance (mm)';
+case 'genes'
+    theParameter = 'Genes';
+case 'voxels'
+    theParameter = 'Voxels';
 end
 
 end

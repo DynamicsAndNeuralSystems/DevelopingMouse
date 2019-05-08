@@ -27,6 +27,8 @@ case 'cellTypes'
     theParameter = {'allCellTypes','oligodendrocyte','neuron','astrocyte'};
 case 'constantTypes'
     theParameter = {'decayConstant','multiplier','freeParameter'};
+case 'matTypes'
+    theParameter = {'voxGeneMat','distMat','cgeMat'};
 end
 
 end
