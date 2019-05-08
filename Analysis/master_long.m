@@ -38,6 +38,10 @@ makeBrainDivision();
 
 % create distances, correlation and directions for different brain divisions, ...
 % cell types, using good gene subset, with or without directions
+% temporary:
+makeSpatialData(1000,'wholeBrain',false,'allCellTypes',true); % unscaled distance global data (in mm)
+makeSpatialData(1000,'wholeBrain',true,'allCellTypes',true); % scaled distance global data (in mm)
+% for later:
 createSpatialData(numData,true);
 % ------------------------------------------------------------------------------
 

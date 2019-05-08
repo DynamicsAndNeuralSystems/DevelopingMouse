@@ -9,7 +9,7 @@ function createSpatialData(numData,withDirection)
   for j=1:length(brainDivisions)
     for k=1:length(scaledDistance)
       for m=1:length(cellTypes)
-      [~,~,~,~,~]=makeSpatialData(numData,true,brainDivisions{j},...
+      [~,~,~,~,~]=makeSpatialData(numData,brainDivisions{j},...
                                   scaledDistance{k},cellTypes{m},withDirection);
       end
     end
