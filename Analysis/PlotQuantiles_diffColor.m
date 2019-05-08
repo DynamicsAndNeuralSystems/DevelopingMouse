@@ -62,15 +62,12 @@ for k = 1:numThresholds-1
     plot(mean(xThresholds(k:k+1)),yMeans(k),'o','MarkerSize',5,'LineStyle',theStyle,...
         'LineWidth',theLineWidth,'Color',theColor)
 end
-yPosition=linspace(1,0.4,length(timePoints));
-t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k',...
-      'BackgroundColor',colorScheme(timePointIndex,:));
-% t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k','FontSize',14,...
+xlim([0 xThresholds(end)])
+ylim([-0.1 0.8])
+% yPosition=linspace(1,0.4,length(timePoints));
+% t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k',...
 %       'BackgroundColor',colorScheme(timePointIndex,:));
-t.Units='normalized';
-t.Position=[1 yPosition(timePointIndex)];
-% str=sprintf('Developing Mouse %s %s %s numData=%d threshold number=%d',...
-%             timePointNow,thisBrainDiv,thisDirection,numData,numThresholds);
-% title(str)
-% title(str,'Fontsize',18)
+% t.Units='normalized';
+% t.Position=[1 yPosition(timePointIndex)];
+
 end

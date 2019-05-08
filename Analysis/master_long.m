@@ -41,7 +41,7 @@ makeBrainDivision();
 % temporary:
 makeSpatialData(1000,'wholeBrain',false,'allCellTypes',true); % unscaled distance global data (in mm)
 makeSpatialData(1000,'wholeBrain',true,'allCellTypes',true); % scaled distance global data (in mm)
-% for later:
+% for later (not tested yet):
 createSpatialData(numData,true);
 % ------------------------------------------------------------------------------
 

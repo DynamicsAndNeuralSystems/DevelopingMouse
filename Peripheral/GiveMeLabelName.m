@@ -10,7 +10,9 @@ switch whatParam
 case 'scaledDistance'
     theParameter = 'Separation Distance/maxDistance';
 case 'originalDistance'
-    theParameter = 'Separation Distance (um)';
+    theParameter = 'Separation Distance (mm)';
+case 'CGE'
+    theParameter = 'Correlated Gene Expression';
 case 'length'
     theParameter = 'Length scale';
 case 'decayConstant'
@@ -20,7 +22,7 @@ case 'logLength'
 case 'logDecayConstant'
     theParameter = 'log (Decay constant)'
 case 'maxDistance'
-    theParameter = 'Max distance (um)'
+    theParameter = 'Max distance (mm)'
 end
 
 end
