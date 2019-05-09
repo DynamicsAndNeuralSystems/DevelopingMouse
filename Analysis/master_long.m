@@ -171,10 +171,8 @@ for j=1:length(directions)
   hold on
 end
 
-
 % plot the bins of enriched genes with exponential in wholeBrain,forebrain,...
 % midbrain and hindbrain
-
 for j=1:length(cellTypes)
   for i=1:length(timePoints)
     makeBinningPlot_withExponential(numData,numThresholds,...
