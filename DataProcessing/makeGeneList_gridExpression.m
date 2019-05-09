@@ -1,8 +1,8 @@
 function makeGeneList_gridExpression()
 % iterate through the folders storing grid expression data to retrieve the gene IDs
 geneID_gridExpression=struct();
-timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-fileTimePoints={'E11.5','E13.5','E15.5','E18.5','P4','P14','P28'};
+timePoints=GiveMeParameter('timePoints');
+fileTimePoints=GiveMeParameter('fileTimePoints');
 for i=1:length(timePoints)
   str=fullfile('Data','API','GridData',fileTimePoints{i});
   A=dir(str);

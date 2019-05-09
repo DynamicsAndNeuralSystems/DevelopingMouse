@@ -15,7 +15,7 @@ function plotMat(timePointNow,thisCellType,thisBrainDiv,whatMat,makeNewFigure)
     str=sprintf('cgeMat%s%s_%s.mat',brainStr,cellTypeStr,timePointNow);
     s=load(str,'cgeMat');
   end
-  cmapOut = BF_getcmap('redblue',11,0,0);
+  cmapOut = BF_getcmap('redblue',11,0,1);
   [h, hcb] = imagescwithnan(s.(whatMat), cmapOut, [0 0 0], false)
   colorbar
   switch whatMat

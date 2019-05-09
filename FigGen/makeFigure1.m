@@ -7,27 +7,38 @@ function makeFigure1()
   brainStr = GiveMeFileName(thisBrainDiv);
   cellTypeStr = GiveMeFileName(thisCellType);
   distanceStr = GiveMeFileName('notScaled');
-  matTypes = GiveMeParameter('matTypes');
+  matTypes = GiveMeParameter('matTypes'); % {'voxGeneMat','distMat','cgeMat'};
   numData = 1000;
   numThresholds = 20;
   timePointIndex = strcmp(timePointNow,timePoints);
-  f = figure('color','w');
-  % plots the matrices
-  for j = 1:length(matTypes)
-    subplot(2,2,j)
-    plotMat(timePointNow,thisCellType,thisBrainDiv,matTypes{j},false)
-  end
-  subplot(2,2,4)
+  % load distance and correlation data first
   fileString = sprintf('spatialData_NumData_%d%s%s%s.mat',numData,brainStr,cellTypeStr,...
                     distanceStr);
   load(fileString,'distances_all','corrCoeff_all');
+  % plots the voxGeneMat and CGE vs distance graph
+  f1 = figure('color','w');
+  plotMat(timePointNow,thisCellType,thisBrainDiv,matTypes{1},false);
+
+  % plots the distMat and cgeMat
+  f2 = figure('color','w');
+  subplot(2,1,1)
+  plotMat(timePointNow,thisCellType,thisBrainDiv,matTypes{2},false);
+  hold on
+  subplot(2,1,2)
+  plotMat(timePointNow,thisCellType,thisBrainDiv,matTypes{3},false);
+
+  f3 = figure('color','w');
   BF_PlotQuantiles(distances_all{timePointIndex},corrCoeff_all{timePointIndex},...
                   numThresholds,false,false);
-  xLabel = GiveMeLabelName('originalDistance')
+  xLabel = GiveMeLabelName('originalDistance');
   yLabel = GiveMeLabelName('CGE');
   xlabel(xLabel);
   ylabel(yLabel);
   % save outs
-  str = fullfile('Outs','figure1','figure1.svg');
-  saveas(f,str)
+  str = fullfile('Outs','figure1','figure1_part1.svg');
+  saveas(f1,str)
+  str = fullfile('Outs','figure1','figure1_part2.svg');
+  saveas(f2,str)
+  str = fullfile('Outs','figure1','figure1_part3.svg');
+  saveas(f3,str)
 end

@@ -1,6 +1,6 @@
 function makeVoxGeneMatStats_geneAcrossTime()
 timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-load('geneID_gridExpression.mat')
+load('geneID_gridExpression.mat','geneID_gridExpression');
 % collect the set of genes that are present in any time points
 SDKgeneEntrez = importfile_SDK_geneEntrez('SDK_geneEntrez.csv');
 % [~,geneAbbreviation,~]=xlsread('SDK_geneAbbreviations.csv','A1:CBX1');
@@ -27,15 +27,16 @@ end
 f=figure('color','w','Position',get(0,'Screensize'));
 imagesc(geneMatrix)
 colormap([0 0 0; 1 1 1])
-xlabel('Genes')
-ylabel('Time Points')
+xLabel = GiveMeLabelName('genes');
+yLabel = GiveMeLabelName('timePoints');
+xlabel(xLabel)
+ylabel(yLabel)
 ax = gca;
 ax.YTickLabel=timePoints;
 % set(gca,'xtick',[1:length(SDKgeneEntrez)],'xticklabel',geneAbbreviation)
 title('Gene status across time points', 'FontSize', 14)
-F=getframe(f);
 str=fullfile('Outs','voxGeneMatStats_geneAcrossTime','voxGeneMatStats_geneAcrossTime.jpeg');
-imwrite(F.cdata,str,'jpeg')
+saveas(f,str)
 
 % get subset of genes that are good across time points
 goodGeneSubset=SDKgeneEntrez(arrayfun(@(x) x==7, sum(geneMatrix)));

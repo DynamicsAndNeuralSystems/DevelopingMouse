@@ -31,6 +31,8 @@ case 'genes'
     theParameter = 'Genes';
 case 'voxels'
     theParameter = 'Voxels';
+case 'timePoints'
+    theParameter = 'Time Points';
 end
 
 end
