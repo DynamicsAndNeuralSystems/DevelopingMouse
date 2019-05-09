@@ -58,10 +58,12 @@ createSpatialMat('E11pt5','allCellTypes','wholeBrain',numData);
 for j=1:length(directions)
   makeDirectionalityData(numData,false,directions{j});
 end
+% create the data of variance in decay constant against number of data points used
+makeVariance(incrementVector,samplingNum);
 % ------------------------------------------------------------------------------
 
 % plot variance in decay constant against number of data points used
-makeVariance(incrementVector,samplingNum);
+plotVariance();
 
 % make histogram of proportion of NaN genes
 makeVoxGeneMatStats_NaNGene_histogram();

@@ -33,6 +33,10 @@ case 'voxels'
     theParameter = 'Voxels';
 case 'timePoints'
     theParameter = 'Time Points';
+case 'sampleSize'
+    theParameter = 'Sample Size';
+case 'variance'
+    theParameter = 'Variance in decay constant';
 end
 
 end

@@ -1,4 +1,6 @@
-function createSpatialData(numData,withDirection)
+% function createSpatialData(numData,withDirection)
+  numData = 1000;
+  withDirection = true;
   % create distance and correlation distances, and angles that voxel pairs
   % make with the axes for different brain divisions, cell types, using good gene subset, with or without
   % directions
@@ -14,4 +16,4 @@ function createSpatialData(numData,withDirection)
       end
     end
   end
-end
+% end

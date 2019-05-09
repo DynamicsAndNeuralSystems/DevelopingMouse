@@ -34,16 +34,4 @@ end
 str=fullfile('Matlab_variables','variance.mat');
 save(str,'variance','incrementVector');
 %%
-% plot variance against sampling size
-for i=1:length(timePoints)
-  f=figure('color','w');
-  plot(incrementVector,variance{i},'-ok')
-  xlabel('Sample size','FontSize',16)
-  ylabel('Variance in decay constant','FontSize',13)
-  str=sprintf('Variance in decay constant against sample size, %s, numTrials=%d',timePoints{i},samplingNum);
-  title(str,'FontSize',19)
-  filename=strcat(sprintf('decay_constant_variance_%s_numTrials=%d',timePoints{i},samplingNum),'.jpeg');
-  str=fullfile('Outs','decay_constant_variance',filename);
-  saveas(f,str)
-end
 end
