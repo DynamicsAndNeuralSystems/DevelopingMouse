@@ -66,11 +66,8 @@ cd(currentFolder);
 
 %% SAVE
 % Gridded expression energy data:
-if strcmp(thisCellType,'allCellTypes')
-  var_name1 = sprintf('energyGrids_%s.mat',timePoints{timePointIndex});
-else
-  var_name1 = strcat('energyGrids_%s_%s.mat',thisCellType,timePoints{timePointIndex});
-end
+cellTypeStr = GiveMeFileName(thisCellType);
+var_name1 = sprintf('energyGrids%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
 str=fullfile('Matlab_variables',var_name1);
 save(str,'energyGrids','geneIDInfo','-v7.3')
 % Gene ID for each grid:

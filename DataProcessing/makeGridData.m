@@ -2,7 +2,8 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoint
                                                                       whatNorm, ...
                                                                       whatVoxelThreshold,...
                                                                       whatGeneThreshold,...
-                                                                      thisBrainDiv)
+                                                                      thisBrainDiv,...
+                                                                      thisCellType)
   % this script creates a voxel x gene matrix with irrelevant voxels filtered out
   % for whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
   % for thisBrainDiv: 'forebrain', 'midbrain', 'hindbrain' or 'wholeBrain'
@@ -14,7 +15,8 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoint
     timePointIndex = GiveMeParameter('timePointIndex'); %match index to the chosen timepoint
 
     %% load matlab variables
-    filename=sprintf('energyGrids_%s.mat',timePoints{timePointIndex});
+    cellTypeStr = GiveMeFileName(thisCellType);
+    filename=sprintf('energyGrids%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
     load(str)
     load('annotationGrids.mat','annotationGrids')
     load('spinalCord_ID.mat','spinalCord_ID')

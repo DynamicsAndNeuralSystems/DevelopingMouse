@@ -19,6 +19,8 @@ case 'resolutionGrid'
     theParameter = struct('E11pt5',0.08,'E13pt5',0.1,'E15pt5',0.12,'E18pt5',0.14,'P4',0.16,'P14',0.2,'P28',0.2);
 case 'brainDivisions'
     theParameter = {'wholeBrain','forebrain','midbrain','hindbrain'};
+case 'smallBrainDivisions'
+    theParameter = {'forebrain','midbrain','hindbrain'};
 case 'scaledDistance'
     theParameter = {true,false};
 case 'useEnrichedGenes'
@@ -29,6 +31,8 @@ case 'constantTypes'
     theParameter = {'decayConstant','multiplier','freeParameter'};
 case 'matTypes'
     theParameter = {'voxGeneMat','distMat','cgeMat'};
+case 'directions'
+    theParameter = {'sagittal','coronal','axial'};
 end
 
 end
