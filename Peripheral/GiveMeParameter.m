@@ -27,6 +27,8 @@ case 'useEnrichedGenes'
     theParameter = {true,false};
 case 'cellTypes'
     theParameter = {'allCellTypes','oligodendrocyte','neuron','astrocyte'};
+case 'smallCellTypes'
+    theParameter = {'oligodendrocyte','neuron','astrocyte'};
 case 'constantTypes'
     theParameter = {'decayConstant','multiplier','freeParameter'};
 case 'matTypes'

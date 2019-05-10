@@ -12,12 +12,12 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoint
     sizeGrids = GiveMeParameter('sizeGrids');
     timePoints = GiveMeParameter('timePoints');
     resolutionGrid = GiveMeParameter('resolutionGrid');
-    timePointIndex = GiveMeParameter('timePointIndex'); %match index to the chosen timepoint
+    timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chosen timepoint
 
     %% load matlab variables
     cellTypeStr = GiveMeFileName(thisCellType);
     filename=sprintf('energyGrids%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
-    load(str)
+    load(filename,'energyGrids')
     load('annotationGrids.mat','annotationGrids')
     load('spinalCord_ID.mat','spinalCord_ID')
     load('brainDivision.mat','brainDivision')

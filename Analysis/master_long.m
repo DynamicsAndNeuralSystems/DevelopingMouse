@@ -11,6 +11,7 @@ smallBrainDivisions = GiveMeParameter('smallBrainDivisions');
 brainDivisions = GiveMeParameter('brainDivisions');
 directions = GiveMeParameter('directions');
 cellTypes = GiveMeParameter('cellTypes');
+smallCellTypes = GiveMeParameter('smallCellTypes');
 % ------------------------------------------------------------------------------
 % Process raw data from Allen API
 % ------------------------------------------------------------------------------
@@ -37,8 +38,8 @@ makeEnergyGrid(true);
 makeBrainDivision();
 % repeat running this function to create gene expression matrix from
 % good genes (wholeBrain,forebrain,midbrain and hindbrain), and from different cell types
-for j=1:length(brainDivisions)
-  for k=1:length(cellTypes)
+for j=1:length(smallBrainDivisions)
+  for k=1:length(smallCellTypes)
   makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
                           brainDivisions{j},cellTypes{k});
   end
