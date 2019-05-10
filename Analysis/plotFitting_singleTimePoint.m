@@ -23,27 +23,27 @@ function plotFitting_singleTimePoint(xData_all,fitType,fitting_stat_all, ...
   switch fitType
       case 'exp'
           p=plot(xData,fitting_stat_all.(timePoints{timePointIndex}).fHandle.exp(xData),...
-                '-','MarkerEdgeColor',theColor,'LineWidth',2);
+                '-','MarkerEdgeColor',theColor,'LineWidth',4);
           p.Color=theColor;
           % legend(p,sprintf('Exponential fit (exp), %s', thisDataType))
       case 'exp1'
           p=plot(xData,fitting_stat_all.(timePoints{timePointIndex}).fHandle.exp1(xData),...
-                '-','MarkerEdgeColor',theColor,'LineWidth',2);
+                '-','MarkerEdgeColor',theColor,'LineWidth',4);
           p.Color=theColor;
           % legend(p,sprintf('Exponential fit (exp1), %s', thisDataType))
       case 'exp_1_0'
           p=plot(xData,fitting_stat_all.(timePoints{timePointIndex}).fHandle.exp_1_0(xData),...
-                '-','MarkerEdgeColor',theColor,'LineWidth',2);
+                '-','MarkerEdgeColor',theColor,'LineWidth',4);
           p.Color=theColor;
           % legend(p,sprintf('Exponential fit (exp_1_0), %s', thisDataType))
       case 'linear'
           p=plot(xData,fitting_stat_all.(timePoints{timePointIndex}).fHandle.linear(xData),...
-                '-','MarkerEdgeColor',theColor,'LineWidth',2);
+                '-','MarkerEdgeColor',theColor,'LineWidth',4);
           p.Color=theColor;
           % legend(p,sprintf('Linear fit, %s', thisDataType))
       otherwise
           error('Unknown fit type: ''%s''',fitType);
   end
-  xlabel(xLabel,'FontSize',8.5)
-  ylabel(yLabel,'FontSize',8.5)
+  xlabel(xLabel)
+  ylabel(yLabel)
 end
