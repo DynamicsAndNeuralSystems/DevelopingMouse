@@ -1,7 +1,7 @@
 function makeFigure2()
 
 numData=1000;
-numThresholds=20;
+numThresholds=21;
 thisBrainDiv='wholeBrain';
 scaledDistance=false;
 thisCellType='allCellTypes';
@@ -17,7 +17,8 @@ for j=1:numSubplot
                                   thisBrainDiv,scaledDistance,...
                                   thisCellType,thisDirection,...
                                   timePoints{j},false);
-  end
+  hold on
+end
 % f.Position = [49         915        2284         211];
 % f.Position=[0.5450    0.1215    0.1539    0.3296];
 % Save out:
@@ -30,8 +31,6 @@ subplot(1,2,1)
 makeExponentialPlot(numData,numThresholds,...
                     thisBrainDiv,false,...
                     thisDirection,thisCellType,false);
-                    hold on
-                    subplot(2,2,3)
 hold on
 subplot(1,2,2)
 makeExponentialPlot(numData,numThresholds,...

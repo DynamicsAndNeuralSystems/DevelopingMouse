@@ -26,7 +26,7 @@ makeEnrichedGenes();
 makeEnergyGrid(false);
 
 % Create gene-expression matrix from all genes (gets the good genes)
-makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,'wholeBrain','allCellTypes');
+makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,'wholeBrain','allCellTypes',false);
 
 % make a struct containing gene IDs from different time points
 makeGeneList_gridExpression();
@@ -38,10 +38,10 @@ makeEnergyGrid(true);
 makeBrainDivision();
 % repeat running this function to create gene expression matrix from
 % good genes (wholeBrain,forebrain,midbrain and hindbrain), and from different cell types
-for j=1:length(smallBrainDivisions)
-  for k=1:length(smallCellTypes)
+for j=1:length(brainDivisions)
+  for k=1:length(cellTypes)
   makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
-                          brainDivisions{j},cellTypes{k});
+                          brainDivisions{j},cellTypes{k},true);
   end
 end
 % create distances, correlation and directions for different brain divisions, ...
@@ -49,7 +49,7 @@ end
 % temporary:
 makeSpatialData(1000,'wholeBrain',false,'allCellTypes',true); % unscaled distance global data (in mm)
 makeSpatialData(1000,'wholeBrain',true,'allCellTypes',true); % scaled distance global data (in mm)
-% for later (not tested yet):
+% testing
 createSpatialData(numData,true);
 
 % makes cgeMat and distMat for figure 1

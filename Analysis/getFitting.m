@@ -1,7 +1,7 @@
 function [fitting_stat_all, constantOut, maxDistance]=getFitting(xData,yData,whatConstantOut)
   % xData and yData are cells each containing distances and correlation coefficient of all time points
   % dataProcessing: 'original' or 'binned numThresholds=xx'
-  timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
+  timePoints=GiveMeParameter('timePoints');
   % initialize
   fitting_stat_all = struct();
   constantOut=zeros(length(timePoints),1);
@@ -13,12 +13,13 @@ function [fitting_stat_all, constantOut, maxDistance]=getFitting(xData,yData,wha
                                                 xData{i}, yData{i}); % only keep exp for the time being
       % fitting_stat_all.(timePoints{i}).fHandle]=fitting_stat({'linear','exp_1_0','exp1','exp'}, ...
       %                                           xData{i}, yData{i});
-      % collect decay constant
-      if strcmp(whatConstantOut,'decayConstant')
+      % collect the constant
+      switch whatConstantOut
+      case 'decayConstant'
         constantOut(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.n;
-      elseif strcmp(whatConstantOut,'freeParameter')
+      case 'freeParameter'
         constantOut(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.B;
-      elseif strcmp(whatConstantOut,'multiplier')
+      case 'multiplier'
         constantOut(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.A;
       end
       % collect max distance

@@ -16,7 +16,9 @@ function plotMat(timePointNow,thisCellType,thisBrainDiv,whatMat,makeNewFigure)
     s=load(str,'cgeMat');
   end
   cmapOut = BF_getcmap('redblue',11,0,1);
-  [h, hcb] = imagescwithnan(s.(whatMat), cmapOut, [0 0 0], false)
+  [ord_row,~,~] = BF_ClusterReorder(s.(whatMat),'euclidean','average');
+  [ord_col,~,~] = BF_ClusterReorder((s.(whatMat))','euclidean','average');
+  [h, hcb] = imagescwithnan(s.(whatMat)(ord_row,ord_col), cmapOut, [0 0 0], false)
   colorbar
   switch whatMat
   case 'voxGeneMat'

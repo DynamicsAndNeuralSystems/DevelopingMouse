@@ -4,6 +4,9 @@
   % create distance and correlation distances, and angles that voxel pairs
   % make with the axes for different brain divisions, cell types, using good gene subset, with or without
   % directions
+  % brainDivisions=GiveMeParameter('brainDivisions');
+  % scaledDistance=GiveMeParameter('scaledDistance');
+  % cellTypes=GiveMeParameter('cellTypes');
   brainDivisions=GiveMeParameter('brainDivisions');
   scaledDistance=GiveMeParameter('scaledDistance');
   cellTypes=GiveMeParameter('cellTypes');

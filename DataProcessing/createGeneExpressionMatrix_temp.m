@@ -11,9 +11,11 @@ brainDivisions = GiveMeParameter('brainDivisions');
 directions = GiveMeParameter('directions');
 cellTypes = GiveMeParameter('cellTypes');
 smallCellTypes = GiveMeParameter('smallCellTypes');
-for j=1:length(smallBrainDivisions)
-  for k=1:length(smallCellTypes)
-  makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
-                          smallBrainDivisions{j},smallCellTypes{k});
-  end
-end
+makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
+                        'wholeBrain','allCellTypes',true);
+% for j=1:length(brainDivisions)
+%   for k=1:length(cellTypes)
+%   makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
+%                           brainDivisions{j},cellTypes{k});
+%   end
+% end
