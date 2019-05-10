@@ -13,6 +13,8 @@ function [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds)
   % angle_sagittal=acos((dot(vec,sagittalVec))/(norm(vec)*norm(sagittalVec)));
 
   [n,p] = size(coOrds);
+  angle_sagittal = zeros(1,n*(n-1)./2);
+  angle_coronal = zeros(1,n*(n-1)./2);
   angle_axial = zeros(1,n*(n-1)./2);
   k = 1;
   for i = 1:n-1 % for each coordinate triplet
