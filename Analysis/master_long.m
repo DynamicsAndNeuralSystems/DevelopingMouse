@@ -26,8 +26,8 @@ makeEnrichedGenes();
 makeEnergyGrid(false);
 
 % Create gene-expression matrix from all genes (gets the good genes)
-makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,'wholeBrain','allCellTypes',false);
-
+makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
+                        'wholeBrain','allCellTypes',false)
 % make a struct containing gene IDs from different time points
 makeGeneList_gridExpression();
 
@@ -49,7 +49,7 @@ end
 % temporary:
 makeSpatialData(1000,'wholeBrain',false,'allCellTypes',true); % unscaled distance global data (in mm)
 makeSpatialData(1000,'wholeBrain',true,'allCellTypes',true); % scaled distance global data (in mm)
-% testing
+% testing on massive
 createSpatialData(numData,true);
 
 % makes cgeMat and distMat for figure 1
