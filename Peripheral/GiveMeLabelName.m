@@ -16,11 +16,11 @@ case 'CGE'
 case 'length'
     theParameter = 'Length scale';
 case 'decayConstant'
-    theParameter = 'Decay Constant';
+    theParameter = 'Constant Length';
 case 'freeParameter'
-    theParameter = 'Free Parameter';
+    theParameter = 'Offset';
 case 'multiplier'
-    theParameter = 'Multiplier';
+    theParameter = 'Amplitude';
 case 'logLength'
     theParameter = 'log (Length scale)';
 case 'logDecayConstant'
