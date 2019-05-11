@@ -49,7 +49,7 @@ end
 % temporary (done on Massive, for makeFigure2)
 makeSpatialData(1000,'wholeBrain',false,'allCellTypes',true); % unscaled distance global data (in mm)
 makeSpatialData(1000,'wholeBrain',true,'allCellTypes',true); % scaled distance global data (in mm)
-% testing on massive
+% tested on massive
 createSpatialData(numData,true);
 
 % makes cgeMat and distMat for figure 1
@@ -63,8 +63,14 @@ end
 makeVariance(incrementVector,samplingNum);
 % ------------------------------------------------------------------------------
 
-% plot variance in decay constant against number of data points used
-plotVariance();
+% plot variance in decay constant against number of data points used (makeFigureS1)
+function makeFigureS1()
+  f=figure('color','w');
+  plotVariance(false)
+  % Save out:
+  str = fullfile('Outs','figureS1','figureS1.svg');
+  saveas(f,str)
+end
 
 % make histogram of proportion of NaN genes
 makeVoxGeneMatStats_NaNGene_histogram();
@@ -74,7 +80,7 @@ makeVoxGeneMatStats_NaNGene_histogram();
 makeVoxGeneMatStats_geneAcrossTime();
 
 % plot the bins with fitted exponential curve (distance unscaled)
-
+f=figure('color','w');
 for i=1:length(timePoints)
   makeBinningPlot_withExponential(numData,numThresholds,'wholeBrain',...
                                   false,'wholeBrain','allDirections',...
@@ -93,14 +99,17 @@ makeExponentialPlot(numData,numThresholds,...
 makeExponentialPlot(numData,numThresholds,...
                     'wholeBrain',true,...
                     'allDirections','allCellTypes',true);
-
+%-----------------------------------------------------------------------------------
+%% brain subdivisions
 % create binning plot with exponential curve for brain subdivisions
 for j=1:length(smallBrainDivisions)
+  f=figure('color','w');
   for i=1:length(timePoints)
     makeBinningPlot_withExponential(numData,numThresholds,...
                                     smallBrainDivisions{j},false,...
                                     'allCellTypes','allDirections',...
-                                    timePoints{i},true)
+                                    timePoints{i},false)
+    hold on
   end
 end
 % plot exponential curves of different time points together for brain subdivisions
@@ -126,12 +135,22 @@ for j=1:length(smallBrainDivisions)
                       'allDirections','allCellTypes',true);
 end
 
+% plot decay constant against max distance
+for j=1:length(smallBrainDivisions)
+  f = figure('color','w');
+  makeConstantPlot(numData,numThresholds,smallBrainDivisions{j},...
+                  false,'allCellTypes','allDirections',...
+                  false,'decayConstant')
+end
+
 % plot decay constant against max distance (distance scaled)
 for j=1:length(smallBrainDivisions)
   makeConstantPlot(numData,numThresholds,smallBrainDivisions{j},...
                   true,'allCellTypes','allDirections',...
                   true,'decayConstant')
 end
+
+
 
 %% analysis of directions
 % plot the bins of different directions with exponential
@@ -190,7 +209,8 @@ for j=1:length(cellTypes)
                         'allDirections',cellTypes{j},true);
   end
 end
-% plot decay constant of different directions against max distance
+% plot decay constant of different cell types against max distance ...
+%in different brain divisions
 for j=1:length(brainDivisions)
   f=figure('color','w');
   for k=1:length(cellTypes)

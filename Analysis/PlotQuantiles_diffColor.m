@@ -63,7 +63,6 @@ for k = 1:numThresholds-1
         'LineWidth',theLineWidth,'Color',theColor)
 end
 xlim([0 xThresholds(end)])
-ylim([-0.1 0.8])
 % yPosition=linspace(1,0.4,length(timePoints));
 % t=text(0.5,0.5,char(timePoints{timePointIndex}),'color','k',...
 %       'BackgroundColor',colorScheme(timePointIndex,:));

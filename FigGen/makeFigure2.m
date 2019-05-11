@@ -17,6 +17,7 @@ for j=1:numSubplot
                                   thisBrainDiv,scaledDistance,...
                                   thisCellType,thisDirection,...
                                   timePoints{j},false);
+  ylim([-0.1 0.8])
   hold on
 end
 % f.Position = [49         915        2284         211];

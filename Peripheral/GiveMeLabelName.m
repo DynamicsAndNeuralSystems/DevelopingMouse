@@ -37,6 +37,14 @@ case 'sampleSize'
     theParameter = 'Sample Size';
 case 'variance'
     theParameter = 'Variance in decay constant';
+case 'forebrain'
+    theParameter = 'Forebrain';
+case 'midbrain'
+    theParameter = 'Midbrain';
+case 'hindbrain'
+    theParameter = 'Hindbrain';
+case 'wholeBrain'
+    theParameter = 'Whole Brain';
 end
 
 end
