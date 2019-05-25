@@ -16,17 +16,32 @@ function [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds)
   angle_sagittal = zeros(1,n*(n-1)./2);
   angle_coronal = zeros(1,n*(n-1)./2);
   angle_axial = zeros(1,n*(n-1)./2);
-  k = 1;
-  for i = 1:n-1 % for each coordinate triplet
-      % determine direction vector with another coordinate triplet
-      vecMat = zeros(n-i,p); % pair with another coordinate triplet
-      for j = 1:n-1
-        vecMat(j,:)=coOrds(i+1,:)-coOrds(i,:); % direction vector
-        % determine the angle made with the three directions between two voxels
-        angle_coronal(k:(k+n-i-1)) = acos((dot(vecMat(j,:),coronalVec))/(norm(vecMat(j,:))*norm(coronalVec)));
-        angle_axial(k:(k+n-i-1)) = acos((dot(vecMat(j,:),axialVec))/(norm(vecMat(j,:))*norm(axialVec)));
-        angle_sagittal(k:(k+n-i-1)) = acos((dot(vecMat(j,:),sagittalVec))/(norm(vecMat(j,:))*norm(sagittalVec)));
+
+  % make the direction vectors
+  vecMat = zeros(n*(n-1)./2,3); % stores direction vectors
+  for i = 1:length(vecMat)
+    for j = 1:n-1
+      for k = j+1:n
+        vecMat(i,:) = coOrds(k,:)-coOrds(j,:);
+        % determine angle made with the three directions
+        angle_coronal(i) = acos((dot(vecMat(i,:),coronalVec))/(norm(vecMat(i,:))*norm(coronalVec)));
+        angle_axial(i) = acos((dot(vecMat(i,:),axialVec))/(norm(vecMat(i,:))*norm(axialVec)));
+        angle_sagittal(i) = acos((dot(vecMat(i,:),sagittalVec))/(norm(vecMat(i,:))*norm(sagittalVec)));
       end
-      k = k + (n-i);
+    end
   end
+  %%
+  % k = 1;
+  % for i = 1:n-1 % for each coordinate triplet
+  %     % determine direction vector with another coordinate triplet
+  %     vecMat = zeros(n-i,p); % pair with another coordinate triplet
+  %     for j = 1:n-1
+  %       vecMat(j,:)=coOrds(j+1,:)-coOrds(i,:); % direction vector
+  %     end
+  %     % determine the angle made with the three directions between two voxels
+  %     angle_coronal(k:(k+n-i-1)) = acos((dot(vecMat(j,:),coronalVec))/(norm(vecMat(j,:))*norm(coronalVec)));
+  %     angle_axial(k:(k+n-i-1)) = acos((dot(vecMat(j,:),axialVec))/(norm(vecMat(j,:))*norm(axialVec)));
+  %     angle_sagittal(k:(k+n-i-1)) = acos((dot(vecMat(j,:),sagittalVec))/(norm(vecMat(j,:))*norm(sagittalVec)));
+  %     k = k + (n-i);
+  % end
 end
