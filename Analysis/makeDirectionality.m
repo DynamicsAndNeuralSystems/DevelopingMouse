@@ -22,11 +22,11 @@ function [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds)
       vecMat = zeros(n-i,p); % pair with another coordinate triplet
       for j = 1:n-1
         vecMat(j,:)=coOrds(i+1,:)-coOrds(i,:); % direction vector
+        % determine the angle made with the three directions between two voxels
+        angle_coronal(k:(k+n-i-1)) = acos((dot(vecMat(j,:),coronalVec))/(norm(vecMat(j,:))*norm(coronalVec)));
+        angle_axial(k:(k+n-i-1)) = acos((dot(vecMat(j,:),axialVec))/(norm(vecMat(j,:))*norm(axialVec)));
+        angle_sagittal(k:(k+n-i-1)) = acos((dot(vecMat(j,:),sagittalVec))/(norm(vecMat(j,:))*norm(sagittalVec)));
       end
-      % determine the angle made with the three directions between two voxels
-      angle_coronal(k:(k+n-i-1)) = acos((dot(vecMat(j,:),coronalVec))/(norm(vecMat(j,:))*norm(coronalVec)));
-      angle_axial(k:(k+n-i-1)) = acos((dot(vecMat(j,:),axialVec))/(norm(vecMat(j,:))*norm(axialVec)));
-      angle_sagittal(k:(k+n-i-1)) = acos((dot(vecMat(j,:),sagittalVec))/(norm(vecMat(j,:))*norm(sagittalVec)));
       k = k + (n-i);
   end
 end

@@ -1,4 +1,5 @@
 function makeFigureS2()
+  % This function plots quantiles with exponential curves separately for brain divisions
   numData=1000;
   numThresholds=21;
   thisCellType='allCellTypes';
@@ -6,7 +7,7 @@ function makeFigureS2()
   smallBrainDivisions = GiveMeParameter('smallBrainDivisions');
   scaledDistance = GiveMeParameter('scaledDistance');
   timePoints = GiveMeParameter('timePoints');
-  Plot all quantiles together
+  % Plot all quantiles together
   f=figure('color','w');
   for j=1:length(smallBrainDivisions)
     subplot(2,2,j)
