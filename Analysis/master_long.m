@@ -82,9 +82,11 @@ makeVoxGeneMatStats_geneAcrossTime();
 % plot the bins with fitted exponential curve (distance unscaled)
 f=figure('color','w');
 for i=1:length(timePoints)
+  subplot(4,2,i)
   makeBinningPlot_withExponential(numData,numThresholds,'wholeBrain',...
                                   false,'wholeBrain','allDirections',...
-                                  timePoints{i},true);
+                                  timePoints{i},false);
+  hold on
 end
 % plot decay constants, free parameter and multiplier against max distance
 makeFigure3();
