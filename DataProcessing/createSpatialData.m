@@ -14,8 +14,10 @@
   for j=1:length(brainDivisions)
     for k=1:length(scaledDistance)
       for m=1:length(cellTypes)
-      [~,~,~,~,~]=makeSpatialData(numData,brainDivisions{j},...
-                                  scaledDistance{k},cellTypes{m},withDirection);
+      [~,~,~,~,~]=makeSpatialData(numData,brainDivisions,...
+                                  scaledDistance,cellTypes,withDirection);
+      % [~,~,~,~,~]=makeSpatialData(numData,brainDivisions{j},...
+      %                             scaledDistance{k},cellTypes{m},withDirection);
       end
     end
   end
