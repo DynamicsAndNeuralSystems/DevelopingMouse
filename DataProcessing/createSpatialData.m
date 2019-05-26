@@ -7,9 +7,9 @@
   % brainDivisions=GiveMeParameter('brainDivisions');
   % scaledDistance=GiveMeParameter('scaledDistance');
   % cellTypes=GiveMeParameter('cellTypes');
-  brainDivisions=GiveMeParameter('brainDivisions');
-  scaledDistance=GiveMeParameter('scaledDistance');
-  cellTypes=GiveMeParameter('cellTypes');
+  brainDivisions='wholeBrain';
+  scaledDistance=false;
+  cellTypes='allCellTypes';
   % create distances (unscaled) and correlation from good genes
   for j=1:length(brainDivisions)
     for k=1:length(scaledDistance)
