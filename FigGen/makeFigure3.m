@@ -1,11 +1,17 @@
-function makeFigure3()
-numData=1000;
-numThresholds=20;
+function makeFigure3(numData,numThresholds)
 thisBrainDiv='wholeBrain';
 thisCellType='allCellTypes';
 thisDirection='allDirections';
 timePoints = GiveMeParameter('timePoints');
 constantTypes = GiveMeParameter('constantTypes');
+
+if nargin < 2
+  numThresholds = 21; % 21 thresholds by default
+end
+if nargin < 1
+  numData = 1000; % 1000 data by default
+end
+
 %-------------------------------------------------------------------------------
 f = figure('color','w');
 

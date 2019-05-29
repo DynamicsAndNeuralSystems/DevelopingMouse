@@ -2,6 +2,13 @@ function makeVariance(incrementVector,samplingNum)
   % incrementVector: a vector stating the incremental number of data points tested ...
   % e.g. 100:100:1000
   % samplingNum: the number of trials each data point number is subjected to e.g. 100
+  if nargin < 2
+    samplingNum=100; % 100 samples by default
+  end
+  if nargin < 1
+    incrementVector=100:100:1000; % increment from 100 to 1000 in steps of 100 by default
+  end
+
 timePoints=GiveMeParameter('timePoints');
 variance=cell(length(timePoints),1);
 decayConstant_samples=cell(length(incrementVector),1);

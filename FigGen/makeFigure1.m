@@ -1,4 +1,4 @@
-function makeFigure1()
+function makeFigure1(numData,numThresholds)
   % plot the voxGeneMat, distMat and cgeMat(correlated gene expression) and the bins
   timePoints = GiveMeParameter('timePoints');
   timePointNow = 'E11pt5';
@@ -8,12 +8,17 @@ function makeFigure1()
   cellTypeStr = GiveMeFileName(thisCellType);
   distanceStr = GiveMeFileName('notScaled');
   matTypes = GiveMeParameter('matTypes'); % {'voxGeneMat','distMat','cgeMat'};
-  numData = 1000;
-  numThresholds = 20;
   timePointIndex = strcmp(timePointNow,timePoints);
+  if nargin < 2
+    numThresholds = 21; % 21 thresholds by default
+  end
+  if nargin < 1
+    numData = 1000; % 1000 data by default
+  end
+
   % load distance and correlation data first
   fileString = sprintf('spatialData_NumData_%d%s%s%s.mat',numData,brainStr,cellTypeStr,...
-                    distanceStr);
+                        distanceStr);
   load(fileString,'distances_all','corrCoeff_all');
   % plots the voxGeneMat and CGE vs distance graph
   f1 = figure('color','w');

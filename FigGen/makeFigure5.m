@@ -1,8 +1,14 @@
-function makeFigure5()
+function makeFigure5(numData,numThresholds)
   brainDivisions = GiveMeParameter('brainDivisions');
   cellTypes = GiveMeParameter('cellTypes');
-  numData=1000;
-  numThresholds=21;
+
+  if nargin < 2
+    numThresholds = 21; % 21 thresholds by default
+  end
+  if nargin < 1
+    numData = 1000; % 1000 data by default
+  end
+
   f=figure('color','w');
   for j=1:length(brainDivisions)
     subplot(2,2,j)

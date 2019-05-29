@@ -1,13 +1,18 @@
-function makeFigure2()
+function makeFigure2(numData,numThresholds)
 
-numData=1000;
-numThresholds=21;
 thisBrainDiv='wholeBrain';
 scaledDistance=false;
 thisCellType='allCellTypes';
 thisDirection='allDirections';
 timePoints = GiveMeParameter('timePoints');
 numSubplot=7;
+
+if nargin < 2
+  numThresholds = 21; % 21 thresholds by default
+end
+if nargin < 1
+  numData = 1000; % 1000 data by default
+end
 
 % first part of figure 1
 f = figure('color','w');

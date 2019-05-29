@@ -1,4 +1,4 @@
-function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal]=sampleGridData(voxGeneMat,coOrds,whatNumData,timePointNow,scaledDistance,withDirection)
+function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal,vecMat]=sampleGridData(voxGeneMat,coOrds,whatNumData,timePointNow,scaledDistance,withDirection)
   % Create distance matrix from only voxels selected for gene expression matrix
   timePoints = GiveMeParameter('timePoints');
   resolutionGrid=GiveMeParameter('resolutionGrid');
@@ -17,15 +17,16 @@ function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal]=sampleGr
   end
   if withDirection
     % shuffle the distances and corrCoeff
-    shuffledOrder = randperm(whatNumData);
-    distances = distances(shuffledOrder);
-    corrCoeff = corrCoeff(shuffledOrder);
+    % shuffledOrder = randperm(length(distances));
+    % distances = distances(shuffledOrder);
+    % corrCoeff = corrCoeff(shuffledOrder);
     % determine directionality
-    [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds(dataIndSelect,:),...
-                                                                  shuffledOrder);
-    % angle_coronal=extractDistances(squareform(angle_coronal));
-    % angle_axial=extractDistances(squareform(angle_axial));
-    % angle_sagittal=extractDistances(squareform(angle_sagittal));
+    [angle_coronal,angle_axial,angle_sagittal,vecMat]=makeDirectionality(coOrds(dataIndSelect,:));
+    % [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds(dataIndSelect,:),...
+    %                                                               shuffledOrder);
+    angle_coronal=extractDistances(squareform(angle_coronal));
+    angle_axial=extractDistances(squareform(angle_axial));
+    angle_sagittal=extractDistances(squareform(angle_sagittal));
   else
     angle_coronal=NaN;
     angle_axial=NaN;
