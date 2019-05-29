@@ -9,11 +9,18 @@ samplingNum=100;
 % ------------------------------------------------------------------------------
 % Process raw data from Allen API
 % ------------------------------------------------------------------------------
-renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData)
+% comment out for the time being
+% renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData)
 
 % create the data of variance in decay constant against number of data points used ...
 % (takes very long)
-% makeVariance(incrementVector,samplingNum); % comment out for the time being
+% comment out for the time being
+% makeVariance(incrementVector,samplingNum);
+
+% temporary placed here
+% cell types, using good gene subset
+createSpatialData(numData,false);
+
 % ------------------------------------------------------------------------------
 % Make the figures
 makeFigure1(numData,numThresholds);
