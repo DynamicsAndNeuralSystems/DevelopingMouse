@@ -1,4 +1,4 @@
-function renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData)
+function renderDataFromEnergyGrids(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData)
 % renders raw data into mat variables which are saved in Matlab_variables (these take a long time)
 if nargin < 4
   numData=GiveMeParameter('numData');
@@ -15,24 +15,7 @@ end
 
 brainDivisions=GiveMeParameter('brainDivisions');
 cellTypes=GiveMeParameter('cellTypes');
-% Create annotation grids and spinal cord ID
-makeAnnotationGrids_SpinalCordID();
-% make a matlab variable containing enriched genes
-makeEnrichedGenes();
 
-% Create the energy grids using all genes
-makeEnergyGrid(false);
-
-% Create gene-expression matrix from all genes (gets the good genes)
-makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
-                        'wholeBrain','allCellTypes',false);
-
-% Create the energy grids using all good genes, genes enriched in neurons, ...
-% oligodendrocytes and astrocytes
-makeEnergyGrid(true);
-% create matlab variable with IDs of brain subdivisions
-makeBrainDivision();
-% repeat running this function to create gene expression matrix from
 % good genes (wholeBrain,forebrain,midbrain and hindbrain), and from different cell types
 for j=1:length(brainDivisions)
   for k=1:length(cellTypes)

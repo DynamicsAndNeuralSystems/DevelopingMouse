@@ -35,6 +35,20 @@ case 'matTypes'
     theParameter = {'voxGeneMat','distMat','cgeMat'};
 case 'directions'
     theParameter = {'sagittal','coronal','axial'};
+case 'whatNorm'
+    theParameter = 'scaledSigmoid';
+case 'whatVoxelThreshold'
+    theParameter = 0.3;
+case 'whatGeneThreshold'
+    theParameter = 0.3;
+case 'numData'
+    theParameter = 1000;
+case 'numThresholds'
+    theParameter = 21;
+case 'incrementVector'
+    theParameter = 100:100:1000;
+case 'samplingNum'
+    theParameter = 100;
 end
 
 end

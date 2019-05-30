@@ -7,10 +7,10 @@ function makeFigureS2(numData,numThresholds)
   timePoints = GiveMeParameter('timePoints');
 
   if nargin < 2
-    numThresholds = 21; % 21 thresholds by default
+    numThresholds=GiveMeParameter('numThresholds');
   end
   if nargin < 1
-    numData = 1000; % 1000 data by default
+    numData=GiveMeParameter('numData');
   end
 
   % Plot all quantiles together

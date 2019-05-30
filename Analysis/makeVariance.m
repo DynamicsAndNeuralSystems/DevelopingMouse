@@ -3,10 +3,10 @@ function makeVariance(incrementVector,samplingNum)
   % e.g. 100:100:1000
   % samplingNum: the number of trials each data point number is subjected to e.g. 100
   if nargin < 2
-    samplingNum=100; % 100 samples by default
+    samplingNum=GiveMeParameter('samplingNum');
   end
   if nargin < 1
-    incrementVector=100:100:1000; % increment from 100 to 1000 in steps of 100 by default
+    incrementVector=GiveMeParameter('incrementVector');
   end
 
 timePoints=GiveMeParameter('timePoints');

@@ -3,10 +3,10 @@ function makeFigure5(numData,numThresholds)
   cellTypes = GiveMeParameter('cellTypes');
 
   if nargin < 2
-    numThresholds = 21; % 21 thresholds by default
+    numThresholds=GiveMeParameter('numThresholds');
   end
   if nargin < 1
-    numData = 1000; % 1000 data by default
+    numData=GiveMeParameter('numData');
   end
 
   f=figure('color','w');
