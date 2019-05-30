@@ -10,7 +10,10 @@ samplingNum=GiveMeParameter('samplingNum');
 % Process raw data from Allen API
 % ------------------------------------------------------------------------------
 % create most of the data
-renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData);
+% renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData);
+
+% uncomment and use this instead if starting with energyGrids
+renderDataFromEnergyGrids(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData);
 
 % create the data of variance in decay constant against number of data points used ...
 % (takes very long)
