@@ -32,6 +32,9 @@
 `makeFigure5()`
 ![Figure5](Outs/figure5/figure5.png)
 
+`makeFigureS1()`
+![FigureS1](Outs/figureS1/figureS1.png)
+
 `makeFigureS2()`
 ![FigureS2_part1](Outs/figureS2/figureS2_part1.png)
 ![FigureS2_part2](Outs/figureS2/figureS2_part2.png)
