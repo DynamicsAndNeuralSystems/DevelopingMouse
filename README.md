@@ -13,6 +13,8 @@
 * Run `createVariance.m` to create the data of variance in decay constant against number of data points used (take a long time, >24h)
 
 ## Figures
+Either create single figures by running each of the separate functions below, or create all figures at once by running `createFigures.m`
+
 ### Figure 1
 `makeFigure1()`
 ![Figure1_part1](Outs/figure1/figure1_part1.png)
