@@ -1,4 +1,4 @@
-function makeFigure5(numData,numThresholds)
+function makeFigureS3(numData,numThresholds)
   brainDivisions = GiveMeParameter('brainDivisions');
   cellTypes = GiveMeParameter('smallCellTypes');
 
@@ -14,7 +14,7 @@ function makeFigure5(numData,numThresholds)
     subplot(2,2,j)
     for k=1:length(cellTypes)
       makeConstantPlot(numData,numThresholds,brainDivisions{j},...
-                      false,cellTypes{k},'allDirections',...
+                      true,cellTypes{k},'allDirections',...
                       false,'decayConstant');
       hold on
     end
@@ -23,6 +23,6 @@ function makeFigure5(numData,numThresholds)
     hold on
   end
   % Save out:
-  str = fullfile('Outs','figure5','figure5.svg');
+  str = fullfile('Outs','figureS3','figureS3.svg');
   saveas(f,str)
 end
