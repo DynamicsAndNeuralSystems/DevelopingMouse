@@ -1,16 +1,20 @@
 # Developing Mouse Scripts
 
-## Retrieve data from Allen API (NOT YET REPLICATED)
+## Retrieve data 
+# raw data from Allen API (NOT YET REPLICATED) or...
 * Fills the `Data/API` directory.
 * First download Allen API package by `pip install allensdk`
 * Run `download_devmouse_unionizes.py` to retrieve gene expression data at structure level (tentative)
 * Run `structures.py` to download structure information
 * Run `getBrainDivision.py` to download major brain division info (forebrain, midbrain and hindbrain) and ID of their descendants; data saved in `structure_F.csv`, `structure_M.csv`,`structure_H.csv`,`structure_F_descendant_ID.csv`,`structure_M_descendant_ID.csv`,`structure_H_descendant_ID.csv`
+# download preprocessed data 
+* Fill the `Matlab_variables` directory with data from this figshare repository (insert link later)
+* The Data processing step below can be skipped, or you can run `createData()` to create data starting from energyGrids .mat variables
 
 ## Data processing
 * Fills the `Matlab_variables` directory
-* Run `createData.m` to create most of the Matlab variables from the raw data
-* Run `createVariance.m` to create the data of variance in decay constant against number of data points used (take a long time, >24h)
+* To create most of the data, either run `createData()` to create data starting from energyGrids .mat variables, or `createData(true)` to create from the raw data
+* Run `createVariance.m` to create the data of variance in decay constant against number of data points used (takes a long time, >24h)
 
 ## Figures
 Either create single figures by running each of the separate functions below, or create all figures at once by running `createFigures.m`
@@ -48,5 +52,5 @@ Either create single figures by running each of the separate functions below, or
 ![FigureS2_part2](Outs/figureS2/figureS2_part2.png)
 ![FigureS2_part3](Outs/figureS2/figureS2_part3.png)
 
-* All figures are saved in Outs
+* All figures are saved in Outs/figure(number)
 
