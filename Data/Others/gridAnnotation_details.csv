@@ -1,0 +1,11 @@
+reference_space,age,anatomy,size_x,size_y,size_z,spacing_x,spacing_y,spacing_z,gridAnnotation_link,ontology_id,structure_graph_id
+1,E11.5,Embryo,70,75,40,80,80,80,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/E11pt5_DevMouse2012_gridAnnotation.zip,12,17
+2,E13.5,Embryo,89,109,69,100,100,100,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/E13pt5_DevMouse2012_gridAnnotation.zip,12,17
+3,E15.5,Embryo,94,132,65,120,120,120,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/E15pt5_DevMouse2012_gridAnnotation.zip,12,17
+4,E16.5,Head,94,132,65,120,120,120,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/E16pt5_DevMouse2012_gridAnnotation.zip,12,17
+5,E18.5,Brain,67,43,40,140,140,140,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/E18pt5_DevMouse2012_gridAnnotation.zip,12,17
+6,P4,Brain,77,43,50,160,160,160,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/P4_DevMouse2012_gridAnnotation.zip,12,17
+7,P14,Brain,68,40,50,200,200,200,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/P14_DevMouse2012_gridAnnotation.zip,12,17
+8,P28,Brain,73,41,53,200,200,200,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/P28_DevMouse2012_gridAnnotation.zip,12,17
+9,P56,Brain,67,41,58,200,200,200,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/P56_DevMouse2012_gridAnnotation.zip,12,17
+10,P56,Brain,67,41,58,200,200,200,http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/P56_DevMouse2012_gridAnnotation.zip,12,17
