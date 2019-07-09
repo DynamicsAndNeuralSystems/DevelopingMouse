@@ -18,7 +18,8 @@ f = figure('color','w');
 for j=1:length(constantTypes)
   subplot(2,2,j)
   makeConstantPlot(numData,numThresholds,thisBrainDiv,...
-                  false,thisCellType,thisDirection,false,constantTypes{j});
+                  false,thisCellType,thisDirection,false,...
+                  constantTypes{j},false,true);
   hold on
 end
 % f.Position = [0.1300    0.1100    0.3347    0.3412];

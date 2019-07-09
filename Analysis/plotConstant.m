@@ -1,6 +1,7 @@
 function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,...
                       brainDiv,numData,numThresholds,...
-                      makeNewFigure,thisDirection,thisCellType)
+                      makeNewFigure,thisDirection,...
+                      thisCellType,allGrey,linearRegress)
 % this function plots decay constants with error bars against max distance
 
 % dataType='voxel';
@@ -15,7 +16,8 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
   % xData and yData are cells each containing distances and correlation coefficient of all time points
   % dataProcessing: 'original' or 'binned numThresholds=xx'
   % brainDiv: 'forebrain', 'midbrain','hindbrain' or 'wholeBrain'
-  lineWidthMultiple=3;
+
+  lineWidth=3;
   timePoints=GiveMeParameter('timePoints');
   % obtain error of the decay constants (95% CI)
   err=zeros(length(timePoints),1);
@@ -24,6 +26,7 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
     switch whatConstantOut
     case 'decayConstant'
       err(i)=CI(2,3)-CI(1,3);
+      constantOut = 1./constantOut % take reciprocal of decay constant
     case 'freeParameter'
       err(i)=CI(2,2)-CI(1,2);
     case 'multiplier'
@@ -31,7 +34,17 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
     end
   end
   % get the colours needed for plotting
-  cmapOut = BF_getcmap('dark2',7,0,0);
+  if allGrey
+    cmapOut = [0.7 0.7 0.7;
+              0.7 0.7 0.7;
+              0.7 0.7 0.7;
+              0.7 0.7 0.7;
+              0.7 0.7 0.7;
+              0.7 0.7 0.7;
+              0.7 0.7 0.7]
+  else
+    cmapOut = BF_getcmap('dark2',7,0,0);
+  end
   % Specify plotting style for later use
   theStyle = '-';
   %% Plot decay constant of exponential fit (3 parameter)
@@ -132,24 +145,21 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
       % plot
       if ~strcmp(thisDirection,'allDirections')
         errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
-                'LineStyle',theStyle,'LineWidth',...
-                (fitting_stat_all.(timePoints{i}).adjRSquare.exp)*lineWidthMultiple,...
+                'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',thisBackground)
         % t1=text(maxDistance(i),...
         %     decayConstant(i)+yPosition.(thisDirection)(i),num2str(decayConstant(i)),...
         %     'Color',thisBackground,'HorizontalAlignment','center');
       elseif ~strcmp(thisCellType,'allCellTypes')
         errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
-                'LineStyle',theStyle,'LineWidth',...
-                (fitting_stat_all.(timePoints{i}).adjRSquare.exp)*lineWidthMultiple,...
+                'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',thisBackground)
         % t1=text(maxDistance(i),...
         %         decayConstant(i)+yPosition.(thisCellType)(i),num2str(decayConstant(i)),...
         %         'Color','k','HorizontalAlignment','center');
       else
         errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
-                'LineStyle',theStyle,'LineWidth',...
-                (fitting_stat_all.(timePoints{i}).adjRSquare.exp)*lineWidthMultiple,...
+                'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',theColor)
         % t1=text(maxDistance(i),...
         %         decayConstant(i)+0.25*10^(-3),num2str(decayConstant(i)),...
@@ -172,6 +182,15 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
       % end
       hold on
   end
+  if linearRegress % plot linear regression line
+    b1 = maxDistance\constantOut;
+    yCalc1 = b1*maxDistance;
+    plot(maxDistance,yCalc1);
+    disp(sprintf('regression coefficient : %d', b1))
+  % compute correlation coefficient
+  corrCoeff = corrcoef(maxDistance,constantOut);
+  disp(sprintf('correlation coefficient : %d', corrCoeff))
+  % label the axes
   xLabel = GiveMeLabelName('maxDistance');
   yLabel = GiveMeLabelName(whatConstantOut);
   xlabel(xLabel)

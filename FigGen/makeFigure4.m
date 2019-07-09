@@ -11,9 +11,13 @@ end
 f = figure('color','w');
 for j=1:length(smallBrainDivisions)
   subplot(2,2,j)
+  makeConstantPlot(numData,numThresholds,'wholeBrain',...
+                  false,'allCellTypes','allDirections',...
+                  false,'decayConstant',true,false);
+  hold on
   makeConstantPlot(numData,numThresholds,smallBrainDivisions{j},...
                   false,'allCellTypes','allDirections',...
-                  false,'decayConstant')
+                  false,'decayConstant',false,false);
   str = GiveMeLabelName(smallBrainDivisions{j});
   title(str);
   hold on

@@ -1,6 +1,6 @@
 function makeConstantPlot(numData,numThresholds,thisBrainDiv,...
                           scaledDistance,thisCellType,thisDirection,...
-                          makeNewFigure,whatConstantOut)
+                          makeNewFigure,whatConstantOut,allGrey,linearRegress)
 % numData=1000;
 % numThresholds=20;
 % useGoodGeneSubset=true;
@@ -43,5 +43,5 @@ end
 
 plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,...
             thisBrainDiv,numData,numThresholds,makeNewFigure,...
-            thisDirection,thisCellType);
+            thisDirection,thisCellType,allGrey,linearRegress);
 end
