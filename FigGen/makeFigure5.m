@@ -15,7 +15,7 @@ function makeFigure5(numData,numThresholds)
     for k=1:length(cellTypes)
       makeConstantPlot(numData,numThresholds,brainDivisions{j},...
                       false,cellTypes{k},'allDirections',...
-                      false,'decayConstant');
+                      false,'decayConstant',false,false);
       hold on
     end
     str = GiveMeLabelName(brainDivisions{j});

@@ -17,8 +17,10 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
   % dataProcessing: 'original' or 'binned numThresholds=xx'
   % brainDiv: 'forebrain', 'midbrain','hindbrain' or 'wholeBrain'
 
-  lineWidth=3;
+  lineWidth=2;
+  markerSize=8;
   timePoints=GiveMeParameter('timePoints');
+  constantTypes = GiveMeParameter('constantTypes');
   % obtain error of the decay constants (95% CI)
   err=zeros(length(timePoints),1);
   for i=1:length(timePoints)
@@ -26,7 +28,7 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
     switch whatConstantOut
     case 'decayConstant'
       err(i)=CI(2,3)-CI(1,3);
-      constantOut = 1./constantOut % take reciprocal of decay constant
+      constantOut = 1./constantOut; % take reciprocal of decay constant
     case 'freeParameter'
       err(i)=CI(2,2)-CI(1,2);
     case 'multiplier'
@@ -41,7 +43,7 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
               0.7 0.7 0.7;
               0.7 0.7 0.7;
               0.7 0.7 0.7;
-              0.7 0.7 0.7]
+              0.7 0.7 0.7];
   else
     cmapOut = BF_getcmap('dark2',7,0,0);
   end
@@ -144,28 +146,32 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
       end
       % plot
       if ~strcmp(thisDirection,'allDirections')
-        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
+        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',markerSize,...
                 'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',thisBackground)
-        % t1=text(maxDistance(i),...
-        %     decayConstant(i)+yPosition.(thisDirection)(i),num2str(decayConstant(i)),...
-        %     'Color',thisBackground,'HorizontalAlignment','center');
       elseif ~strcmp(thisCellType,'allCellTypes')
-        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
+        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',markerSize,...
                 'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',thisBackground)
         % t1=text(maxDistance(i),...
         %         decayConstant(i)+yPosition.(thisCellType)(i),num2str(decayConstant(i)),...
         %         'Color','k','HorizontalAlignment','center');
       else
-        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
+        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',markerSize,...
                 'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',theColor)
         % t1=text(maxDistance(i),...
         %         decayConstant(i)+0.25*10^(-3),num2str(decayConstant(i)),...
         %         'Color','k','HorizontalAlignment','center');
       end
-      disp(sprintf('%s : %d', whatConstantOut,constantOut(i))) % display decay constant in command window
+      % add to table and display
+      if strcmp(whatConstantOut,'decayConstant')
+        disp(sprintf('%s : %d', whatConstantOut,1./constantOut(i))) % display decay constant in command window
+      else
+
+        disp(sprintf('%s : %d', whatConstantOut,constantOut(i))) % display decay constant in command window
+
+      end
       % t1.FontSize=12;
       % if (strcmp(thisDirection,'allDirections') & strcmp(thisCellType,'allCellTypes'))
       %   yPosition=linspace(1,0.4,length(timePoints));
@@ -187,8 +193,9 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
     yCalc1 = b1*maxDistance;
     plot(maxDistance,yCalc1);
     disp(sprintf('regression coefficient : %d', b1))
+  end
   % compute correlation coefficient
-  corrCoeff = corrcoef(maxDistance,constantOut);
+  corrCoeff = extractDistances(corrcoef(maxDistance,constantOut));
   disp(sprintf('correlation coefficient : %d', corrCoeff))
   % label the axes
   xLabel = GiveMeLabelName('maxDistance');
