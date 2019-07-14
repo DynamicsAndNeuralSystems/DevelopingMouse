@@ -30,7 +30,7 @@ case 'cellTypes'
 case 'smallCellTypes'
     theParameter = {'oligodendrocyte','neuron','astrocyte'};
 case 'constantTypes'
-    theParameter = {'decayConstant','multiplier','freeParameter'};
+    theParameter = {'decayConstant','strength','offset'};
 case 'matTypes'
     theParameter = {'voxGeneMat','distMat','cgeMat'};
 case 'directions'

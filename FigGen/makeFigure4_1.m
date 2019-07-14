@@ -21,10 +21,13 @@ for k=1:length(brainDivisions)
 
   for j=1:length(constantTypes)
     subplot(1,3,j)
-    constantOut.(constantTypes{j}).(brainDivisions{k}) = makeConstantPlot(numData,numThresholds,...
-                                                                          brainDivisions{k},...
-                                                                          false,thisCellType,thisDirection,false,...
-                                                                          constantTypes{j},false,false);
+    makeConstantPlot(numData,numThresholds,...
+                      brainDivisions{k},...
+                      false,thisCellType,...
+                      thisDirection,false,...
+                      constantTypes{j},...
+                      false,false,...
+                      false,false,false);
     hold on
   end
   str = GiveMeLabelName(brainDivisions{k});
@@ -32,22 +35,4 @@ for k=1:length(brainDivisions)
   str = fullfile('Outs','figure4',sprintf('figure4_%d.svg',k));
   saveas(f,str)
 end
-
-
-
-  T = struct2table(constantOut)
-  % % create a table to hold the data
-  % T = cell2table(cell(0,3));
-  % T.Properties.VariableNames = constantTypes;
-  % % T.Properties.RowNames = brainDivisions;
-  % for j=1:length(constantTypes)
-  %   for k=1:length(brainDivisions)
-  %     T.(constantTypes{1}) = constantOut.(constantTypes{j}).(brainDivisions{k})(i);
-  %     T.(constantTypes{2}) = constantOut.(constantTypes{j}).(brainDivisions{k})(i);
-  %     T.(constantTypes{3}) = constantOut.(constantTypes{j}).(brainDivisions{k})(i);
-  %   end
-  % end
-  % T(1:4,:) % display the table
-
-
 end

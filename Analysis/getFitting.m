@@ -17,9 +17,9 @@ function [fitting_stat_all, constantOut, maxDistance]=getFitting(xData,yData,wha
       switch whatConstantOut
       case 'decayConstant'
         constantOut(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.n;
-      case 'freeParameter'
+      case 'offset'
         constantOut(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.B;
-      case 'multiplier'
+      case 'strength'
         constantOut(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.A;
       end
       % collect max distance

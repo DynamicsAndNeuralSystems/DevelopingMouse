@@ -16,17 +16,17 @@ case 'CGE'
 case 'length'
     theParameter = 'Length scale';
 case 'decayConstant'
-    theParameter = '1/Eta (mm^{-1})';
-case 'freeParameter'
+    theParameter = 'Correlation length, {\lambda} (mm)';
+case 'offset'
     theParameter = 'Offset (mm)';
-case 'multiplier'
-    theParameter = 'Amplitude (mm)';
+case 'strength'
+    theParameter = 'Strength (mm)';
 case 'logLength'
     theParameter = 'log (Length scale)';
 case 'logDecayConstant'
     theParameter = 'log (Decay constant)';
-case 'maxDistance'
-    theParameter = 'Max Distance (mm)';
+case 'brainSize'
+    theParameter = 'Brain Size, d_m_a_x (mm)';
 case 'genes'
     theParameter = 'Genes';
 case 'voxels'

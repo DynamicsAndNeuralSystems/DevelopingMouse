@@ -1,7 +1,8 @@
 function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,...
                       brainDiv,numData,numThresholds,...
                       makeNewFigure,thisDirection,...
-                      thisCellType,allGrey,linearRegress)
+                      thisCellType,allGrey,linearRegress,...
+                      showCorrCoeff,forceYLim,displayAdjR)
 % this function plots decay constants with error bars against max distance
 
 % dataType='voxel';
@@ -172,20 +173,10 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
         disp(sprintf('%s : %d', whatConstantOut,constantOut(i))) % display decay constant in command window
 
       end
-      % t1.FontSize=12;
-      % if (strcmp(thisDirection,'allDirections') & strcmp(thisCellType,'allCellTypes'))
-      %   yPosition=linspace(1,0.4,length(timePoints));
-      %   t=text(0.5,0.5,char(timePoints{i}),'color','k','FontSize',12,'BackgroundColor',...
-      %           theColor);
-      %   t.Units='normalized';
-      %   t.Position=[1 yPosition(i)];
-      % else
-      %   yPosition=linspace(0.95,0.65,length(timePoints));
-      %   t=text(0.5,0.5,[timePoints{i} ' ' showThis],'color','k',...
-      %         'FontSize',12,'BackgroundColor',thisBackground);
-      %   t.Units='normalized';
-      %   t.Position=[thisXPosition yPosition(i)];
-      % end
+      % display adjusted R square
+      if displayAdjR
+        disp(sprintf('Ajusted R square : %d', fitting_stat_all.(timePoints{i}).adjRSquare.exp))
+      end
       hold on
   end
   if linearRegress % plot linear regression line
@@ -197,9 +188,18 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
   % compute correlation coefficient
   corrCoeff = extractDistances(corrcoef(maxDistance,constantOut));
   disp(sprintf('correlation coefficient : %d', corrCoeff))
+  if showCorrCoeff
+    t = text(0.5,0.5,strcat('corrCoeff: ',num2str(corrCoeff)));
+    t.Units='normalized';
+    t.Position=[0.1 1];
+    t.FontWeight='bold';
+  end
   % label the axes
-  xLabel = GiveMeLabelName('maxDistance');
+  xLabel = GiveMeLabelName('brainSize');
   yLabel = GiveMeLabelName(whatConstantOut);
   xlabel(xLabel)
   ylabel(yLabel)
+  if forceYLim
+    ylim([-1 4])
+  end
 end
