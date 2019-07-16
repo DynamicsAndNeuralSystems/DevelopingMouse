@@ -1,7 +1,8 @@
 function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,...
                       brainDiv,numData,numThresholds,...
                       makeNewFigure,thisDirection,...
-                      thisCellType,allGrey,linearRegress)
+                      thisCellType,allGrey,linearRegress,...
+                      showCorrCoeff,forceYLim,displayAdjR)
 % this function plots decay constants with error bars against max distance
 
 % dataType='voxel';
@@ -17,8 +18,10 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
   % dataProcessing: 'original' or 'binned numThresholds=xx'
   % brainDiv: 'forebrain', 'midbrain','hindbrain' or 'wholeBrain'
 
-  lineWidth=3;
+  lineWidth=2;
+  markerSize=8;
   timePoints=GiveMeParameter('timePoints');
+  constantTypes = GiveMeParameter('constantTypes');
   % obtain error of the decay constants (95% CI)
   err=zeros(length(timePoints),1);
   for i=1:length(timePoints)
@@ -26,7 +29,7 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
     switch whatConstantOut
     case 'decayConstant'
       err(i)=CI(2,3)-CI(1,3);
-      constantOut = 1./constantOut % take reciprocal of decay constant
+      constantOut = 1./constantOut; % take reciprocal of decay constant
     case 'freeParameter'
       err(i)=CI(2,2)-CI(1,2);
     case 'multiplier'
@@ -41,7 +44,7 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
               0.7 0.7 0.7;
               0.7 0.7 0.7;
               0.7 0.7 0.7;
-              0.7 0.7 0.7]
+              0.7 0.7 0.7];
   else
     cmapOut = BF_getcmap('dark2',7,0,0);
   end
@@ -144,42 +147,36 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
       end
       % plot
       if ~strcmp(thisDirection,'allDirections')
-        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
+        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',markerSize,...
                 'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',thisBackground)
-        % t1=text(maxDistance(i),...
-        %     decayConstant(i)+yPosition.(thisDirection)(i),num2str(decayConstant(i)),...
-        %     'Color',thisBackground,'HorizontalAlignment','center');
       elseif ~strcmp(thisCellType,'allCellTypes')
-        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
+        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',markerSize,...
                 'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',thisBackground)
         % t1=text(maxDistance(i),...
         %         decayConstant(i)+yPosition.(thisCellType)(i),num2str(decayConstant(i)),...
         %         'Color','k','HorizontalAlignment','center');
       else
-        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',10,...
+        errorbar(maxDistance(i),constantOut(i),err(i),'-o','MarkerSize',markerSize,...
                 'LineStyle',theStyle,'LineWidth',lineWidth,...
                 'Color',theColor)
         % t1=text(maxDistance(i),...
         %         decayConstant(i)+0.25*10^(-3),num2str(decayConstant(i)),...
         %         'Color','k','HorizontalAlignment','center');
       end
-      disp(sprintf('%s : %d', whatConstantOut,constantOut(i))) % display decay constant in command window
-      % t1.FontSize=12;
-      % if (strcmp(thisDirection,'allDirections') & strcmp(thisCellType,'allCellTypes'))
-      %   yPosition=linspace(1,0.4,length(timePoints));
-      %   t=text(0.5,0.5,char(timePoints{i}),'color','k','FontSize',12,'BackgroundColor',...
-      %           theColor);
-      %   t.Units='normalized';
-      %   t.Position=[1 yPosition(i)];
-      % else
-      %   yPosition=linspace(0.95,0.65,length(timePoints));
-      %   t=text(0.5,0.5,[timePoints{i} ' ' showThis],'color','k',...
-      %         'FontSize',12,'BackgroundColor',thisBackground);
-      %   t.Units='normalized';
-      %   t.Position=[thisXPosition yPosition(i)];
-      % end
+      % add to table and display
+      if strcmp(whatConstantOut,'decayConstant')
+        disp(sprintf('%s : %d', whatConstantOut,1./constantOut(i))) % display decay constant in command window
+      else
+
+        disp(sprintf('%s : %d', whatConstantOut,constantOut(i))) % display decay constant in command window
+
+      end
+      % display adjusted R square
+      if displayAdjR
+        disp(sprintf('Ajusted R square : %d', fitting_stat_all.(timePoints{i}).adjRSquare.exp))
+      end
       hold on
   end
   if linearRegress % plot linear regression line
@@ -187,12 +184,22 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
     yCalc1 = b1*maxDistance;
     plot(maxDistance,yCalc1);
     disp(sprintf('regression coefficient : %d', b1))
+  end
   % compute correlation coefficient
-  corrCoeff = corrcoef(maxDistance,constantOut);
+  corrCoeff = extractDistances(corrcoef(maxDistance,constantOut));
   disp(sprintf('correlation coefficient : %d', corrCoeff))
+  if showCorrCoeff
+    t = text(0.5,0.5,strcat('corrCoeff: ',num2str(corrCoeff)));
+    t.Units='normalized';
+    t.Position=[0.1 1];
+    t.FontWeight='bold';
+  end
   % label the axes
-  xLabel = GiveMeLabelName('maxDistance');
+  xLabel = GiveMeLabelName('brainSize');
   yLabel = GiveMeLabelName(whatConstantOut);
   xlabel(xLabel)
   ylabel(yLabel)
+  if forceYLim
+    ylim([-1 4])
+  end
 end
