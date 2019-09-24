@@ -66,38 +66,6 @@ end
 % Compute pairwise distances
 % ------------------------------------------------------------------------------
 switch distMetric
-case 'mi'
-    % Mutual information distances: can't make use of the inbuilt pdist function
-    if ~isempty(opts)
-        nbins = opts; % for MI, extra argument specifies nbins
-    else
-        nbins = 10;
-    end
-    if ~beSilent, fprintf(1,'Using a histogram with %u bins\n',nbins); end
-
-    goodies = ~isnan(dataMatrix); % now we can deal with NaNs into design matrix
-
-    mis = zeros(n1);
-    mitimer = tic; % Way faster to not store the time taken for every iteration
-    for i = 1:n1
-        % tic
-        goodi = goodies(i,:);
-        for j = i:n1
-            goodj = goodies(j,:);
-            goodboth = (goodi & goodj);
-            % Using Information Dynamics Toolkit:
-            mis(i,j) = IN_MutualInfo(dataMatrix(i,goodboth),dataMatrix(j,goodboth),'gaussian');
-            % mis(i,j) = BF_MutualInformation(dataMatrix(i,goodboth),dataMatrix(j,goodboth),'quantile','quantile',nbins); % by quantile with nbins
-            mis(j,i) = mis(i,j);
-        end
-        if (mod(i,floor(n1/50)) == 0)
-            fprintf(1,'Approximately %s remaining! We''re at %u / %u\n', ...
-                        BF_thetime(toc(mitimer)/i*(n1-i)),i,n1);
-        end
-    end
-    clear mitimer % stop timing
-    R = mis; clear mis; % not really an R but ok.
-
 
 case {'corr_fast','abscorr_fast'}
     % Try using fast approximation to correlation coefficients when data includes NaNs

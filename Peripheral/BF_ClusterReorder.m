@@ -56,8 +56,14 @@ end
 %% Do linkage:
 % ------------------------------------------------------------------------------
 if ischar(distanceMetric)
-    % Specify a distance metric as an input to BF_pdist
-    R = BF_pdist(dataMatrix,distanceMetric);
+    switch distanceMetric
+    case 'euclidean'
+        % Custom-NaN euclidean distances:
+        fprintf(1,'Computing custom-NaN euclidean distances\n');
+        R = pdist(dataMatrix,@BF_customDist);
+    otherwise
+        R = BF_pdist(dataMatrix,distanceMetric);
+    end
 else
     % Put the pre-computed distance matrix in the second input: distanceMetric
     R = distanceMetric;
