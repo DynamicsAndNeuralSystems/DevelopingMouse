@@ -15,18 +15,22 @@ case 'cgeMat'
     s = load(str,'cgeMat');
 end
 
+% Normalize:
+dataMatrix = s.(whatMat);
+dataMatrix = BF_NormalizeMatrix(dataMatrix,'mixedSigmoid');
+
 % Reorder for visualization:
-[ord_row,~,~] = BF_ClusterReorder(s.(whatMat),'euclidean','average');
-[ord_col,~,~] = BF_ClusterReorder((s.(whatMat))','euclidean','average');
+[ord_row,~,~] = BF_ClusterReorder(dataMatrix,'euclidean','average');
+[ord_col,~,~] = BF_ClusterReorder(dataMatrix','euclidean','average');
 
 % Plot as image:
 if makeNewFigure
     f = figure('color','w')
 end
-cmapOut = BF_getcmap('redblue',11,0,1);
-[h,hcb] = imagescwithnan(s.(whatMat)(ord_row,ord_col), cmapOut, [0 0 0], false)
-
-colorbar()
+% cMap = BF_getcmap('redblue',11,0,1);
+cMap = BF_getcmap('redyellowblue',11,0);
+[h,hcb] = imagescwithnan(dataMatrix(ord_row,ord_col), flipud(cMap), [0 0 0], false)
+colorbar();
 
 % Give appropriate axes labels:
 switch whatMat
