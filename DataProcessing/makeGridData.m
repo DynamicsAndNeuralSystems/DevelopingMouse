@@ -66,7 +66,7 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoint
     voxGeneMat=BF_NormalizeMatrix(voxGeneMat,whatNorm); % 'scaledSigmoid' used in Monash analysis
 
     % get all coordinates
-    coOrds = getCoOrds(thisBrainDiv,timePointNow)
+    coOrds = getCoOrds(thisBrainDiv,timePointNow);
 
     % only keep good voxels
     coOrds=coOrds(isGoodVoxel,:);
