@@ -30,7 +30,7 @@ maxDistance = zeros(length(timePoints),1);
 for i=1:length(timePoints)
   filename=sprintf('voxelGeneCoexpression_%s.mat',timePoints{i});
   load(filename,'voxGeneMat','coOrds');
-  maxDistance(i) = (max(coOrds(:,1))-min(coOrds(:,1)))*resolutionGrid.(timePoints{i});
+  maxDistance(i) = getMaxDistance(timePoints{i});
 end
 
 if scaledDistance
