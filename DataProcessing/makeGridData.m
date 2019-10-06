@@ -30,21 +30,8 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoint
     % filters off spinal cord voxels
     isSpinalCord=ismember(annotationGrids{timePointIndex},spinalCord_ID);
     isAnno=annotationGrids{timePointIndex}>0;
+    isIncluded = getIsIncluded(thisBrainDiv,timePointNow);
 
-    if strcmp(thisBrainDiv,'wholeBrain')
-        isIncluded=or(or(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
-                          ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
-                          ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID));
-    elseif strcmp(thisBrainDiv,'forebrain')
-      isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID);
-    elseif strcmp(thisBrainDiv,'midbrain')
-      isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID);
-    elseif strcmp(thisBrainDiv,'hindbrain')
-      isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID);
-    else
-      error('Invalid brain division input')
-    end
-    % end
     % make voxel x gene matrix
     voxGeneMat=zeros(nnz(isAnno & ~isSpinalCord & isIncluded),length(energyGrids));
 
@@ -79,8 +66,8 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoint
     voxGeneMat=BF_NormalizeMatrix(voxGeneMat,whatNorm); % 'scaledSigmoid' used in Monash analysis
 
     % get all coordinates
-    [a,b,c]=ind2sub(sizeGrids.(timePoints{timePointIndex}),find(isAnno & ~isSpinalCord & isIncluded));
-    coOrds=horzcat(a,b,c);
+    coOrds = getCoOrds(thisBrainDiv,timePointNow)
+
     % only keep good voxels
     coOrds=coOrds(isGoodVoxel,:);
 end
