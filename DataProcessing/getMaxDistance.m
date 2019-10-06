@@ -1,3 +1,4 @@
 function [maxDistance] = getMaxDistance(timePointNow)
   x = GiveMeParameter('sizeGrids');
-  maxDistance = x.(timePointNow)(1);
+  y = GiveMeParameter('resolutionGrid');
+  maxDistance = x.(timePointNow)(1)*y.(timePointNow);
