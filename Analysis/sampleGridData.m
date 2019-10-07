@@ -11,7 +11,7 @@ function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal,vecMat]=s
   corrCoeff = extractDistances(geneCorr);
   % extract distances from distance matrix
   if scaledDistance
-    distances = extractDistances(distMat)/getMaxDistance(thisBrainDiv,timePointNow);
+    distances = extractDistances(distMat)/getMaxDistance('wholeBrain',timePointNow);
   else
     distances = extractDistances(distMat);
   end
