@@ -30,7 +30,7 @@ maxDistance = zeros(length(timePoints),1);
 for i=1:length(timePoints)
   filename=sprintf('voxelGeneCoexpression_%s.mat',timePoints{i});
   load(filename,'voxGeneMat','coOrds');
-  maxDistance(i) = getMaxDistance(timePoints{i});
+  maxDistance(i) = getMaxDistance('wholeBrain',timePoints{i});
 end
 
 if scaledDistance
