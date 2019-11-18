@@ -18,26 +18,28 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
   % dataProcessing: 'original' or 'binned numThresholds=xx'
   % brainDiv: 'forebrain', 'midbrain','hindbrain' or 'wholeBrain'
 
-  lineWidth=2;
-  markerSize=8;
-  timePoints=GiveMeParameter('timePoints');
-  constantTypes = GiveMeParameter('constantTypes');
-  % obtain error of the decay constants (95% CI)
-  err=zeros(length(timePoints),1);
-  for i=1:length(timePoints)
+lineWidth=2;
+markerSize=8;
+timePoints=GiveMeParameter('timePoints');
+constantTypes = GiveMeParameter('constantTypes');
+% obtain error of the decay constants (95% CI)
+err=zeros(length(timePoints),1);
+for i=1:length(timePoints)
     CI=confint(fitting_stat_all.(timePoints{i}).fitObject.exp);
     switch whatConstantOut
     case 'decayConstant'
-      err(i)=CI(2,3)-CI(1,3);
-      constantOut = 1./constantOut; % take reciprocal of decay constant
+        err(i)=CI(2,3)-CI(1,3);
+        constantOut = 1./constantOut; % take reciprocal of decay constant
     case 'freeParameter'
-      err(i)=CI(2,2)-CI(1,2);
+        err(i)=CI(2,2)-CI(1,2);
     case 'multiplier'
-      err(i)=CI(2,1)-CI(1,1);
+        err(i)=CI(2,1)-CI(1,1);
     end
-  end
-  % get the colours needed for plotting
-  if allGrey
+end
+
+%-------------------------------------------------------------------------------
+% Get colours needed for plotting
+if allGrey
     cmapOut = [0.7 0.7 0.7;
               0.7 0.7 0.7;
               0.7 0.7 0.7;
@@ -45,42 +47,43 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
               0.7 0.7 0.7;
               0.7 0.7 0.7;
               0.7 0.7 0.7];
-  else
+else
     cmapOut = BF_getcmap('dark2',7,0,0);
-  end
-  % Specify plotting style for later use
-  theStyle = '-';
-  %% Plot decay constant of exponential fit (3 parameter)
-  if makeNewFigure
+end
+% Specify plotting style for later use
+theStyle = '-';
+
+%% Plot decay constant of exponential fit (3 parameter)
+if makeNewFigure
     f=figure('color','w');
-  end
-  for i=1:length(timePoints)
-      % set the color
-      theColor=cmapOut(i,:);
-      % set y position
-      if ~strcmp(thisDirection,'allDirections')
+end
+for i=1:length(timePoints)
+    % set the color
+    theColor=cmapOut(i,:);
+    % set y position
+    if ~strcmp(thisDirection,'allDirections')
         yPosition=struct();
         yPosition.sagittal=zeros(length(timePoints),1);
         yPosition.coronal=zeros(length(timePoints),1);
         yPosition.axial=zeros(length(timePoints),1);
         if i==1
-          yPosition.sagittal(i)=-1.25*10^(-3);
-          yPosition.coronal(i)=-1.5*10^(-3);
-          yPosition.axial(i)=-1.75*10^(-3);
+            yPosition.sagittal(i)=-1.25*10^(-3);
+            yPosition.coronal(i)=-1.5*10^(-3);
+            yPosition.axial(i)=-1.75*10^(-3);
         elseif i==6
-          yPosition.sagittal(i)=0.75*10^(-3);
-          yPosition.coronal(i)=1*10^(-3);
-          yPosition.axial(i)=1.25*10^(-3);
+            yPosition.sagittal(i)=0.75*10^(-3);
+            yPosition.coronal(i)=1*10^(-3);
+            yPosition.axial(i)=1.25*10^(-3);
         elseif i==7
-          yPosition.sagittal(i)=0.6*10^(-3);
-          yPosition.coronal(i)=0.9*10^(-3);
-          yPosition.axial(i)=1.15*10^(-3);
+            yPosition.sagittal(i)=0.6*10^(-3);
+            yPosition.coronal(i)=0.9*10^(-3);
+            yPosition.axial(i)=1.15*10^(-3);
         else
-          yPosition.sagittal(i)=0.75*10^(-3);
-          yPosition.coronal(i)=1*10^(-3);
-          yPosition.axial(i)=1.25*10^(-3);
+            yPosition.sagittal(i)=0.75*10^(-3);
+            yPosition.coronal(i)=1*10^(-3);
+            yPosition.axial(i)=1.25*10^(-3);
         end
-      elseif ~strcmp(thisCellType,'allCellTypes')
+    elseif ~strcmp(thisCellType,'allCellTypes')
         yPosition=struct();
         yPosition.neuron=zeros(length(timePoints),1);
         yPosition.oligodendrocyte=zeros(length(timePoints),1);
@@ -177,23 +180,23 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
       if displayAdjR
         disp(sprintf('Ajusted R square : %d', fitting_stat_all.(timePoints{i}).adjRSquare.exp))
       end
-      hold on
+      hold('on')
   end
-  if linearRegress % plot linear regression line
-    b1 = maxDistance\constantOut;
-    yCalc1 = b1*maxDistance;
-    plot(maxDistance,yCalc1);
-    disp(sprintf('regression coefficient : %d', b1))
-  end
-  % compute correlation coefficient
-  corrCoeff = extractDistances(corrcoef(maxDistance,constantOut));
-  disp(sprintf('correlation coefficient : %d', corrCoeff))
-  if showCorrCoeff
-    t = text(0.5,0.5,strcat('corrCoeff: ',num2str(corrCoeff)));
-    t.Units='normalized';
-    t.Position=[0.1 1];
-    t.FontWeight='bold';
-  end
+    if linearRegress % plot linear regression line
+        b1 = maxDistance\constantOut;
+        yCalc1 = b1*maxDistance;
+        plot(maxDistance,yCalc1);
+        disp(sprintf('regression coefficient : %d', b1))
+    end
+    % compute correlation coefficient
+    corrCoeff = extractDistances(corrcoef(maxDistance,constantOut));
+    disp(sprintf('correlation coefficient : %d', corrCoeff))
+    if showCorrCoeff
+        t = text(0.5,0.5,strcat('corrCoeff: ',num2str(corrCoeff)));
+        t.Units='normalized';
+        t.Position=[0.1 1];
+        t.FontWeight='bold';
+    end
   % label the axes
   xLabel = GiveMeLabelName('brainSize');
   yLabel = GiveMeLabelName(whatConstantOut);
