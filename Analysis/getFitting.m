@@ -1,11 +1,10 @@
-function [fitting_stat_all, constantOut, maxDistance]=getFitting(xData,yData,whatConstantOut)
+function [fitting_stat_all, constantOut]=getFitting(xData,yData,whatConstantOut)
   % xData and yData are cells each containing distances and correlation coefficient of all time points
   % dataProcessing: 'original' or 'binned numThresholds=xx'
   timePoints=GiveMeParameter('timePoints');
   % initialize
   fitting_stat_all = struct();
   constantOut=zeros(length(timePoints),1);
-  maxDistance = zeros(length(timePoints),1);
   for i = 1:length(timePoints)
       [fitting_stat_all.(timePoints{i}).adjRSquare, ...
       fitting_stat_all.(timePoints{i}).fitObject,...
@@ -22,7 +21,5 @@ function [fitting_stat_all, constantOut, maxDistance]=getFitting(xData,yData,wha
       case 'strength'
         constantOut(i)=fitting_stat_all.(timePoints{i}).fitObject.exp.A;
       end
-      % collect max distance
-      maxDistance(i)=max(xData{i});
   end
 end
