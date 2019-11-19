@@ -27,13 +27,13 @@ err=zeros(length(timePoints),1);
 for i=1:length(timePoints)
     CI=confint(fitting_stat_all.(timePoints{i}).fitObject.exp);
     switch whatConstantOut
-    case 'decayConstant'
+    case constantTypes{1} % decayConstant
         err(i)=CI(2,3)-CI(1,3);
         constantOut = 1./constantOut; % take reciprocal of decay constant
-    case 'freeParameter'
-        err(i)=CI(2,2)-CI(1,2);
-    case 'multiplier'
+    case constantTypes{2} % strength
         err(i)=CI(2,1)-CI(1,1);
+    case constantTypes{3} % offset
+        err(i)=CI(2,2)-CI(1,2);
     end
 end
 
@@ -176,6 +176,7 @@ for i=1:length(timePoints)
         disp(sprintf('%s : %d', whatConstantOut,constantOut(i))) % display decay constant in command window
 
       end
+      
       % display adjusted R square
       if displayAdjR
         disp(sprintf('Ajusted R square : %d', fitting_stat_all.(timePoints{i}).adjRSquare.exp))
