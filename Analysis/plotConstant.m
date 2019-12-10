@@ -176,7 +176,7 @@ for i=1:length(timePoints)
         disp(sprintf('%s : %d', whatConstantOut,constantOut(i))) % display decay constant in command window
 
       end
-      
+
       % display adjusted R square
       if displayAdjR
         disp(sprintf('Ajusted R square : %d', fitting_stat_all.(timePoints{i}).adjRSquare.exp))
@@ -184,10 +184,8 @@ for i=1:length(timePoints)
       hold('on')
   end
     if linearRegress % plot linear regression line
-        b1 = maxDistance\constantOut;
-        yCalc1 = b1*maxDistance;
-        plot(maxDistance,yCalc1);
-        disp(sprintf('regression coefficient : %d', b1))
+        [f_handle,Stats,c] = GiveMeFit(maxDistance,constantOut,'linear',true);
+        plot(maxDistance,f_handle(maxDistance))
     end
     % compute correlation coefficient
     corrCoeff = extractDistances(corrcoef(maxDistance,constantOut));
