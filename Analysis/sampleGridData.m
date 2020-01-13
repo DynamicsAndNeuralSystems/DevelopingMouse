@@ -7,7 +7,7 @@ timePointIndex = find(strcmp(timePointNow,timePoints));
 distMat = squareform(pdist(coOrds(dataIndSelect,:),...
                     'euclidean')*resolutionGrid.(timePoints{timePointIndex}));
 
-% Extract the correlation coefficients
+% Extract the correlation coefficients (correlated gene expression, CGE)
 geneCorr = corrcoef(voxGeneMat(dataIndSelect,:)','rows','pairwise');
 corrCoeff = extractDistances(geneCorr);
 
