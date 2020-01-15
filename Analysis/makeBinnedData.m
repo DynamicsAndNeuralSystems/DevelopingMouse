@@ -1,29 +1,11 @@
-function [xPlotDataAll,yPlotDataAll,numThresholds] = makeBinnedData(numData,...
-                                                                    numThresholds,...
-                                                                    thisBrainDiv,...
-                                                                    scaledDistance,...
-                                                                    thisCellType,...
-                                                                    thisDirection)
-% Bins the coexpression-distance data into numThresholds-1 bins
-if scaledDistance
-    distanceStr = GiveMeFileName('scaled');
-else
-    distanceStr = GiveMeFileName('notScaled');
-end
-cellTypeStr = GiveMeFileName(thisCellType);
-brainStr = GiveMeFileName(thisBrainDiv);
-% load the spatial data
-if strcmp(thisDirection,'allDirections')
-  fileString = sprintf('spatialData_NumData_%d%s%s%s.mat',numData,brainStr,cellTypeStr,...
-                        distanceStr);
-else
-  fileString = sprintf('directionalityData_%s%s.mat',thisDirection,distanceStr);
-end
-load(fileString,'distances_all','corrCoeff_all');
+function [xPlotDataAll,yPlotDataAll] = makeBinnedData(params)
+% Bins the CGE-distance data into numThresholds-1 bins
+%-------------------------------------------------------------------------------
 
-timePoints = GiveMeParameter('timePoints');
+% Load the spatial data from file:
+[distances_all,corrCoeff_all] = LoadMyDistanceCGE(params);
 
 % Bin the data
-[xPlotDataAll,yPlotDataAll,~] = plotBinning(distances_all,corrCoeff_all,...
-                                                numThresholds);
+[xPlotDataAll,yPlotDataAll,~] = plotBinning(distances_all,corrCoeff_all,params.numThresholds);
+
 end

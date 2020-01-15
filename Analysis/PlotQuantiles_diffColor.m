@@ -1,33 +1,24 @@
-function PlotQuantiles_diffColor(xData,yData,numData,numThresholds,alsoScatter,...
-                                          colorScheme,makeNewFigure,timePointNow,...
-                                          thisBrainDiv,thisDirection)
+function PlotQuantiles_diffColor(xData,yData,numThresholds,alsoScatter,...
+                                          theColor,makeNewFigure)
 % Plots x-y scatter, but with mean of y plotted in quantiles of x
-% Ben Fulcher
 %-------------------------------------------------------------------------------
-
-if nargin < 5
-    theColor='k';
-end
-if nargin < 6 || isempty(numThresholds)
+if nargin < 3 || isempty(numThresholds)
     numThresholds = 10;
 end
-if nargin < 7
-    alsoScatter = 0;
+if nargin < 4
+    alsoScatter = false;
 end
-if nargin < 8
-    makeNewFigure = 0;
+if nargin < 5
+    makeNewFigure = false;
 end
-if nargin < 9
-    thisBrainDiv='wholeBrain';
-end
-if nargin < 10
-    thisDirection='allDirections';
-end
+
+%-------------------------------------------------------------------------------
+% Binning:
+[xPlotDataAll,yPlotDataAll,numThresholds] = makeBinnedData(params);
 
 %-------------------------------------------------------------------------------
 % Parameter for looping
-timePoints=GiveMeParameter('timePoints');
-timePointIndex=find(strcmp(timePointNow,timePoints));
+
 xThresholds = arrayfun(@(x)quantile(xData,x),linspace(0,1,numThresholds));
 xThresholds(end) = xThresholds(end) + eps; % make sure all data included in final bin
 yMeans = arrayfun(@(x)mean(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),...
@@ -40,8 +31,8 @@ yStds = arrayfun(@(x)std(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))
 if makeNewFigure
     f = figure('color','w'); box('on');
 end
-hold on
-%theColor = 'k';
+
+hold('on')
 theStyle = '-';
 theLineWidth = 1;
 theColor = colorScheme(timePointIndex,:);
