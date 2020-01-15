@@ -1,47 +1,46 @@
 function makeBinningPlot_withExponential(params,timePointNow,makeNewFigure)
+% Plot binned data with exponential fit
+%-------------------------------------------------------------------------------
 
-% Plot bins with exponential curve fitted on top
-timePoints = GiveMeParameter('timePoints');
-timePointIndex = find(strcmp(timePointNow,timePoints));
-
-[xPlotDataAll,yPlotDataAll,numThresholds] = makeBinnedData(params);
-% fitting_stat_all = getFitting(xPlotDataAll,yPlotDataAll,'decayConstant');
+% Retrieve the time point index:
+timePointIndex = find(strcmp(timePointNow,params.timePoints));
 
 %-------------------------------------------------------------------------------
-% Load distances and CGE scores:
-[distances_all,corrCoeff_all] = LoadMyDistanceCGE(params);
+% Load the distance, CGE data:
+[dist,CGE] = LoadMyDistanceCGE(params);
+% Only take for the time point of interest:
+dist = dist{timePointIndex};
+CGE = CGE{timePointIndex};
 
 %-------------------------------------------------------------------------------
+% Bin the data:
+[xBinCenters,xThresholds,yMeans,yMedians,yStds] = makeQuantiles(dist,CGE,params.numThresholds);
+
+%-------------------------------------------------------------------------------
+% Fit the binned data (on means):
+[f_handle,stats,c] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
+% Give some info out to commandline:
+fprintf('Adj R square = %d\n',stats.adjrsquare)
+coeff = coeffvalues(c);
+fprintf('y = %d*exp(-%d*x) + %d\n',coeff(1),coeff(3),coeff(2))
+
+%-------------------------------------------------------------------------------
+% Plot the binned data:
+theColor = params.colors(timePointIndex,:);
+PlotQuantiles(xThresholds,yMeans,yStds,theColor);
+
+%-------------------------------------------------------------------------------
+% Add an exponential fit:
+xRange = linspace(min(dist),max(dist),100);
+plot(xRange,f_handle(xRange),'-','Color',theColor,'MarkerEdgeColor',theColor,'LineWidth',2);
+
+%-------------------------------------------------------------------------------
+% Label axes:
 if params.scaledDistance
-    xLabeling = GiveMeLabelName('scaledDistance');
+    xlabel(GiveMeLabelName('scaledDistance'));
 else
-    xLabeling = GiveMeLabelName('originalDistance');
+    xlabel(GiveMeLabelName('originalDistance'));
 end
 yLabeling = GiveMeLabelName('CGE');
-colorMap = BF_getcmap('dark2',7,0,0);
-for i = 1:length(timePoints)
-    if makeNewFigure
-        f = figure('color','w');
-        box('on');
-        hold('on')
-    end
-
-    % Binned data:
-    PlotQuantiles_diffColor(distances_all{timePointIndex},corrCoeff_all{timePointIndex},...
-                            numData,numThresholds,false,colorMap,false,...
-                            timePointNow, thisBrainDiv, thisDirection);
-
-    % Add an exponential fit:
-    plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all,...
-                                xLabeling, yLabeling, 1, ...
-                                thisDirection, timePointNow,false, ...
-                                thisBrainDiv,thisCellType);
-end
-
-%-------------------------------------------------------------------------------
-% Give some info to commandline:
-fprintf('Adj R square = %d\n',fitting_stat_all.(timePointNow).adjRSquare.exp)
-coeff = coeffvalues(fitting_stat_all.(timePointNow).fitObject.exp);
-fprintf('y = %d*exp(-%d*x) + %d\n',coeff(1),coeff(3),coeff(2))
 
 end

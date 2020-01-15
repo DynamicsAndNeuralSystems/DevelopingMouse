@@ -12,10 +12,10 @@ else
     distanceStr = GiveMeFileName('notScaled');
 end
 if strcmp(params.thisDirection,'allDirections')
-    fileString = sprintf('spatialData_NumData_%d%s%s%s.mat',numData,brainStr,cellTypeStr,...
+    fileString = sprintf('spatialData_NumData_%d%s%s%s.mat',params.numData,brainStr,cellTypeStr,...
                     distanceStr);
 else
-    fileString = sprintf('directionalityData_%s%s.mat',thisDirection,distanceStr);
+    fileString = sprintf('directionalityData_%s%s.mat',params.thisDirection,distanceStr);
 end
 
 %-------------------------------------------------------------------------------

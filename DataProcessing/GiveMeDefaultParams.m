@@ -7,9 +7,12 @@ params.thisCellType = 'allCellTypes';
 params.scaledDistance = false;
 params.thisDirection = 'allDirections';
 params.distancesMM = true;
+params.numData = 1000;
 
 % Fitting:
 params.numThresholds = 21;
+params.whatFit = 'exp';
+params.colors = BF_getcmap('dark2',7,0);
 
 % Info:
 params.timePoints = GiveMeParameter('timePoints');
