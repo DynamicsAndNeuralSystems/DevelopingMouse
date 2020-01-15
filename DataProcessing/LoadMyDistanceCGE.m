@@ -24,7 +24,7 @@ load(fileString,'distances_all','corrCoeff_all');
 
 %-------------------------------------------------------------------------------
 % Normalize distances from um to mm:
-if params.distancesMM
+if params.distancesMM & ~params.scaledDistance
     distances_all = cellfun(@(x)x/1000,distances_all,'UniformOutput',false);
 end
 

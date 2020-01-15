@@ -1,38 +1,33 @@
-function makeExponentialPlot(params,makeNewFigure)
+function makeExponentialPlot(params)
 % Plots all exponential curves from different time points on the same graph
-
-% Do basic fitting:
-[xPlotDataAll,yPlotDataAll] = makeBinnedData(params);
-fitting_stat_all = getFitting(xPlotDataAll,yPlotDataAll,'decayConstant');
-
 %-------------------------------------------------------------------------------
-% Load distance, CGE data:
-[distances_all,corrCoeff_all] = LoadMyDistanceCGE(params);
 
-%-------------------------------------------------------------------------------
-% Plotting:
-if makeNewFigure
-    f = figure('color','w');
-end
-hold('on');
-if scaledDistance
-    xLabeling = GiveMeLabelName('scaledDistance');
-else
-    xLabeling = GiveMeLabelName('originalDistance');
-end
+% Load the distance, CGE data:
+[dist,CGE] = LoadMyDistanceCGE(params);
 
 %-------------------------------------------------------------------------------
 numTimePoints = length(params.timePoints);
+hold('on');
 for i = 1:numTimePoints
-    % The function handle for the fit of interest:
-    fit_funHandle = fitting_stat_all.(params.timePoints{i}).fHandle.(params.fitType);
+    % Bin the data:
+    [xBinCenters,xThresholds,yMeans,yStds] = makeQuantiles(dist{i},CGE{i},params.numThresholds);
+
+    % Fit the binned data (on means):
+    [fitHandle,stats,c] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
 
     % Plot it:
-    plotFitting_singleTimePoint(xPlotDataAll{i},params,fit_funHandle,xDataDensity,params.colors(i,:),false)
-
-    % Label axes:
-    xlabel(xLabeling)
-    ylabel(GiveMeLabelName('CGE'))
+    xRange = linspace(min(dist{i}),max(dist{i}),100);
+    plot(xRange,fitHandle(xRange),'-','Color',params.colors(i,:),'MarkerEdgeColor',params.colors(i,:),'LineWidth',2);
 end
+
+%-------------------------------------------------------------------------------
+% Label axis:
+if params.scaledDistance
+    xlabel(GiveMeLabelName('scaledDistance'));
+else
+    xlabel(GiveMeLabelName('originalDistance'));
+end
+ylabel('Correlated gene expression')
+
 
 end

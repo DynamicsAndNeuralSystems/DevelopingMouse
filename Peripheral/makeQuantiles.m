@@ -1,4 +1,4 @@
-function [xBinCenters,xThresholds,yMeans,yMedians,yStds] = makeQuantiles(xData,yData,numThresholds)
+function [xBinCenters,xThresholds,yMeans,yStds] = makeQuantiles(xData,yData,numThresholds)
 %-------------------------------------------------------------------------------
 
 if nargin < 2

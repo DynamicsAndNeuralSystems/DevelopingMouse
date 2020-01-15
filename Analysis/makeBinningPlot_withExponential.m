@@ -1,4 +1,4 @@
-function makeBinningPlot_withExponential(params,timePointNow,makeNewFigure)
+function fitHandle = makeBinningPlot_withExponential(params,timePointNow,makeNewFigure)
 % Plot binned data with exponential fit
 %-------------------------------------------------------------------------------
 
@@ -14,11 +14,11 @@ CGE = CGE{timePointIndex};
 
 %-------------------------------------------------------------------------------
 % Bin the data:
-[xBinCenters,xThresholds,yMeans,yMedians,yStds] = makeQuantiles(dist,CGE,params.numThresholds);
+[xBinCenters,xThresholds,yMeans,yStds] = makeQuantiles(dist,CGE,params.numThresholds);
 
 %-------------------------------------------------------------------------------
 % Fit the binned data (on means):
-[f_handle,stats,c] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
+[fitHandle,stats,c] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
 % Give some info out to commandline:
 fprintf('Adj R square = %d\n',stats.adjrsquare)
 coeff = coeffvalues(c);
@@ -32,7 +32,7 @@ PlotQuantiles(xThresholds,yMeans,yStds,theColor);
 %-------------------------------------------------------------------------------
 % Add an exponential fit:
 xRange = linspace(min(dist),max(dist),100);
-plot(xRange,f_handle(xRange),'-','Color',theColor,'MarkerEdgeColor',theColor,'LineWidth',2);
+plot(xRange,fitHandle(xRange),'-','Color',theColor,'MarkerEdgeColor',theColor,'LineWidth',2);
 
 %-------------------------------------------------------------------------------
 % Label axes:
