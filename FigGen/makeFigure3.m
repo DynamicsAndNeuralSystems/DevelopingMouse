@@ -1,25 +1,15 @@
-function makeFigure3(numData,numThresholds)
-if nargin < 1
-    numData = GiveMeParameter('numData');
-end
-if nargin < 2
-    numThresholds = GiveMeParameter('numThresholds');
-end
+function makeFigure3()
 
 %-------------------------------------------------------------------------------
-% Set/retrieve defaults:
-thisBrainDiv='wholeBrain';
-thisCellType='allCellTypes';
-thisDirection='allDirections';
-timePoints = GiveMeParameter('timePoints');
-constantTypes = GiveMeParameter('constantTypes');
+% Set/retrieve default parameters:
+params = GiveMeDefaultParams();
 
 %-------------------------------------------------------------------------------
 % Plot:
 f = figure('color','w');
 hold('on')
 
-for j=1:length(constantTypes)
+for j = 1:length(params.constantTypes)
     subplot(1,3,j)
     makeConstantPlot(numData,numThresholds,thisBrainDiv,...
                   false,thisCellType,thisDirection,false,...

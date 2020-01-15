@@ -1,33 +1,17 @@
-function makeConstantPlot(numData,numThresholds,thisBrainDiv,...
-                          scaledDistance,thisCellType,thisDirection,...
-                          makeNewFigure,whatConstantOut,allGrey,...
+function makeConstantPlot(params,makeNewFigure,whatConstantOut,allGrey,...
                           linearRegress,showCorrCoeff,forceYLim,displayAdjR)
-% Plot decay constant against max distance
-% numData=1000;
-% numThresholds=20;
-% thisBrainDiv='wholeBrain';
-% scaledDistance=false;
-% thisCellType='allCellTypes';
-% thisDirection='allDirections';
-% makeNewFigure = true;
-% whatConstantOut = 'decayConstant';
-% allGrey = false;
-% linearRegress = true;
-% showCorrCoeff = false;
-% forceYLim = false;
 
-timePoints = GiveMeParameter('timePoints');
-resolutionGrid = GiveMeParameter('resolutionGrid');
-constantTypes = GiveMeParameter('constantTypes');
-maxDistance = zeros(length(timePoints),1);
+
 [xPlotDataAll,yPlotDataAll,numThresholds] = makeBinnedData(numData,...
                                                             numThresholds,...
                                                             thisBrainDiv,...
                                                             scaledDistance,...
                                                             thisCellType,...
                                                             thisDirection);
-% get max distance
-for i=1:length(timePoints)
+% Get max distances
+numTimePoints = length(params.timePoints);
+maxDistance = zeros(length(timePoints),1);
+for i = 1:numTimePoints
     maxDistance(i) = getMaxDistance('wholeBrain',timePoints{i});
 end
 

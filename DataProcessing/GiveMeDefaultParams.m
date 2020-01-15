@@ -8,6 +8,7 @@ params.scaledDistance = false;
 params.thisDirection = 'allDirections';
 params.distancesMM = true;
 params.numData = 1000;
+params.constantTypes = GiveMeParameter('constantTypes');
 
 % Fitting:
 params.numThresholds = 21;
