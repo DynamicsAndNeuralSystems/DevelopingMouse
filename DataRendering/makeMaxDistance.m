@@ -1,10 +1,14 @@
-function maxDistances = makeMaxDistance()
-timePoints = GiveMeParameter('timePoints');
-thisBrainDiv = 'wholeBrain';
+function maxDistances = makeMaxDistance(params)
+% Get maximum distances across the seven time points
+if nargin < 1
+    params = GiveMeDefaultParams();
+end
+numTimePoints = length(params.timePoints);
+%-------------------------------------------------------------------------------
 
-maxDistances = zeros(length(timePoints),1);
-for i=1:length(timePoints)
-    maxDistances(i) = getMaxDistance(thisBrainDiv,timePoints{i});
+maxDistances = zeros(numTimePoints,1);
+for i = 1:numTimePoints
+    maxDistances(i) = getMaxDistance(params.thisBrainDiv,params.timePoints{i});
 end
 
 end

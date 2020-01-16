@@ -41,6 +41,6 @@ if params.scaledDistance
 else
     xlabel(GiveMeLabelName('originalDistance'));
 end
-yLabeling = GiveMeLabelName('CGE');
+ylabel(GiveMeLabelName('CGE'));
 
 end

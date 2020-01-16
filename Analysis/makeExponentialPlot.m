@@ -16,7 +16,7 @@ for i = 1:numTimePoints
     [fitHandle,stats,c] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
 
     % Plot it:
-    xRange = linspace(min(dist{i}),max(dist{i}),100);
+    xRange = linspace(0,max(dist{i}),100);
     plot(xRange,fitHandle(xRange),'-','Color',params.colors(i,:),'MarkerEdgeColor',params.colors(i,:),'LineWidth',2);
 end
 
