@@ -8,7 +8,7 @@
 * Run `structures.py` to download structure information
 * Run `getBrainDivision.py` to download major brain division info (forebrain, midbrain and hindbrain) and ID of their descendants; data saved in `structure_F.csv`, `structure_M.csv`,`structure_H.csv`,`structure_F_descendant_ID.csv`,`structure_M_descendant_ID.csv`,`structure_H_descendant_ID.csv`
 ### download preprocessed data
-* Fill the `Matlab_variables` directory with data from this figshare repository (insert link later)
+* Fill the `Matlab_variables` directory with data from [this](https://drive.google.com/file/d/1Bw0frIZqJuTZCW797K-CUV1bVU1KG8eL/view?usp=sharing) Google Drive
 * The Data processing step below can be skipped, or you can run `createData()` to create data starting from energyGrids .mat variables
 
 ## Data processing
