@@ -36,6 +36,7 @@ maxDistances = makeMaxDistance(params);
 % Plotting
 %-------------------------------------------------------------------------------
 doLogLambda = true;
+keyboard
 if doLogLambda
     customParamOrder = {'n','nLog','A','B'};
 else
@@ -77,6 +78,8 @@ for i = 1:numParams
         Gradient = c.p1; Intercept = c.p2;
         f_handle = @(x) Gradient*x + Intercept;
     end
+    [r,pVal] = corr(maxDistances,paramEstMean);
+    fprintf(1,'%s: r = %g, p = %g\n',customParamOrder{p},r,pVal);
     xRange = linspace(0,maxDistances(end));
     plot(xRange,f_handle(xRange),':k')
     ylabel(paramNames{ind})

@@ -34,7 +34,8 @@ ylabel('Spatial correlation length, \lambda');
 xRange = logspace(min(log10(maxDistances)),max(log10(maxDistances)),50);
 plot(xRange,10.^c.p2*xRange.^c.p1,'--k');
 % Gradient = c.p1; Intercept = c.p2;
-str = sprintf('alpha approx %f',c.p1);
+str = sprintf('lambda = %g d^{%f}',10^c.p2,c.p1);
+fprintf(1,'%s\n',str);
 text(mean(maxDistances),mean(corrLengths),str);
 
 %
