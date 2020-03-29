@@ -1,23 +1,50 @@
-clear
-timePoints={'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
-load('fitting_NumData_1000.mat','maxDistance','decayConstant')
+function decayConstant_voxel(params)
 
-f=figure('color','w');
-plot(log(maxDistance),log(decayConstant),'ok','DisplayName','data1');
-axis square
-xlabel('log (length scale)');
-ylabel('log (decay constant)');
-hold on
-[f_handle,stats,c]=GiveMeFit(log(maxDistance),log(decayConstant),'linear');
-Gradient = c.p1; Intercept = c.p2;
-plot(linspace(8.4,9.6,5),f_handle(linspace(8.4,9.6,5)),'DisplayName','linear');
-str=sprintf('y=%fx+%f',Gradient,Intercept);
-text(8.8,-6,str);
-legend('show')
-str=sprintf('Developing Mouse decay constant against max distance, %s', 'wholeBrain');
-title(str,'Fontsize',16)
+if nargin < 1
+    params = GiveMeDefaultParams();
+end
 
-% save figure
-filename=strcat('decayConstant_log','.jpeg');
-str=fullfile('Outs','decay_constant_log',filename);
-saveas(f,str)
+%-------------------------------------------------------------------------------
+% Load in what we need:
+maxDistances = makeMaxDistance(params);
+load('parameterFits.mat','paramMeanValues','paramErrValues');
+corrLengths = paramMeanValues(1,:);
+%-------------------------------------------------------------------------------
+doColorful = true;
+
+% f = figure('color','w');
+hold('on'); grid('on');
+if doColorful
+    for t = 1:length(params.timePoints)
+        loglog(maxDistances(t),corrLengths(t),'o',...
+                    'MarkerEdgeColor',brighten(params.colors(t,:),-0.5),...
+                    'MarkerFaceColor',params.colors(t,:),'MarkerSize',7)
+    end
+else
+    loglog(maxDistances,corrLengths,'ok')
+end
+
+ax = gca();
+ax.XScale = 'log';
+ax.YScale = 'log';
+axis('square')
+xlabel('Brain size, d_{max}');
+ylabel('Spatial correlation length, \lambda');
+[f_handle,stats,c] = GiveMeFit(log10(maxDistances),log10(corrLengths'),'linear');
+xRange = logspace(min(log10(maxDistances)),max(log10(maxDistances)),50);
+plot(xRange,10.^c.p2*xRange.^c.p1,'--k');
+% Gradient = c.p1; Intercept = c.p2;
+str = sprintf('alpha approx %f',c.p1);
+text(mean(maxDistances),mean(corrLengths),str);
+
+%
+% legend('show')
+% str=sprintf('Developing Mouse decay constant against max distance, %s', 'wholeBrain');
+% title(str,'Fontsize',16)
+%
+% % save figure
+% filename=strcat('decayConstant_log','.jpeg');
+% str=fullfile('Outs','decay_constant_log',filename);
+% saveas(f,str)
+
+end

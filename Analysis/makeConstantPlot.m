@@ -35,13 +35,31 @@ maxDistances = makeMaxDistance(params);
 %-------------------------------------------------------------------------------
 % Plotting
 %-------------------------------------------------------------------------------
-customParamOrder = {'n','A','B'};
+doLogLambda = true;
+if doLogLambda
+    customParamOrder = {'n','nLog','A','B'};
+else
+    customParamOrder = {'n','A','B'};
+end
+numParams = length(paramNames);
 f = figure('color','w','Renderer','painters');
-for i = 1:3
-    subplot(1,3,i)
+paramMeanValues = zeros(numParams,numTimePoints);
+for i = 1:numParams
+    if doLogLambda
+        if i >= 2
+            p = i+1;
+        else
+            p = i;
+        end
+        subplot(1,numParams+1,p)
+    else
+        p = i;
+        subplot(1,numParams,p)
+    end
     hold('on')
+    axis('square')
 
-    ind = find(strcmp(customParamOrder{i},paramNames));
+    ind = find(strcmp(customParamOrder{p},paramNames));
 
     % Get mean parameter estimate:
     paramEstMean = cellfun(@(x)x.(paramNames{ind}),fittedParams);
@@ -62,7 +80,7 @@ for i = 1:3
     xRange = linspace(0,maxDistances(end));
     plot(xRange,f_handle(xRange),':k')
     ylabel(paramNames{ind})
-    xlabel('Brain size, dmax (mm)')
+    xlabel('Brain size, d_{max} (mm)')
 
     % Get error bounds:
     errs = cellfun(@(x)diff(x(:,ind))/2,CIs);
@@ -72,8 +90,17 @@ for i = 1:3
         errorbar(maxDistances(t),paramEstMean(t),errs(t),'-o','MarkerSize',8,...
                         'Color',params.colors(t,:),'LineWidth',2)
     end
+    % Store for output:
+    paramMeanValues(i,:) = paramEstMean;
+    paramErrValues(i,:) = errs;
 end
-f.Position = [1000        1116         831         222];
+f.Position = [807         771        1024         286];
+save('parameterFits.mat','paramMeanValues','paramErrValues');
 
+
+if doLogLambda
+    subplot(1,numParams+1,2)
+    decayConstant_voxel(params);
+end
 
 end
