@@ -5,19 +5,6 @@ function plotConstant(fitting_stat_all,constantOut,whatConstantOut,maxDistance,.
                       showCorrCoeff,forceYLim,displayAdjR)
 % this function plots decay constants with error bars against max distance
 
-% dataType='voxel';
-% brainDiv='wholeBrain';
-% numData=1000;
-% numThresholds=20;
-% useGoodGeneSubset=true;
-% makeNewFigure=true;
-% thisDirection='allDirections';
-% thisCellType='allCellTypes';
-  % dataType: 'voxel' or 'structure'
-  % xData and yData are cells each containing distances and correlation coefficient of all time points
-  % dataProcessing: 'original' or 'binned numThresholds=xx'
-  % brainDiv: 'forebrain', 'midbrain','hindbrain' or 'wholeBrain'
-
 lineWidth=2;
 markerSize=8;
 timePoints=GiveMeParameter('timePoints');
@@ -38,15 +25,9 @@ for i=1:length(timePoints)
 end
 
 %-------------------------------------------------------------------------------
-% Get colours needed for plotting
+% Get colors needed for plotting
 if allGrey
-    cmapOut = [0.7 0.7 0.7;
-              0.7 0.7 0.7;
-              0.7 0.7 0.7;
-              0.7 0.7 0.7;
-              0.7 0.7 0.7;
-              0.7 0.7 0.7;
-              0.7 0.7 0.7];
+    cmapOut = 0.7*ones(7,3);
 else
     cmapOut = BF_getcmap('dark2',7,0,0);
 end
@@ -172,9 +153,7 @@ for i=1:length(timePoints)
       if strcmp(whatConstantOut,'decayConstant')
         disp(sprintf('%s : %d', whatConstantOut,1./constantOut(i))) % display decay constant in command window
       else
-
         disp(sprintf('%s : %d', whatConstantOut,constantOut(i))) % display decay constant in command window
-
       end
 
       % display adjusted R square

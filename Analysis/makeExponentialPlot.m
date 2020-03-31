@@ -1,53 +1,33 @@
-function makeExponentialPlot(numData,numThresholds,...
-                            thisBrainDiv,scaledDistance,...
-                            thisDirection,thisCellType,makeNewFigure)
+function makeExponentialPlot(params)
 % Plots all exponential curves from different time points on the same graph
+%-------------------------------------------------------------------------------
 
-timePoints = GiveMeParameter('timePoints');
-[xPlotDataAll,yPlotDataAll,numThresholds] = makeBinnedData(numData,...
-                                                            numThresholds,...
-                                                            thisBrainDiv,...
-                                                            scaledDistance,...
-                                                            thisCellType,...
-                                                            thisDirection);
+% Load the distance, CGE data:
+[dist,CGE] = LoadMyDistanceCGE(params);
 
-[fitting_stat_all,~] = makeBinnedFitting(xPlotDataAll,...
-                                          yPlotDataAll,...
-                                          numThresholds,...
-                                          'decayConstant');
-% set file name parameters
-brainStr = GiveMeFileName(thisBrainDiv);
-cellTypeStr = GiveMeFileName(thisCellType);
-if scaledDistance
-    distanceStr = GiveMeFileName('scaled');
+%-------------------------------------------------------------------------------
+numTimePoints = length(params.timePoints);
+hold('on');
+for i = 1:numTimePoints
+    % Bin the data:
+    [xBinCenters,xThresholds,yMeans,yStds] = makeQuantiles(dist{i},CGE{i},params.numThresholds);
+
+    % Fit the binned data (on means):
+    [fitHandle,stats,c] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
+
+    % Plot it:
+    xRange = linspace(0,max(dist{i}),100);
+    plot(xRange,fitHandle(xRange),'-','Color',params.colors(i,:),'MarkerEdgeColor',params.colors(i,:),'LineWidth',2);
+end
+
+%-------------------------------------------------------------------------------
+% Label axis:
+if params.scaledDistance
+    xlabel(GiveMeLabelName('scaledDistance'));
 else
-    distanceStr = GiveMeFileName('notScaled');
+    xlabel(GiveMeLabelName('originalDistance'));
 end
+ylabel('Correlated gene expression')
 
-if strcmp(thisDirection,'allDirections')
-    fileString = sprintf('spatialData_NumData_%d%s%s%s.mat',numData,brainStr,cellTypeStr,...
-                    distanceStr);
-else
-    fileString = sprintf('directionalityData_%s%s.mat',thisDirection,distanceStr);
-end
-
-load(fileString,'distances_all','corrCoeff_all');
-
-if scaledDistance
-    xLabeling = GiveMeLabelName('scaledDistance');
-else
-    xLabeling = GiveMeLabelName('originalDistance');
-end
-yLabeling = GiveMeLabelName('CGE');
-if makeNewFigure
-    f = figure('color','w');
-end
-for i=1:length(timePoints)
-    plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all,...
-                              xLabeling, yLabeling, 1, ...
-                              thisDirection,timePoints{i},false, ...
-                              thisBrainDiv,thisCellType);
-    hold('on');
-end
 
 end

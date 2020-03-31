@@ -8,9 +8,9 @@ end
 
 switch whatParam
 case 'scaledDistance'
-    theParameter = 'Separation Distance/maxDistance';
+    theParameter = 'Relative distance (d/dmax)';
 case 'originalDistance'
-    theParameter = 'Separation Distance (mm)';
+    theParameter = 'Distance, d (mm)';
 case 'CGE'
     theParameter = 'Correlated Gene Expression';
 case 'length'

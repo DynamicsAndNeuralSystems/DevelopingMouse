@@ -1,48 +1,41 @@
-function makeFigure2(numData,numThresholds)
+function makeFigure2()
 
-thisBrainDiv='wholeBrain';
-scaledDistance=false;
-thisCellType='allCellTypes';
-thisDirection='allDirections';
-timePoints = GiveMeParameter('timePoints');
-numSubplot=7;
+% Set defaults:
+params = GiveMeDefaultParams();
 
-if nargin < 2
-  numThresholds=GiveMeParameter('numThresholds');
+%-------------------------------------------------------------------------------
+% First part of Fig. 2
+f = figure('color','w','Renderer','painters');
+hold('on')
+numTimePoints = length(params.timePoints);
+for j = 1:numTimePoints
+    subplot(2,4,j)
+    makeBinningPlot_withExponential(params,params.timePoints{j},false);
+    ylabel('CGE')
+    ylim([-0.1 0.8])
 end
-if nargin < 1
-  numData=GiveMeParameter('numData'); 
-end
+f.Position = [607   797   779   325];
 
-% first part of figure 1
-f = figure('color','w');
-for j=1:numSubplot
-  subplot(2,4,j)
-  makeBinningPlot_withExponential(numData,numThresholds,...
-                                  thisBrainDiv,scaledDistance,...
-                                  thisCellType,thisDirection,...
-                                  timePoints{j},false);
-  ylim([-0.1 0.8])
-  hold on
-end
-% f.Position = [49         915        2284         211];
-% f.Position=[0.5450    0.1215    0.1539    0.3296];
 % Save out:
-str = fullfile('Outs','figure2','figure2_part1.svg');
-saveas(f,str)
+fileName = fullfile('Outs','figure2','figure2_part1.svg');
+saveas(f,fileName,'svg')
+fprintf(1,'Saved to %s\n',fileName);
 
-% second part of figure 1
-f = figure('color','w');
-subplot(1,2,1)
-makeExponentialPlot(numData,numThresholds,...
-                    thisBrainDiv,false,...
-                    thisDirection,thisCellType,false);
-hold on
-subplot(1,2,2)
-makeExponentialPlot(numData,numThresholds,...
-                  thisBrainDiv,true,...
-                  thisDirection,thisCellType,false);
+%-------------------------------------------------------------------------------
+% Second part of Fig. 2
+f = figure('color','w','Renderer','painters');
+subplot(2,1,1)
+params.scaledDistance = false;
+makeExponentialPlot(params)
+subplot(2,1,2)
+params.scaledDistance = true;
+makeExponentialPlot(params);
+
+f.Position = [1000        1003         292         335];
+
 % Save out:
-str = fullfile('Outs','figure2','figure2_part2.svg');
-saveas(f,str)
+fileName = fullfile('Outs','figure2','figure2_part2.svg');
+saveas(f,fileName,'svg')
+fprintf(1,'Saved to %s\n',fileName);
+
 end

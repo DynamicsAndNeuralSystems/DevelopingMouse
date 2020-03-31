@@ -1,7 +1,5 @@
 function [f_handle,Stats,c] = GiveMeFit(xData,yData,fitType,suppressFigure)
 % ------------------------------------------------------------------------------
-% Ben Fulcher, 2014-11-20
-% ------------------------------------------------------------------------------
 if nargin < 4
     suppressFigure = false;
 end
@@ -28,13 +26,12 @@ case 'decayEta'
     f_handle = @(x) c.A.*x.^(-c.n) + c.B;
 
 case 'exp'
-    s = fitoptions('Method','NonlinearLeastSquares','StartPoint',[1,0,0]);
-    % s = fitoptions('Method','NonlinearLeastSquares','StartPoint',[1,0.5,0]);
+    s = fitoptions('Method','NonlinearLeastSquares','StartPoint',[0.5,0,1/mean(xData)]);
     f = fittype('A*exp(-n*x) + B','options',s);
     try
-        [c, Stats] = fit(xData,yData,f);
-    catch
-        error('Fit to exp failed')
+        [c,Stats] = fit(xData,yData,f);
+    catch emsg
+        error('Fit to exp failed: %s',emsg.message)
     end
     f_handle = @(x) c.A.*exp(-c.n*x) + c.B;
 

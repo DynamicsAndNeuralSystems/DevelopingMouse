@@ -1,63 +1,46 @@
-function makeBinningPlot_withExponential(numData,numThresholds,...
-                                        thisBrainDiv,scaledDistance,...
-                                        thisCellType,thisDirection,...
-                                        timePointNow,makeNewFigure)
-% plot bins with exponential curve fitted on top
-timePoints=GiveMeParameter('timePoints');
-timePointIndex = find(strcmp(timePointNow,timePoints));
-[xPlotDataAll,yPlotDataAll,numThresholds] = makeBinnedData(numData,...
-                                                            numThresholds,...
-                                                            thisBrainDiv,...
-                                                            scaledDistance,...
-                                                            thisCellType,...
-                                                            thisDirection);
+function fitHandle = makeBinningPlot_withExponential(params,timePointNow,makeNewFigure)
+% Plot binned data with exponential fit
+%-------------------------------------------------------------------------------
 
-[fitting_stat_all,~] = makeBinnedFitting(xPlotDataAll,...
-                                          yPlotDataAll,...
-                                          numThresholds,...
-                                          'decayConstant');
+% Retrieve the time point index:
+timePointIndex = find(strcmp(timePointNow,params.timePoints));
 
-% set file name parameters
-brainStr = GiveMeFileName(thisBrainDiv);
-cellTypeStr = GiveMeFileName(thisCellType);
-if scaledDistance
-  distanceStr = GiveMeFileName('scaled');
+%-------------------------------------------------------------------------------
+% Load the distance, CGE data:
+[dist,CGE] = LoadMyDistanceCGE(params);
+% Only take for the time point of interest:
+dist = dist{timePointIndex};
+CGE = CGE{timePointIndex};
+
+%-------------------------------------------------------------------------------
+% Bin the data:
+[xBinCenters,xThresholds,yMeans,yStds] = makeQuantiles(dist,CGE,params.numThresholds);
+
+%-------------------------------------------------------------------------------
+% Fit the binned data (on means):
+[fitHandle,stats,c] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
+% Give some info out to commandline:
+fprintf('Adj R square = %d\n',stats.adjrsquare)
+coeff = coeffvalues(c);
+fprintf('y = %d*exp(-%d*x) + %d\n',coeff(1),coeff(3),coeff(2))
+
+%-------------------------------------------------------------------------------
+% Plot the binned data:
+theColor = params.colors(timePointIndex,:);
+PlotQuantiles(xThresholds,yMeans,yStds,theColor);
+
+%-------------------------------------------------------------------------------
+% Add an exponential fit:
+xRange = linspace(min(dist),max(dist),100);
+plot(xRange,fitHandle(xRange),'-','Color',theColor,'MarkerEdgeColor',theColor,'LineWidth',2);
+
+%-------------------------------------------------------------------------------
+% Label axes:
+if params.scaledDistance
+    xlabel(GiveMeLabelName('scaledDistance'));
 else
-  distanceStr = GiveMeFileName('notScaled');
+    xlabel(GiveMeLabelName('originalDistance'));
 end
+ylabel(GiveMeLabelName('CGE'));
 
-if strcmp(thisDirection,'allDirections')
-  fileString = sprintf('spatialData_NumData_%d%s%s%s.mat',numData,brainStr,cellTypeStr,...
-                    distanceStr);
-else
-  fileString = sprintf('directionalityData_%s%s.mat',thisDirection,distanceStr);
-end
-
-load(fileString,'distances_all','corrCoeff_all');
-
-cmapOut = BF_getcmap('dark2',7,0,0);
-if scaledDistance
-  xLabeling=GiveMeLabelName('scaledDistance');
-else
-  xLabeling=GiveMeLabelName('originalDistance');
-end
-yLabeling=GiveMeLabelName('CGE');
-for i=1:length(timePoints)
-    if makeNewFigure
-      f = figure('color','w'); box('on');
-    end
-    % Binned data:
-    PlotQuantiles_diffColor(distances_all{timePointIndex},corrCoeff_all{timePointIndex},...
-                            numData,numThresholds,false,cmapOut,false,...
-                            timePointNow, thisBrainDiv, thisDirection);
-
-    % Exponential fit:
-    plotFitting_singleTimePoint(distances_all,'exp',fitting_stat_all,...
-                                xLabeling, yLabeling, 1, ...
-                                thisDirection, timePointNow,false, ...
-                                thisBrainDiv,thisCellType);
-end
-disp(sprintf('Adj R square = %d',fitting_stat_all.(timePointNow).adjRSquare.exp))
-coeff=coeffvalues(fitting_stat_all.(timePointNow).fitObject.exp);
-disp(sprintf('y = %d*exp(-%d*x) + %d',coeff(1),coeff(3),coeff(2)))
 end
