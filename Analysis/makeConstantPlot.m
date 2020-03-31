@@ -36,37 +36,35 @@ maxDistances = makeMaxDistance(params);
 % Plotting
 %-------------------------------------------------------------------------------
 doLogLambda = true;
-keyboard
-if doLogLambda
-    customParamOrder = {'n','nLog','A','B'};
-else
-    customParamOrder = {'n','A','B'};
-end
+customParamOrder = {'n','A','B'};
 numParams = length(paramNames);
+
+plotOrder = {'nLog','nLogHuman','A','B'};
 f = figure('color','w','Renderer','painters');
 paramMeanValues = zeros(numParams,numTimePoints);
 for i = 1:numParams
-    if doLogLambda
-        if i >= 2
-            p = i+1;
-        else
-            p = i;
-        end
-        subplot(1,numParams+1,p)
-    else
-        p = i;
-        subplot(1,numParams,p)
-    end
-    hold('on')
-    axis('square')
-
-    ind = find(strcmp(customParamOrder{p},paramNames));
+    ind = find(strcmp(customParamOrder{i},paramNames));
 
     % Get mean parameter estimate:
     paramEstMean = cellfun(@(x)x.(paramNames{ind}),fittedParams);
     if strcmp(paramNames{ind},'n')
         paramEstMean = 1./paramEstMean;
     end
+    % Get error bounds:
+    errs = cellfun(@(x)diff(x(:,ind))/2,CIs);
+
+    % Store for output:
+    paramMeanValues(i,:) = paramEstMean;
+    paramErrValues(i,:) = errs;
+
+    % Plot:
+    plotHere = find(strcmp(paramNames{ind},plotOrder));
+    if isempty(plotHere)
+        continue;
+    end
+    subplot(1,length(plotOrder),plotHere)
+    hold('on')
+    axis('square')
 
     % Fit linear regression:
     if strcmp(paramNames{ind},'n')
@@ -79,31 +77,29 @@ for i = 1:numParams
         f_handle = @(x) Gradient*x + Intercept;
     end
     [r,pVal] = corr(maxDistances,paramEstMean);
-    fprintf(1,'%s: r = %g, p = %g\n',customParamOrder{p},r,pVal);
+    fprintf(1,'%s: r = %g, p = %g\n',paramNames{ind},r,pVal);
     xRange = linspace(0,maxDistances(end));
     plot(xRange,f_handle(xRange),':k')
     ylabel(paramNames{ind})
     xlabel('Brain size, d_{max} (mm)')
-
-    % Get error bounds:
-    errs = cellfun(@(x)diff(x(:,ind))/2,CIs);
 
     % Color by time point:
     for t = 1:numTimePoints
         errorbar(maxDistances(t),paramEstMean(t),errs(t),'-o','MarkerSize',8,...
                         'Color',params.colors(t,:),'LineWidth',2)
     end
-    % Store for output:
-    paramMeanValues(i,:) = paramEstMean;
-    paramErrValues(i,:) = errs;
 end
 f.Position = [807         771        1024         286];
 save('parameterFits.mat','paramMeanValues','paramErrValues');
 
 
-if doLogLambda
-    subplot(1,numParams+1,2)
-    decayConstant_voxel(params);
-end
+% Add extras:
+subplot(1,4,1)
+decayConstant_voxel(params,false);
+axis('square')
+subplot(1,4,2)
+decayConstant_voxel(params,true);
+axis('square')
+
 
 end

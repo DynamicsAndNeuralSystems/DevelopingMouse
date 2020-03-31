@@ -25,7 +25,7 @@ if doColorful
                     'MarkerFaceColor',params.colors(t,:),'MarkerSize',7)
     end
     if addHuman
-        dMaxHuman = 151;
+        dMaxHuman = 148;
         lambdaHuman = 61.4;
         humanColor = ones(3,1)*0.5;
         loglog(dMaxHuman,lambdaHuman,'o',...
