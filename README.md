@@ -1,12 +1,13 @@
-# Developing Mouse Scripts
+# Analysing the spatial embedding of gene expression across mouse brain development
 
 Code for reproducing analyses presented in:
 H.Y.G. Lau, B.D. Fulcher, A. Fornito. [Scaling of gene transcriptional gradients with brain size across mouse development](https://doi.org/10.1101/2020.06.04.135525), _bioRxiv_ (2020).
 
 Data analysis is here; code for the simple physical model is in [this repo](https://github.com/NeuralSystemsAndSignals/DevelopmentalExpressionModeling).
 
-Processed data is available from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328).
-These data files should be placed in the `Matlab_variables` directory.
+Data was taken from the Allen Institute's [Developing Mouse Brain Atlas](https://developingmouse.brain-map.org/) using python scripts that call the [AllenSDK](https://allensdk.readthedocs.io/) (in `DataRendering`).
+
+Processed data is available from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328), and can be downloaded to reproduce the results presented in our paper (using the functions outlined below).
 
 Before running analyses, add all repository paths using `startup`.
 
