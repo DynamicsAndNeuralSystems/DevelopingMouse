@@ -7,6 +7,7 @@ timePointIndex = find(strcmp(timePointNow,timePoints));
 resolutionGrid = GiveMeParameter('resolutionGrid');
 
 % Get the max extent along the (default x)-axis:
+dimension = 1; % x-axis
 coOrds = getCoOrds(thisBrainDiv,timePointNow);
 maxX = max(coOrds(:,dimension)) - min(coOrds(:,dimension));
 maxDistance = maxX*resolutionGrid.(timePointNow);

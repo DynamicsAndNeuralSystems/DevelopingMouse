@@ -1,4 +1,4 @@
-function makeFigure3()
+function makeParameterScalingFig()
 
 %-------------------------------------------------------------------------------
 % Set/retrieve default parameters:

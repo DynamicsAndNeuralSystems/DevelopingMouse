@@ -1,4 +1,4 @@
-function makeFigure2()
+function makeCGECurves()
 
 % Set defaults:
 params = GiveMeDefaultParams();

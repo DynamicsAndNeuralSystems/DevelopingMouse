@@ -23,7 +23,7 @@ paramNames = coeffnames(fittedParams{1});
 
 % Convert to confidence intervals:
 CIs = cellfun(@(x)confint(x),fittedParams,'UniformOutput',false);
-% ***Convert n -> inverses (probably invalid to do nonlinear transformations of CIs)***
+% ***Convert n -> inverses (hopefully valid to do nonlinear transformations of CIs)***
 nIndex = strcmp(paramNames,'n');
 for i = 1:numTimePoints
     CIs{i}(:,nIndex) = 1./CIs{i}(:,nIndex);
