@@ -49,12 +49,3 @@ Supplementary Fig. S1:
 `makeFigureS1()`
 
 ![FigureS1](Outs/figureS1/figureS1.png)
-
-
-## Data processing
-
-The data processing steps are contained in `createData()`, which generates processed data starting from `energyGrids` `.mat` variables.
-
-* Fills the `Matlab_variables` directory
-* To create most of the data, either run `createData()` to create data starting from energyGrids `.mat` variables, or `createData(true)` to create from the raw data
-* Run `createVariance.m` to create the data of variance in decay constant against number of data points used (takes a long time, >24h)
