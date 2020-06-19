@@ -5,22 +5,21 @@ H.Y.G. Lau, B.D. Fulcher, A. Fornito. [Scaling of gene transcriptional gradients
 
 Data analysis is here; code for the simple physical model is in [this repo](https://github.com/NeuralSystemsAndSignals/DevelopmentalExpressionModeling).
 
-Data was taken from the Allen Institute's [Developing Mouse Brain Atlas](https://developingmouse.brain-map.org/) using python scripts that call the [AllenSDK](https://allensdk.readthedocs.io/) (in `DataRendering`). The retrieved data fills the `Data/API` directory. Detailed steps as follow:
-* Download Allen API package by `pip install allensdk`
-* Run `download_devmouse_unionizes.py` to retrieve gene expression data at structure level
-* Run `structures.py` to download structure information
-* Run `getBrainDivision.py` to download major brain division info (forebrain, midbrain and hindbrain) and ID of their descendants; data saved in `structure_F.csv`, `structure_M.csv`,`structure_H.csv`,`structure_F_descendant_ID.csv`,`structure_M_descendant_ID.csv`,`structure_H_descendant_ID.csv`
+Data was taken from the Allen Institute's [Developing Mouse Brain Atlas](https://developingmouse.brain-map.org/) using python scripts that call the [AllenSDK](https://allensdk.readthedocs.io/) (in `DataRendering`).
 
-Processed data is available from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328), and can be downloaded to reproduce the results presented in our paper (using the functions outlined below). Please save them to the `Matlab_variables` directory.
-Alternatively, to create most of the processed data, either run `createData()` to create starting from `energyGrids.mat` variables (downloaded from our Figshare repository), or `createData(true)` to create from the raw data downloaded from the Allen API. You can also run `createVariance.m` to create the data of variance in decay constant against number of data points used (takes a long time, >24h)
+A description of the raw data retrieval via the Allen SDK is at the bottom of this document.
 
-Before running analyses, add all repository paths using `startup`.
+Processed data is available from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328), and can be downloaded to reproduce the results presented in our paper (using the functions outlined below).
 
 <!-- ### Figure 1
 `makeFigure1()`
 ![Figure1_part1](Outs/figure1/figure1_part1.png)
 ![Figure1_part2](Outs/figure1/figure1_part2.png)
 ![Figure1_part3](Outs/figure1/figure1_part3.png) -->
+
+## Analysis Results
+
+Before running analyses, add all repository paths using `startup`.
 
 ### CGE Curves
 
@@ -49,3 +48,23 @@ Supplementary Fig. S1:
 `makeFigureS1()`
 
 ![FigureS1](Outs/figureS1/figureS1.png)
+
+## Data
+
+### Raw data retrieval
+
+Raw data was retrieved via the API made available using the Allen SDK.
+Code is available in this repository:
+
+1. Download Allen API package by `pip install allensdk`
+2. Run `download_devmouse_unionizes.py` to retrieve gene expression data at structure level
+3. Run `structures.py` to download structure information
+4. Run `getBrainDivision.py` to download major brain division info (forebrain, midbrain and hindbrain) and ID of their descendants; data saved in `structure_F.csv`, `structure_M.csv`,`structure_H.csv`,`structure_F_descendant_ID.csv`,`structure_M_descendant_ID.csv`,`structure_H_descendant_ID.csv`.
+
+### Processing of raw data
+
+The processed data files were obtained by running `createData(false)`, which creates data files starting from `energyGrids.mat` variables (downloaded from the figshare repository linked to above).
+
+The full pipeline from raw data (downloaded via the Allen SDK) can be reproduced using `createData(true)`.
+
+You can also run `createVariance` to create the data of variance in decay constant against number of data points used (takes a long time, >24h).
