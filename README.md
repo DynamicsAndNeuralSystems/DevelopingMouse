@@ -11,7 +11,7 @@ Data was taken from the Allen Institute's [Developing Mouse Brain Atlas](https:/
 * Run `structures.py` to download structure information
 * Run `getBrainDivision.py` to download major brain division info (forebrain, midbrain and hindbrain) and ID of their descendants; data saved in `structure_F.csv`, `structure_M.csv`,`structure_H.csv`,`structure_F_descendant_ID.csv`,`structure_M_descendant_ID.csv`,`structure_H_descendant_ID.csv`
 
-Processed data is available from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328), and can be downloaded to reproduce the results presented in our paper (using the functions outlined below). Please save them to the "Matlab_variables" folder.
+Processed data is available from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328), and can be downloaded to reproduce the results presented in our paper (using the functions outlined below). Please save them to the `Matlab_variables` directory.
 
 Before running analyses, add all repository paths using `startup`.
 
