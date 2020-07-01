@@ -3,7 +3,7 @@ function readGridData(timePointNow,useGoodGeneSubset,thisCellType)
 %%
 fileTimePoints=GiveMeParameter('fileTimePoints');
 timePoints=GiveMeParameter('timePoints');
-timePointIndex=GiveMeParameter('timePointIndex'); %match index to the chosen timepoint
+timePointIndex=GiveMeParameter('timePointIndex'); % match index to the chosen timepoint
 sizeGrids = GiveMeParameter('sizeGrids');
 
 %% Specify directories

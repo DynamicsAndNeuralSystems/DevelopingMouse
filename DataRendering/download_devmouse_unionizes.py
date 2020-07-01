@@ -12,7 +12,7 @@ import os
 #-------------------------------------------------------------------------------
 # Global parameters:
 #-------------------------------------------------------------------------------
-# specify the directories
+# Specify the directories
 abs_dir = os.path.dirname(__file__)
 rel_dir = os.path.join(abs_dir, '..','Data','API','Unionizes')
 
@@ -26,6 +26,7 @@ structure_acronyms = ['r4B','POR','r3F','r10F','THyA','r1R','p2R','r4F','r7B','p
 'r5B','p3B','r2A','r11A','r11B','isR','r7A','r2R','r6F','r11F','PHyA','r2F','r5A','r5R',
 'r8B','r10A','TelA','m1F','r1F','PHyF','m1A','r2B','TelR']
 # structure_acronyms = ['is','r1']
+
 ages = ['E11.5','E13.5','E15.5','E18.5','P4','P14','P28','P56']
 
 def download_devmouse_unionizes(file_name, structure_acronyms, age_names):

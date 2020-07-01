@@ -63,7 +63,7 @@ Code is available in this repository:
 
 ### Processing of raw data
 
-The processed data files were obtained by running `createData(false)`, which creates data files starting from `energyGrids.mat` variables (downloaded from the figshare repository linked to above).
+The processed data files were obtained by running `createData(false)`, which creates data files starting from `energyGrids.mat` variables (downloaded from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328).
 
 The full pipeline from raw data (downloaded via the Allen SDK) can be reproduced using `createData(true)`.
 
