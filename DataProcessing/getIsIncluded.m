@@ -15,6 +15,8 @@ function [isIncluded] = getIsIncluded(thisBrainDiv,timePointNow)
     isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID);
   elseif strcmp(thisBrainDiv,'hindbrain')
     isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID);
+  elseif strcmp(thisBrainDiv,'Dpallidum')
+    isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.Dpallidum.ID);
   else
     error('Invalid brain division input')
   end

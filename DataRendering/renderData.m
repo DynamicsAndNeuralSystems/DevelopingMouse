@@ -1,7 +1,8 @@
 function renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData,thisBrainDiv)
 % renders raw data into mat variables which are saved in Matlab_variables (these take a long time)
 if nargin < 5
-  thisBrainDiv='wholeBrain';
+  % thisBrainDiv='wholeBrain';
+  thisBrainDiv='Dpallidum';
 if nargin < 4
   numData=GiveMeParameter('numData');
 end
@@ -39,8 +40,8 @@ cellTypes=GiveMeParameter('cellTypes');
 makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
                         thisBrainDiv,'allCellTypes',false);
 % create distances, correlation and directions for different brain divisions, ...
-% cell types, using good gene subset
-createSpatialData(numData,false);
-% makes cgeMat and distMat for figure 1
-createSpatialMat('E11pt5','allCellTypes','wholeBrain',numData);
+% % cell types, using good gene subset
+% createSpatialData(numData,false);
+% % makes cgeMat and distMat for figure 1
+% createSpatialMat('E11pt5','allCellTypes','wholeBrain',numData);
 end
