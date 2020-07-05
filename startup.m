@@ -16,6 +16,7 @@ for j = 1:length(paths)
         addpath(fullfile('Data','API','Structures'));
         addpath(fullfile('Data','API','Unionizes'));
         addpath(fullfile('Data','API','Filtering'));
+        addpath(fullfile('Data','API','GridData'));
         % add path to a directory containing other raw data
         addpath(fullfile('Data','Others'));
         % Figshare data

@@ -13,6 +13,8 @@ switch whatParam
     theParameter = '_midbrain';
   case 'hindbrain'
     theParameter = '_hindbrain';
+  case 'Dpallidum'
+    theParameter = '_DPallidum';
   case 'scaled'
     theParameter = '_scaled';
   case 'notScaled'

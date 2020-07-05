@@ -1,10 +1,12 @@
-function renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData)
+function renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData,thisBrainDiv)
 % renders raw data into mat variables which are saved in Matlab_variables (these take a long time)
+if nargin < 5
+  thisBrainDiv='wholeBrain';
 if nargin < 4
   numData=GiveMeParameter('numData');
 end
 if nargin < 3
-  numThresholds=GiveMeParameter('numThresholds');
+  whatGeneThreshold=GiveMeParameter('whatGeneThreshold');
 end
 if nargin < 2
   whatVoxelThreshold=GiveMeParameter('whatVoxelThreshold');
@@ -15,31 +17,27 @@ end
 
 brainDivisions=GiveMeParameter('brainDivisions');
 cellTypes=GiveMeParameter('cellTypes');
-% Create annotation grids and spinal cord ID
-makeAnnotationGrids_SpinalCordID();
-% make a matlab variable containing enriched genes
-makeEnrichedGenes();
+% % Create annotation grids
+% makeAnnotationGrids();
+% % Create spinal cord ID
+% makeEnrichedGenes();
+% % create matlab variable with IDs of brain subdivisions (forebrain, midbrain, hindbrain, Dpallidum, SpinalCord)
+% makeBrainDivision();
+% % Create the energy grids using all genes
+% makeEnergyGrid(false);
+%
+% % Create gene-expression matrix from all genes (gets the good genes)
+% makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
+%                         'wholeBrain','allCellTypes',false);
+%
+% % Create the energy grids using all good genes, genes enriched in neurons, ...
+% % oligodendrocytes and astrocytes
+% makeEnergyGrid(true);
 
-% Create the energy grids using all genes
-makeEnergyGrid(false);
-
-% Create gene-expression matrix from all genes (gets the good genes)
-makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
-                        'wholeBrain','allCellTypes',false);
-
-% Create the energy grids using all good genes, genes enriched in neurons, ...
-% oligodendrocytes and astrocytes
-makeEnergyGrid(true);
-% create matlab variable with IDs of brain subdivisions
-makeBrainDivision();
 % repeat running this function to create gene expression matrix from
 % good genes (wholeBrain,forebrain,midbrain and hindbrain), and from different cell types
-for j=1:length(brainDivisions)
-  for k=1:length(cellTypes)
-  makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
-                          brainDivisions{j},cellTypes{k},true);
-  end
-end
+makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
+                        thisBrainDiv,'allCellTypes',false);
 % create distances, correlation and directions for different brain divisions, ...
 % cell types, using good gene subset
 createSpatialData(numData,false);

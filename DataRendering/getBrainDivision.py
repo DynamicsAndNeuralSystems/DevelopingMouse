@@ -8,6 +8,7 @@ api = RmaApi()
 # specify directory of ID file
 abs_dir = os.path.dirname(__file__)
 rel_dir = os.path.join(abs_dir, '..','Data','API','Structures')
+brainDivisions = ['F','M','H','DPall','SpC']
 
 # user input directory name here for saving the files at the end # ages = ['E11.5']
 #directory='D:\Data\DevelopingAllenMouseAPI-master\Git\Data\\'
@@ -15,11 +16,12 @@ def getDivision(brainDivision):
     BRAIN_DIVISION=brainDivision
     ages = ['E11.5','E13.5','E15.5','E18.5','P4','P14','P28']
     age_str = "'" + "','".join(ages) + "'"
-    criteria=['[graph_id$eq17][st_level$eq1]'+('[acronym$eq%s]'%BRAIN_DIVISION)
-              #'products[abbreviation$eqDevMouse],'
-              #'specimen(donor(age[name$in%s])),' %age_str,
-              #'plane_of_section[name$eqsagittal]'
-             ]
+    if BRAIN_DIVISION == 'DPall':
+        ST_LEVEL = '7'
+    else: # forebrain, midbrain or hindbrain
+        ST_LEVEL = '1'
+
+    criteria=['[graph_id$eq17][st_level$eq%s]'%ST_LEVEL+('[acronym$eq%s]'%BRAIN_DIVISION)]
     structure=pd.DataFrame(api.model_query('Structure',
                                 criteria="".join(criteria),
                                 include='descendant_hierarchies(descendant)',
@@ -35,17 +37,23 @@ def getDivision(brainDivision):
         descendantID.append(structure['descendant_hierarchies'][0][i].get('descendant_id'))
     return structure,descendantID
 def main():
-    # get forebrain data and descendant ID
-    structure, descendantID = getDivision('F')
-    structure.to_csv(os.path.join(abs_dir, rel_dir,'structure_F.csv'))
-    pd.DataFrame(descendantID).to_csv(os.path.join(abs_dir, rel_dir,'structure_F_descendant_ID.csv'))
-    # get midbrain and descendant ID
-    structure, descendantID = getDivision('M')
-    structure.to_csv(os.path.join(abs_dir, rel_dir,'structure_M.csv'))
-    pd.DataFrame(descendantID).to_csv(os.path.join(abs_dir, rel_dir,'structure_M_descendant_ID.csv'))
-    # get hindbrain and descendant ID
-    structure, descendantID = getDivision('H')
-    structure.to_csv(os.path.join(abs_dir, rel_dir,'structure_H.csv'))
-    pd.DataFrame(descendantID).to_csv(os.path.join(abs_dir, rel_dir,'structure_H_descendant_ID.csv'))
+    for brainDivision in brainDivisions:
+        structure, descendantID = getDivision(brainDivision)
+        structure.to_csv(os.path.join(abs_dir, rel_dir,'structure_%s.csv'%brainDivision))
+        pd.DataFrame(descendantID).to_csv(os.path.join(abs_dir,
+                                                        rel_dir,
+                                                        'structure_%s_descendant_ID.csv'%brainDivision))
+    # # get forebrain data and descendant ID
+    # structure, descendantID = getDivision('F')
+    # structure.to_csv(os.path.join(abs_dir, rel_dir,'structure_F.csv'))
+    # pd.DataFrame(descendantID).to_csv(os.path.join(abs_dir, rel_dir,'structure_F_descendant_ID.csv'))
+    # # get midbrain and descendant ID
+    # structure, descendantID = getDivision('M')
+    # structure.to_csv(os.path.join(abs_dir, rel_dir,'structure_M.csv'))
+    # pd.DataFrame(descendantID).to_csv(os.path.join(abs_dir, rel_dir,'structure_M_descendant_ID.csv'))
+    # # get hindbrain and descendant ID
+    # structure, descendantID = getDivision('H')
+    # structure.to_csv(os.path.join(abs_dir, rel_dir,'structure_H.csv'))
+    # pd.DataFrame(descendantID).to_csv(os.path.join(abs_dir, rel_dir,'structure_H_descendant_ID.csv'))
 if __name__ == '__main__':
     main()

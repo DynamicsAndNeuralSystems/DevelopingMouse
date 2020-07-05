@@ -24,11 +24,10 @@ function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoint
     end
     load(filename,'energyGrids')
     load('annotationGrids.mat','annotationGrids')
-    load('spinalCord_ID.mat','spinalCord_ID')
     load('brainDivision.mat','brainDivision')
     %% Create the matrix
     % filters off spinal cord voxels
-    isSpinalCord=ismember(annotationGrids{timePointIndex},spinalCord_ID);
+    isSpinalCord=ismember(annotationGrids{timePointIndex},brainDivision.SpinalCord.ID);
     isAnno=annotationGrids{timePointIndex}>0;
     isIncluded = getIsIncluded(thisBrainDiv,timePointNow);
 

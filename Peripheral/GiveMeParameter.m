@@ -18,9 +18,15 @@ case 'fileTimePoints'
 case 'resolutionGrid'
     theParameter = struct('E11pt5',0.08,'E13pt5',0.1,'E15pt5',0.12,'E18pt5',0.14,'P4',0.16,'P14',0.2,'P28',0.2);
 case 'brainDivisions'
-    theParameter = {'wholeBrain','forebrain','midbrain','hindbrain'};
+    theParameter = {'wholeBrain','forebrain','midbrain','hindbrain','Dpallidum'};
 case 'smallBrainDivisions'
-    theParameter = {'forebrain','midbrain','hindbrain'};
+    theParameter = {'forebrain','midbrain','hindbrain','Dpallidum'};
+case 'createBrainDivisions'
+    theParameter = {'forebrain','midbrain','hindbrain','Dpallidum','SpinalCord'};
+case 'smallBrainDivisionsAbbrev'
+    theParameter = {'F','M','H','DPall'};
+case 'createBrainDivisionsAbbrev'
+    theParameter = {'F','M','H','DPall','SpC'};
 case 'scaledDistance'
     theParameter = {true,false};
 case 'useEnrichedGenes'
@@ -49,6 +55,8 @@ case 'incrementVector'
     theParameter = 100:100:1000;
 case 'samplingNum'
     theParameter = 100;
+case 'descendantCsvDim'
+    theParameter = {[1 1 1130 1],[1 1 176 1],[1 1 1089 1],[1 1 118 1],[1 1 93 1]};
 end
 
 end
