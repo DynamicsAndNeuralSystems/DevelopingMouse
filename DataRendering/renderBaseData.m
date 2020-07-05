@@ -1,12 +1,8 @@
-function renderBaseData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData,thisBrainDiv)
+function renderBaseData(whatNorm,whatVoxelThreshold,whatGeneThreshold)
   % this script creates the basic data used in the analysis.
   % It is the first matlab script to be run and should only be run once.
   % renders raw data into mat variables which are saved in Matlab_variables (these take a long time)
-  if nargin < 5
-    thisBrainDiv='wholeBrain';
-  if nargin < 4
-    numData=GiveMeParameter('numData');
-  end
+
   if nargin < 3
     whatGeneThreshold=GiveMeParameter('whatGeneThreshold');
   end
@@ -20,8 +16,6 @@ function renderBaseData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData,th
   makeAnnotationGrids();
   % makes DevMouseGeneExpression.mat
   createDevMouseGeneExpression();
-  % Create spinal cord ID
-  makeEnrichedGenes();
   % create matlab variable with IDs of brain subdivisions (forebrain, midbrain, hindbrain, Dpallidum, SpinalCord)
   makeBrainDivision();
   % Create the energy grids using all genes
@@ -34,6 +28,8 @@ function renderBaseData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData,th
   makeGeneList_gridExpression();
   % create goodGeneSubset.mat
   makeVoxGeneMatStats_geneAcrossTime();
+  % Create enrichedGenes.mat
+  makeEnrichedGenes();
   % Create the energy grids using all good genes, genes enriched in neurons, ...
   % oligodendrocytes and astrocytes
   makeEnergyGrid(true);
