@@ -55,8 +55,12 @@ for j=1:numGenes
     energyGrids{j} = fread(fid,prod(sizeGrids.(timePoints{timePointIndex})),'float');
     fclose(fid);
     energyGrids{j} = reshape(energyGrids{j},sizeGrids.(timePoints{timePointIndex}));
-    infoStr=strsplit(A(j).name,'_');
-    geneIDInfo(j)=str2double(infoStr{2});
+    if useGoodGeneSubset
+      geneIDInfo(j) = goodGeneSubset{j};
+    else
+      infoStr=strsplit(A(j).name,'_');
+      geneIDInfo(j)=str2double(infoStr{2});
+    end
     waitbar(j/steps)
 end
 close(h)
