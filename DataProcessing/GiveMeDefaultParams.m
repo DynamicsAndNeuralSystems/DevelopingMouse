@@ -6,7 +6,7 @@ params.thisBrainDiv = 'wholeBrain';
 params.thisCellType = 'allCellTypes';
 params.scaledDistance = false;
 params.thisDirection = 'allDirections';
-params.distancesMM = true;
+params.distancesMM = false;
 params.numData = 1000;
 params.constantTypes = GiveMeParameter('constantTypes');
 
