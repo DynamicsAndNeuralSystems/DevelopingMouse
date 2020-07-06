@@ -66,6 +66,7 @@ def download_devmouse_unionizes(file_name, structure_acronyms, age_names):
 
         # Check if we're at the end of the road
         if numRows == 0 or numRows < blockSize:
+        # if len(rows) == 4000:
             done = True
 
         # write out the results as they come in
@@ -125,12 +126,6 @@ def main():
 
     # Save data summary as a .csv file:
     df.to_csv(csv_file_name)
-
-    # Show summary to screen:
-    gb = df.groupby(['structure','age_name'])
-    gdf = gb.agg({'data_set_id': pd.Series.nunique})
-
-    print(gdf)
 
     # Make an expression energy matrix:
     SaveExpressionEnergy(df)
