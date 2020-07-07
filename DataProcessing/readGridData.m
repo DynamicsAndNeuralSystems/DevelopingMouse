@@ -14,7 +14,7 @@ function readGridData(timePointNow,useGoodGeneSubset,thisCellType)
     load('goodGeneSubset.mat','goodGeneSubset');
     if ~strcmp(thisCellType,'allCellTypes')
       load('enrichedGenes.mat','enrichedGenes');
-      numGenes = length(enrichedGenes.(thisCellType).ID)
+      numGenes = length(enrichedGenes.(thisCellType).ID);
     else
       numGenes = length(goodGeneSubset);
     end
@@ -60,7 +60,7 @@ function readGridData(timePointNow,useGoodGeneSubset,thisCellType)
         if strcmp(thisCellType,'allCellTypes')
           geneIDInfo(j) = goodGeneSubset{j};
         else
-          geneIDInfo(j) = enrichedGenes.(thisCellType).ID(j));
+          geneIDInfo(j) = (enrichedGenes.(thisCellType).ID(j));
         end
       else
         infoStr=strsplit(A(j).name,'_');
@@ -88,6 +88,4 @@ function readGridData(timePointNow,useGoodGeneSubset,thisCellType)
   %   var_name2=strcat('geneIDInfo_',timePoints{timePointIndex},'.mat');
   %   str=fullfile('Matlab_variables',var_name2);
   %   save(str,'geneIDInfo')
-  end
-
 end
