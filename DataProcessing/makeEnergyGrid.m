@@ -1,9 +1,9 @@
 function makeEnergyGrid(useGoodGeneSubset)
 
-% timePoints = GiveMeParameter('timePoints');
-% cellTypes = GiveMeParameter('cellTypes');
-timePoints = {'E11pt5'};
-cellTypes = {'allCellTypes'};
+timePoints = GiveMeParameter('timePoints');
+cellTypes = GiveMeParameter('cellTypes');
+% timePoints = {'E11pt5'};
+% cellTypes = {'allCellTypes'};
 if useGoodGeneSubset
   for i=1:length(timePoints)
       for j=length(cellTypes)
