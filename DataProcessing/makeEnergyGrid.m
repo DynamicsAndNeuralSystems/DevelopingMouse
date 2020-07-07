@@ -6,7 +6,7 @@ cellTypes = GiveMeParameter('cellTypes');
 % cellTypes = {'allCellTypes'};
 if useGoodGeneSubset
   for i=1:length(timePoints)
-      for j=length(cellTypes)
+      for j=1:length(cellTypes)
         readGridData(timePoints{i},true,cellTypes{j});
       end
   end
