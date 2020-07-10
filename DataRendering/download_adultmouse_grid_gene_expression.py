@@ -4,6 +4,7 @@ import requests, zipfile
 from io import BytesIO
 import csv
 import os
+import time
 api = RmaApi()
 
 # specify the directories
@@ -72,9 +73,22 @@ def downloadGridData(expID_list,age_list,geneID_list):
             '?include=' +\
             '%s' %(dataType_str))
         URL_list.append(URL)
-
+    print('There are %d URLs in total'%(len(URL_list)))
     for j in range(len(URL_list)): #len(URL_list)
-        r = requests.get(URL_list[j], stream=True)
+        connectSuccess = 0
+        while connectSuccess == 0:
+            try:
+                r = requests.get(URL_list[j], stream=True)
+                connectSuccess = 1
+            except requests.exceptions.ConnectionError:
+                print("Connection refused by the server..")
+                print("Let me sleep for 5 seconds")
+                print("ZZzzzz...")
+                time.sleep(5)
+                print("Was a nice sleep, now let me continue...")
+                print('still %d grids left undownloaded'%(len(URL_list)-j))
+                # print(URL_list[-(len(URL_list)-j):])
+                continue
         temp_list = [age_list[j],'_',str(geneID_list[j])]
         dirName=os.path.join(rel_dir,age_list[j],"".join(temp_list))
         try:
