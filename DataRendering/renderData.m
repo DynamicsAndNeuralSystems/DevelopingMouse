@@ -12,9 +12,9 @@ end
 makeGeneExpressionMatrix(procParams);
 
 % create distances, correlation and directions for different brain divisions, ...
-% % cell types, using good gene subset
-createSpatialData(procParams)
+% procParams.scaledDistance = false;
+% makeSpatialData(procParams)
+% procParams.scaledDistance = true;
+% makeSpatialData(procParams)
 
-% % makes cgeMat and distMat for figure 1
-% createSpatialMat('E11pt5','allCellTypes','wholeBrain',numData);
 end

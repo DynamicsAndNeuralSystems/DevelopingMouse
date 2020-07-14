@@ -25,7 +25,7 @@ if withDirection
     % distances = distances(shuffledOrder);
     % corrCoeff = corrCoeff(shuffledOrder);
     % determine directionality
-    [angle_coronal,angle_axial,angle_sagittal,vecMat]=makeDirectionality(coOrds(dataIndSelect,:));
+    [angle_coronal,angle_axial,angle_sagittal,vecMat] = makeDirectionality(coOrds(dataIndSelect,:));
     % [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds(dataIndSelect,:),...
     %                                                               shuffledOrder);
     angle_coronal = extractDistances(squareform(angle_coronal));

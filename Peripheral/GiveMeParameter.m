@@ -28,7 +28,7 @@ case 'smallBrainDivisionsAbbrev'
 case 'createBrainDivisionsAbbrev'
     theParameter = {'F','M','H','DPall','SpC'};
 case 'scaledDistance'
-    theParameter = {true,false};
+    theParameter = false;
 case 'useEnrichedGenes'
     theParameter = {true,false};
 case 'cellTypes'

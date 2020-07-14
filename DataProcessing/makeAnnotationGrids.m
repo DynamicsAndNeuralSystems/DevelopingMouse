@@ -6,7 +6,7 @@ timePoints = GiveMeParameter('timePoints');
 sizeGrids = GiveMeParameter('sizeGrids');
 
 annotationGrids = cell(length(timePoints),1);
-for i=1:length(timePoints) % for each time point%
+for i = 1:length(timePoints) % for each time point%
     gridFileStr = fullfile(gridAnno_loc,sprintf('%s_DevMouse2012_gridAnnotation',timePoints{i}),...
                             'gridAnnotation.raw');
     fid = fopen(gridFileStr,'r','l');

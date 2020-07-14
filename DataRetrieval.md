@@ -4,7 +4,7 @@ Navigate to the `DataRendering` directory.
 
 #### Download the raw gene-expression grid data
 ```python
-python download_devmouse_grid_gene_expression.py
+python3 download_devmouse_grid_gene_expression.py
 ```
 Downloads to [[BF:]]___XXX___.
 
@@ -22,15 +22,16 @@ Rename Supplemental Table S4, S5 and S6 to `Astrocyte_Cahoy_S4.xls`, `Oligodendr
 
 #### Obtain gene entrez IDs and abbreviations
 ```python
-python download_devmouse_unionizes_genes.py
+python3 download_devmouse_unionizes_genes.py
 ```
 Saves output to two files: `SDK_geneEntrez.csv` and `SDK_geneAbbreviations.csv`.
 
 [A partial version was replicated by uncommenting line 69 # if `len(rows) == 4000:` and commenting out line 68 "`if numRows == 0 or numRows < blockSize:`]
 
 #### Retrieve descendant IDs of each structure
+In the `DataRendering` directory:
 ```python
-python getBrainDivision.py
+python3 getBrainDivision.py
 ```
 Retrieves the descendant structure IDs of each primary structure:
 1. forebrain
@@ -39,11 +40,13 @@ Retrieves the descendant structure IDs of each primary structure:
 4. dorsal pallidum
 5. spinal cord
 
-#### Process raw data into matlab files
+___[[[SAVES DATA TO: XXX]]]___
+
+#### Process raw data into Matlab files
 ```matlab
 renderBaseData()
 ```
-This should only be run once [[BF: WHY?]].
+This should only be run once ___[[BF: WHY?]]___.
 Creates processed data files for further analysis.
 
 ```matlab

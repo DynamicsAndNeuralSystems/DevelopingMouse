@@ -1,4 +1,4 @@
-function renderBaseData(whatNorm,whatVoxelThreshold,whatGeneThreshold)
+function renderBaseData(procParams)
 % this script creates the basic data used in the analysis.
 % It is the first matlab script to be run and should only be run once.
 % renders raw data into mat variables which are saved in Matlab_variables (these take a long time)
@@ -7,13 +7,7 @@ function renderBaseData(whatNorm,whatVoxelThreshold,whatGeneThreshold)
 % Check inputs:
 %-------------------------------------------------------------------------------
 if nargin < 1
-    whatNorm = GiveMeParameter('whatNorm');
-end
-if nargin < 2
-    whatVoxelThreshold = GiveMeParameter('whatVoxelThreshold');
-end
-if nargin < 3
-    whatGeneThreshold = GiveMeParameter('whatGeneThreshold');
+    procParams = GiveMeDefaultProcessingParams();
 end
 
 %-------------------------------------------------------------------------------
