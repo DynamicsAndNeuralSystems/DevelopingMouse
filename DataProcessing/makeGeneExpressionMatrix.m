@@ -1,13 +1,9 @@
-function makeGeneExpressionMatrix(whatNorm,...
-                                  whatVoxelThreshold,...
-                                  whatGeneThreshold,...
-                                  thisBrainDiv,...
-                                  thisCellType,...
-                                  useGoodGeneSubset) % both thresholds set to 0.3
+function makeGeneExpressionMatrix(procParams)
 
-%-------------------------------------------------------------------------------
-% Create gene expression matrix
-%-------------------------------------------------------------------------------
+if nargin < 1
+    procParams = GiveMeDefaultProcessingParams();
+end
+
 % Initialize
 timePoints = GiveMeParameter('timePoints');
 
@@ -18,20 +14,18 @@ timePoints = GiveMeParameter('timePoints');
 %for each time point when division of brain is under question...
 % (instead of all brain)
 
-% create gene expression matrix
-for i=1:length(timePoints)
-    [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoints{i}, ...
-                                                                  whatNorm, ...
-                                                                  whatVoxelThreshold,...
-                                                                  whatGeneThreshold,...
-                                                                  thisBrainDiv,...
-                                                                  thisCellType,...
-                                                                  useGoodGeneSubset);
-    brainStr = GiveMeFileName(thisBrainDiv);
-    cellTypeStr = GiveMeFileName(thisCellType);
+%-------------------------------------------------------------------------------
+% Create gene expression matrix
+%-------------------------------------------------------------------------------
+% (for each time point according to current data-processing settings):
+for i = 1:length(timePoints)
+    [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoints{i},procParams);
+    brainStr = GiveMeFileName(procParams.thisBrainDiv);
+    cellTypeStr = GiveMeFileName(procParams.thisCellType);
     fileName = fullfile('Matlab_variables',sprintf('voxelGeneCoexpression%s%s_%s.mat',...
                     brainStr,cellTypeStr,timePoints{i}));
     save(fileName,'voxGeneMat','coOrds','propNanGenes','isGoodGene','-v7.3');
+    fprintf(1,'Saved processed gene-expression data to %s\n',fileName);
 end
 
 end

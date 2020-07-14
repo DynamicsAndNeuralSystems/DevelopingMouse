@@ -1,20 +1,27 @@
-function readGridData(timePointNow,useGoodGeneSubset,thisCellType)
+function readGridData(timePointNow,procParams)
 
-%%
+% Retrieve current default processing parameters:
+if nargin < 2
+    procParams = GiveMeDefaultProcessingParams();
+end
+
+%-------------------------------------------------------------------------------
+% Set up time points:
 fileTimePoints = GiveMeParameter('fileTimePoints');
 timePoints = GiveMeParameter('timePoints');
 timePointIndex = find(strcmp(timePointNow,timePoints)); % match index to the chosen timepoint
 sizeGrids = GiveMeParameter('sizeGrids');
 
-%% Specify directories
+%-------------------------------------------------------------------------------
+%% Specify directories:
 % Location of saved API gene expression data expressed in a cell
 expression_loc = fullfile('Data','API','GridData',fileTimePoints{timePointIndex});
 
-if useGoodGeneSubset
+if procParams.useGoodGeneSubset
     load('goodGeneSubset.mat','goodGeneSubset');
-    if ~strcmp(thisCellType,'allCellTypes')
+    if ~strcmp(procParams.thisCellType,'allCellTypes')
       load('enrichedGenes.mat','enrichedGenes');
-      numGenes = length(enrichedGenes.(thisCellType).ID);
+      numGenes = length(enrichedGenes.(procParams.thisCellType).ID);
     else
       numGenes = length(goodGeneSubset);
     end
@@ -26,26 +33,27 @@ else
     numGenes = length(A);
 end
 
-% initialize variables
+% Initialize variables
 energyGrids = cell(numGenes,1);
 geneIDInfo = zeros(numGenes,1); % Stores IDs of each gene imported
 
-% store original directory and move to new directory (necessitated by
+% Store original directory and move to new directory (necessitated by
 % filepath problems)
 currentFolder = pwd;
 cd(expression_loc);
 
+%-------------------------------------------------------------------------------
 h = waitbar(0,'Compiling energy grid...');
 steps = length(numGenes);
-%%
+%-------------------------------------------------------------------------------
 for j=1:numGenes
-    if useGoodGeneSubset
-        if strcmp(thisCellType,'allCellTypes')
+    if procParams.useGoodGeneSubset
+        if strcmp(procParams.thisCellType,'allCellTypes')
             fileStr = fullfile(sprintf('%s_%s',fileTimePoints{timePointIndex},...
                         num2str(goodGeneSubset{j})),'energy.raw');
         else
             fileStr = fullfile(sprintf('%s_%s',fileTimePoints{timePointIndex},...
-                  num2str(enrichedGenes.(thisCellType).ID(j))),'energy.raw');
+                  num2str(enrichedGenes.(procParams.thisCellType).ID(j))),'energy.raw');
         end
     else
         fileStr = fullfile(A(j).name,'energy.raw');
@@ -56,33 +64,35 @@ for j=1:numGenes
     energyGrids{j} = fread(fid,prod(sizeGrids.(timePoints{timePointIndex})),'float');
     fclose(fid);
     energyGrids{j} = reshape(energyGrids{j},sizeGrids.(timePoints{timePointIndex}));
-    if useGoodGeneSubset
-        if strcmp(thisCellType,'allCellTypes')
+    if procParams.useGoodGeneSubset
+        if strcmp(procParams.thisCellType,'allCellTypes')
             geneIDInfo(j) = goodGeneSubset{j};
         else
-            geneIDInfo(j) = (enrichedGenes.(thisCellType).ID(j));
+            geneIDInfo(j) = (enrichedGenes.(procParams.thisCellType).ID(j));
         end
     else
-        infoStr=strsplit(A(j).name,'_');
-        geneIDInfo(j)=str2double(infoStr{2});
+        infoStr = strsplit(A(j).name,'_');
+        geneIDInfo(j) = str2double(infoStr{2});
     end
     waitbar(j/steps)
 end
 close(h)
 
-%% redirect to home directory
+% return back to base directory
 cd(currentFolder);
 
+%-------------------------------------------------------------------------------
 %% SAVE
 % Gridded expression energy data:
-cellTypeStr = GiveMeFileName(thisCellType);
-if (useGoodGeneSubset & strcmp(thisCellType,'allCellTypes'))
-var_name1 = sprintf('energyGrids_goodGeneSubset_%s.mat',timePoints{timePointIndex});
+cellTypeStr = GiveMeFileName(procParams.thisCellType);
+if (procParams.useGoodGeneSubset & strcmp(procParams.thisCellType,'allCellTypes'))
+    var_name1 = sprintf('energyGrids_goodGeneSubset_%s.mat',timePoints{timePointIndex});
 else
-var_name1 = sprintf('energyGrids%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
+    var_name1 = sprintf('energyGrids%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
 end
-str=fullfile('Matlab_variables',var_name1);
-save(str,'energyGrids','-v7.3')
+fileName = fullfile('Matlab_variables',var_name1);
+save(fileName,'energyGrids','-v7.3')
+
 % % Gene ID for each grid:
 % if strcmp(thisCellType,'allCellTypes')
 %   var_name2=strcat('geneIDInfo_',timePoints{timePointIndex},'.mat');

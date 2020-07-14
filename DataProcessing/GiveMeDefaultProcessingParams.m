@@ -10,9 +10,9 @@ params.thisBrainDiv = 'wholeBrain';
 
 parmas.thisCellType = '';
 
-params.whatVoxelThreshold = ;
+params.whatVoxelThreshold = 0.3;
 
-params.whatGeneThreshold = ;
+params.whatGeneThreshold = 0.3;
 
 params.useGoodGeneSubset = true;
 
