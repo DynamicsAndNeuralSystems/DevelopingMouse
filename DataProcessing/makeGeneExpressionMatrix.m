@@ -4,11 +4,10 @@ function makeGeneExpressionMatrix(whatNorm,...
                                   thisBrainDiv,...
                                   thisCellType,...
                                   useGoodGeneSubset) % both thresholds set to 0.3
-%whatNorm='scaledSigmoid'; % normalizing method for makeGridData
+
 %-------------------------------------------------------------------------------
-% Create gene coexpression matrix
+% Create gene expression matrix
 %-------------------------------------------------------------------------------
-%%
 % Initialize
 timePoints = GiveMeParameter('timePoints');
 
@@ -17,9 +16,9 @@ timePoints = GiveMeParameter('timePoints');
 % the number of voxels are (from voxelGeneCoexpression_all): 5031,9471,11314,11288,19754,21557,24826
 % numData_brainDiv=[587,1000,1000,1000,1000,1000,1000]; % number of data ...
 %for each time point when division of brain is under question...
-%(instead of all brain)
+% (instead of all brain)
 
-% create gene coexpression matrix
+% create gene expression matrix
 for i=1:length(timePoints)
     [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoints{i}, ...
                                                                   whatNorm, ...
@@ -30,9 +29,9 @@ for i=1:length(timePoints)
                                                                   useGoodGeneSubset);
     brainStr = GiveMeFileName(thisBrainDiv);
     cellTypeStr = GiveMeFileName(thisCellType);
-    str=fullfile('Matlab_variables', sprintf('voxelGeneCoexpression%s%s_%s.mat',...
-                brainStr,cellTypeStr,timePoints{i}));
-    save(str,'voxGeneMat','coOrds','propNanGenes','isGoodGene','-v7.3');
-    clear voxGeneMat coOrds numNanGenes isGoodGene
+    fileName = fullfile('Matlab_variables',sprintf('voxelGeneCoexpression%s%s_%s.mat',...
+                    brainStr,cellTypeStr,timePoints{i}));
+    save(fileName,'voxGeneMat','coOrds','propNanGenes','isGoodGene','-v7.3');
 end
+
 end

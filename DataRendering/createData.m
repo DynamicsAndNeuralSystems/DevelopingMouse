@@ -10,10 +10,10 @@ if nargin < 1
 end
 
 % Load default parameters:
-whatNorm=GiveMeParameter('whatNorm');
-whatVoxelThreshold=GiveMeParameter('whatVoxelThreshold');
-whatGeneThreshold=GiveMeParameter('whatGeneThreshold');
-numData=GiveMeParameter('numData');
+whatNorm = GiveMeParameter('whatNorm');
+whatVoxelThreshold = GiveMeParameter('whatVoxelThreshold');
+whatGeneThreshold = GiveMeParameter('whatGeneThreshold');
+numData = GiveMeParameter('numData');
 
 if fromScratch
     renderData(whatNorm,whatVoxelThreshold,whatGeneThreshold,numData,thisBrainDiv);
