@@ -18,10 +18,10 @@ timePoints = GiveMeParameter('timePoints');
 % Create gene expression matrix
 %-------------------------------------------------------------------------------
 % (for each time point according to current data-processing settings):
+brainStr = GiveMeFileName(procParams.thisBrainDiv);
+cellTypeStr = GiveMeFileName(procParams.thisCellType);
 for i = 1:length(timePoints)
     [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePoints{i},procParams);
-    brainStr = GiveMeFileName(procParams.thisBrainDiv);
-    cellTypeStr = GiveMeFileName(procParams.thisCellType);
     fileName = fullfile('Matlab_variables',sprintf('voxelGeneCoexpression%s%s_%s.mat',...
                     brainStr,cellTypeStr,timePoints{i}));
     save(fileName,'voxGeneMat','coOrds','propNanGenes','isGoodGene','-v7.3');

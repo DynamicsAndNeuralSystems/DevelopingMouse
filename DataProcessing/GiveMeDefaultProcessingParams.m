@@ -1,19 +1,24 @@
 function params = GiveMeDefaultProcessingParams()
 % Outputs a set of current default processing parameters:
 
-
 % whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
-params.whatNorm = 'norm';
+params.whatNorm = whatNorm = GiveMeParameter('whatNorm');
 
 % thisBrainDiv: 'forebrain', 'midbrain', 'hindbrain' or 'wholeBrain'
 params.thisBrainDiv = 'wholeBrain';
 
-parmas.thisCellType = '';
+params.thisCellType = '';
 
-params.whatVoxelThreshold = 0.3;
+params.numData = GiveMeParameter('numData');
 
-params.whatGeneThreshold = 0.3;
+params.whatVoxelThreshold = GiveMeParameter('whatVoxelThreshold');
+
+params.whatGeneThreshold = GiveMeParameter('whatGeneThreshold');
 
 params.useGoodGeneSubset = true;
+
+params.withDirection = false;
+
+params.scaledDistance = GiveMeParameter('scaledDistance');
 
 end

@@ -39,7 +39,7 @@ numGenes = length(energyGrids)
 voxGeneMat = nan(numVoxels,numGenes);
 
 h = waitbar(0,'Computing voxel x gene expression matrix...');
-steps=length(energyGrids);
+steps = length(energyGrids);
 for j = 1:numGenes
     energyGridsNow = energyGrids{j};
     energyGridsNow = energyGridsNow(voxelLabel);

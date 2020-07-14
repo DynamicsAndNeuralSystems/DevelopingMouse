@@ -1,5 +1,6 @@
-function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal,vecMat]=sampleGridData(voxGeneMat,coOrds,whatNumData,timePointNow,scaledDistance,withDirection)
-% Create distance matrix from only voxels selected for gene expression matrix
+function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal,vecMat] = sampleGridData(voxGeneMat,coOrds,timePointNow,scaledDistance,whatNumData,withDirection)
+% Create distance matrix from only voxels selected for gene-expression matrix
+
 timePoints = GiveMeParameter('timePoints');
 resolutionGrid = GiveMeParameter('resolutionGrid');
 timePointIndex = find(strcmp(timePointNow,timePoints));
@@ -27,13 +28,13 @@ if withDirection
     [angle_coronal,angle_axial,angle_sagittal,vecMat]=makeDirectionality(coOrds(dataIndSelect,:));
     % [angle_coronal,angle_axial,angle_sagittal]=makeDirectionality(coOrds(dataIndSelect,:),...
     %                                                               shuffledOrder);
-    angle_coronal=extractDistances(squareform(angle_coronal));
-    angle_axial=extractDistances(squareform(angle_axial));
-    angle_sagittal=extractDistances(squareform(angle_sagittal));
+    angle_coronal = extractDistances(squareform(angle_coronal));
+    angle_axial = extractDistances(squareform(angle_axial));
+    angle_sagittal = extractDistances(squareform(angle_sagittal));
 else
-    angle_coronal=NaN;
-    angle_axial=NaN;
-    angle_sagittal=NaN;
+    angle_coronal = NaN;
+    angle_axial = NaN;
+    angle_sagittal = NaN;
 end
 
 end

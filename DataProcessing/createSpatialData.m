@@ -1,15 +1,13 @@
-function createSpatialData(numData,thisBrainDiv,thisCellType,withDirection)
+function createSpatialData(procParams)
 % create distance and correlation distances, and angles that voxel pairs
 % make with the axes for different brain divisions, cell types, using good gene subset, with or without
 % directions
-  % brainDivisions=GiveMeParameter('brainDivisions');
-  scaledDistance=GiveMeParameter('scaledDistance');
-  % cellTypes=GiveMeParameter('cellTypes');
 
-    for k=1:length(scaledDistance)
-            [~,~,~,~,~] = makeSpatialData(numData,thisBrainDiv,...
-                                      scaledDistance{k},thisCellType,withDirection);
-    end
+scaledDistance = GiveMeParameter('scaledDistance');
+
+for k = 1:length(scaledDistance)
+    makeSpatialData(numData,thisBrainDiv,scaledDistance{k},thisCellType,withDirection);
+end
 
 % create distances (unscaled) and correlation from good genes
 % for j=1:length(brainDivisions)

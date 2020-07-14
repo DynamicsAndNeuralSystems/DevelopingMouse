@@ -11,7 +11,7 @@ load('brainDivision.mat','brainDivision')
 % load parameters
 sizeGrids = GiveMeParameter('sizeGrids');
 timePoints = GiveMeParameter('timePoints');
-timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chosen timepoint
+timePointIndex = find(strcmp(timePointNow,timePoints)); % match index to the chosen timepoint
 
 myAnnotationGrid = annotationGrids{timePointIndex};
 
@@ -21,7 +21,7 @@ isAnno = (myAnnotationGrid>0);
 isIncluded = getIsIncluded(thisBrainDiv,timePointNow);
 
 % get all coordinates
-[a,b,c]=ind2sub(sizeGrids.(timePoints{timePointIndex}),find(isAnno & ~isSpinalCord & isIncluded));
-coOrds=horzcat(a,b,c);
+[a,b,c] = ind2sub(sizeGrids.(timePoints{timePointIndex}),find(isAnno & ~isSpinalCord & isIncluded));
+coOrds = horzcat(a,b,c);
 
 end
