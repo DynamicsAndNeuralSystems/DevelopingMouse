@@ -22,7 +22,7 @@ brainStr = GiveMeFileName(procParams.thisBrainDiv);
 cellTypeStr = GiveMeFileName(procParams.thisCellType);
 for i = 1:length(timePoints)
     [voxGeneMat,coOrds] = makeGridData(timePoints{i},procParams);
-    fileName = fullfile('Matlab_variables',sprintf('voxelGeneCoexpression%s%s_%s.mat',...
+    fileName = fullfile('Matlab_variables',sprintf('voxelGeneExpression%s%s_%s.mat',...
                     brainStr,cellTypeStr,timePoints{i}));
     save(fileName,'voxGeneMat','coOrds','-v7.3');
     fprintf(1,'Saved processed gene-expression data to %s\n',fileName);

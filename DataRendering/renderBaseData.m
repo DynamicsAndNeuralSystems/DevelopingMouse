@@ -15,17 +15,16 @@ end
 makeAnnotationGrids();
 
 % makes DevMouseGeneExpression.mat
-createDevMouseGeneExpression();
+% createDevMouseGeneExpression();
 
 % create matlab variable with IDs of brain subdivisions (forebrain, midbrain, hindbrain, Dpallidum, SpinalCord)
 makeBrainDivision();
 
-% Create the energy grids using all genes
-makeEnergyGrid(false);
+% Create the energy grids across all time points
+makeEnergyGrid(procParams);
 
-% Create gene-expression matrix from all genes (gets the good genes)
-makeGeneExpressionMatrix(whatNorm,whatVoxelThreshold,whatGeneThreshold,...
-                      'wholeBrain','allCellTypes',false);
+% Create gene-expression matrix across all time points:
+makeGeneExpressionMatrix(procParams);
 
 % create geneID_gridExpression.mat
 makeGeneList_gridExpression();
@@ -38,6 +37,6 @@ makeEnrichedGenes();
 
 % Create the energy grids using all good genes, genes enriched in neurons, ...
 % oligodendrocytes and astrocytes
-makeEnergyGrid(true);
+% makeEnergyGrid(true);
 
 end

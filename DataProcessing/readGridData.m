@@ -1,5 +1,4 @@
 function readGridData(timePointNow,procParams)
-
 % Retrieve current default processing parameters:
 if nargin < 2
     procParams = GiveMeDefaultProcessingParams();
@@ -20,10 +19,10 @@ expression_loc = fullfile('Data','API','GridData',fileTimePoints{timePointIndex}
 if procParams.useGoodGeneSubset
     load('goodGeneSubset.mat','goodGeneSubset');
     if ~strcmp(procParams.thisCellType,'allCellTypes')
-      load('enrichedGenes.mat','enrichedGenes');
-      numGenes = length(enrichedGenes.(procParams.thisCellType).ID);
+        load('enrichedGenes.mat','enrichedGenes');
+        numGenes = length(enrichedGenes.(procParams.thisCellType).ID);
     else
-      numGenes = length(goodGeneSubset);
+        numGenes = length(goodGeneSubset);
     end
 else
     A = dir(expression_loc);
@@ -44,7 +43,6 @@ cd(expression_loc);
 
 %-------------------------------------------------------------------------------
 h = waitbar(0,'Compiling energy grid...');
-steps = length(numGenes);
 %-------------------------------------------------------------------------------
 for j=1:numGenes
     if procParams.useGoodGeneSubset
@@ -74,7 +72,7 @@ for j=1:numGenes
         infoStr = strsplit(A(j).name,'_');
         geneIDInfo(j) = str2double(infoStr{2});
     end
-    waitbar(j/steps)
+    waitbar(j/numGenes)
 end
 close(h)
 
@@ -86,12 +84,13 @@ cd(currentFolder);
 % Gridded expression energy data:
 cellTypeStr = GiveMeFileName(procParams.thisCellType);
 if (procParams.useGoodGeneSubset & strcmp(procParams.thisCellType,'allCellTypes'))
-    var_name1 = sprintf('energyGrids_goodGeneSubset_%s.mat',timePoints{timePointIndex});
+    fileOut = sprintf('energyGrids_goodGeneSubset_%s.mat',timePoints{timePointIndex});
 else
-    var_name1 = sprintf('energyGrids%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
+    fileOut = sprintf('energyGrids%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
 end
-fileName = fullfile('Matlab_variables',var_name1);
+fileName = fullfile('Matlab_variables',fileOut);
 save(fileName,'energyGrids','-v7.3')
+fprintf(1,'Saved processed energy grid information to %s\n',fileName);
 
 % % Gene ID for each grid:
 % if strcmp(thisCellType,'allCellTypes')

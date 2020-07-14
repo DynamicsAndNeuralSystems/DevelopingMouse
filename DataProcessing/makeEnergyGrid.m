@@ -1,18 +1,29 @@
-function makeEnergyGrid(useGoodGeneSubset)
+function makeEnergyGrid(procParams)
+
+if nargin < 1
+    procParams = GiveMeDefaultProcessingParams();
+end
 
 timePoints = GiveMeParameter('timePoints');
-cellTypes = GiveMeParameter('cellTypes');
-% timePoints = {'E11pt5'};
-% cellTypes = {'allCellTypes'};
-if useGoodGeneSubset
-  for i=1:length(timePoints)
-      for j=1:length(cellTypes)
-        readGridData(timePoints{i},true,cellTypes{j});
-      end
-  end
+numTimePoints = length(timePoints);
+
+if procParams.useGoodGeneSubset
+    error('I don''t think this should ever happen (can always filter by gene/cell-type during analysis)');
+    % Let's also make the energy grids for the custom cell types
+    cellTypes = GiveMeParameter('cellTypes');
+    numCellTypes = length(cellTypes);
+    for i = 1:numTimePoints
+        fprintf(1,'Time point %u/%u\n',i,numTimePoints);
+        for j = 1:numCellTypes
+            fprintf(1,'Cell type %u/%u\n',j,numCellTypes);
+            readGridData(timePoints{i},procParams);
+        end
+    end
 else
-  for i=1:length(timePoints)
-    readGridData(timePoints{i},false,'allCellTypes');
-  end
+    for i = 1:numTimePoints
+        fprintf(1,'Time point %u/%u\n',i,numTimePoints);
+        readGridData(timePoints{i},procParams);
+    end
 end
+
 end

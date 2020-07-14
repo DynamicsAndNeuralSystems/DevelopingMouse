@@ -21,6 +21,9 @@ Rename Supplemental Table S4, S5 and S6 to `Astrocyte_Cahoy_S4.xls`, `Oligodendr
 
 
 #### Obtain gene entrez IDs and abbreviations
+
+___[[[WHY IS THIS NECESSARY? THIS DOWNLOADS ALL DATA AT THE STRUCTURE-AVERAGE LEVEL FOR A CUSTOM STRUCTURE LIST???]]]]___
+
 ```python
 python3 download_devmouse_unionizes_genes.py
 ```
@@ -49,7 +52,11 @@ ___[[[SAVES DATA TO: XXX]]]___
 renderBaseData()
 ```
 This should only be run once ___[[BF: WHY?]]___.
-Creates processed data files for further analysis.
+Creates processed Matlab data files for further analysis.
+
+This includes:
+* `energyGrids_*.mat`: voxel-level expression energy across genes
+*
 
 ```matlab
 renderData()
