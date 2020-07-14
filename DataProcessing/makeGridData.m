@@ -1,13 +1,19 @@
 function [voxGeneMat, coOrds, propNanGenes, isGoodGene] = makeGridData(timePointNow,procParams)
+% makeGridData   Creates a voxel x gene matrix with irrelevant voxels filtered out
 
-% Creates a voxel x gene matrix with irrelevant voxels filtered out
-%% Sets background variables
+if nargin < 2
+    procParams = GiveMeDefaultProcessingParams();
+end
+
+%-------------------------------------------------------------------------------
+%% Set background variables
 sizeGrids = GiveMeParameter('sizeGrids');
 timePoints = GiveMeParameter('timePoints');
 resolutionGrid = GiveMeParameter('resolutionGrid');
 timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chosen timepoint
 
-%% load matlab variables
+%-------------------------------------------------------------------------------
+%% Load matlab variables
 cellTypeStr = GiveMeFileName(thisCellType);
 if procParams.useGoodGeneSubset
     fileName = sprintf('energyGrids_goodGeneSubset%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
@@ -47,6 +53,10 @@ end
 close(h)
 
 %-------------------------------------------------------------------------------
+% Get all coordinates
+coOrds = getCoOrds(procParams.thisBrainDiv,timePointNow);
+
+%-------------------------------------------------------------------------------
 % FILTERING
 %-------------------------------------------------------------------------------
 % get the proportion of NaN genes of each voxel
@@ -60,9 +70,6 @@ voxGeneMat = voxGeneMat(isGoodVoxel,:);
 
 %% normalize matrix
 voxGeneMat = BF_NormalizeMatrix(voxGeneMat,procParams.whatNorm); % 'scaledSigmoid' used in Monash analysis
-
-% get all coordinates
-coOrds = getCoOrds(procParams.thisBrainDiv,timePointNow);
 
 % only keep good voxels
 coOrds = coOrds(isGoodVoxel,:);

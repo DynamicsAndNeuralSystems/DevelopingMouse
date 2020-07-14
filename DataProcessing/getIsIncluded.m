@@ -1,23 +1,33 @@
-function [isIncluded] = getIsIncluded(thisBrainDiv,timePointNow)
-  timePoints = GiveMeParameter('timePoints');
-  timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chosen timepoint
-  % load variables
-  load('annotationGrids.mat','annotationGrids')
-  load('brainDivision.mat','brainDivision')
+function isIncluded = getIsIncluded(thisBrainDiv,timePointNow)
+% Specifies voxels to include
+%-------------------------------------------------------------------------------
 
-  if strcmp(thisBrainDiv,'wholeBrain')
-      isIncluded=or(or(ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID),...
-                        ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID)),...
-                        ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID));
-  elseif strcmp(thisBrainDiv,'forebrain')
-    isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.forebrain.ID);
-  elseif strcmp(thisBrainDiv,'midbrain')
-    isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.midbrain.ID);
-  elseif strcmp(thisBrainDiv,'hindbrain')
-    isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.hindbrain.ID);
-  elseif strcmp(thisBrainDiv,'Dpallidum')
-    isIncluded=ismember(annotationGrids{timePointIndex},brainDivision.Dpallidum.ID);
-  else
-    error('Invalid brain division input')
-  end
+% Load variables
+load('annotationGrids.mat','annotationGrids')
+load('brainDivision.mat','brainDivision')
+
+% Match to get annotation grid for current time point:
+timePoints = GiveMeParameter('timePoints');
+timePointIndex = find(strcmp(timePointNow,timePoints)); % match index to the chosen timepoint
+myAnnotationGrid = annotationGrids{timePointIndex};
+
+%-------------------------------------------------------------------------------
+% Match by ID:
+switch thisBrainDiv
+case 'wholeBrain'
+    wholeBrainIDs = union([brainDivision.forebrain.ID,...
+                brainDivision.midbrain.ID,brainDivision.hindbrain.ID]);
+    isIncluded = ismember(myAnnotationGrid,wholeBrainIDs);
+case 'forebrain'
+    isIncluded = ismember(myAnnotationGrid,brainDivision.forebrain.ID);
+case 'midbrain'
+    isIncluded = ismember(myAnnotationGrid,brainDivision.midbrain.ID);
+case 'hindbrain'
+    isIncluded = ismember(myAnnotationGrid,brainDivision.hindbrain.ID);
+case 'Dpallidum'
+    isIncluded = ismember(myAnnotationGrid,brainDivision.Dpallidum.ID);
+otherwise
+    error('Unknown brain division: ''%s''',thisBrainDiv)
+end
+
 end
