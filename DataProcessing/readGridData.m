@@ -42,7 +42,7 @@ currentFolder = pwd;
 cd(expression_loc);
 
 %-------------------------------------------------------------------------------
-h = waitbar(0,'Compiling energy grid...');
+h = waitbar(0,('Compiling energy grid for %s...',timePointNow));
 %-------------------------------------------------------------------------------
 for j=1:numGenes
     if procParams.useGoodGeneSubset
