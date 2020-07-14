@@ -1,5 +1,6 @@
 function DownloadGridAnnotations()
 % Download grid annotation files from the 2012 DevMouse Allen site
+%-------------------------------------------------------------------------------
 
 timePoints = GiveMeParameter('timePoints');
 for i = 1:length(timePoints)
