@@ -10,8 +10,8 @@ Downloads to [[BF:]]___XXX___.
 
 #### Download the grid annotation data
 
-Manually download the folders `XXX_DevMouse2012_gridAnnotation` (for each time point `XXX`  (E11.5 to P28) from the [current mouse annotation release](http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/).
-Save them to `Data/API/AnnotationData`
+You can use `DownloadGridAnnotations` to download the grid annotation data from the [current mouse annotation release](http://download.alleninstitute.org/informatics-archive/current-release/mouse_annotation/).
+This saves `.zip` files to `Data/API/AnnotationData`, which you must then manually extract.
 
 #### Download Cahoy et al. cell-type enrichment data
 
@@ -33,12 +33,14 @@ In the `DataRendering` directory:
 ```python
 python3 getBrainDivision.py
 ```
-Retrieves the descendant structure IDs of each primary structure:
-1. forebrain
-2. midbrain
-3. hindbrain
-4. dorsal pallidum
-5. spinal cord
+Retrieves the structure information, and descendant structure IDs of each primary structure:
+1. forebrain (`F`)
+2. midbrain (`M`)
+3. hindbrain (`H`)
+4. dorsal pallidum (`DPall`)
+5. spinal cord (`SpC`)
+
+And saves `.csv` files to `Data/API/Structures`.
 
 ___[[[SAVES DATA TO: XXX]]]___
 

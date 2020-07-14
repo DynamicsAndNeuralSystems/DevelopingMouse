@@ -11,7 +11,7 @@ if nargin < 1
 end
 
 %-------------------------------------------------------------------------------
-% % Create annotation grids
+% Create annotation grids
 makeAnnotationGrids();
 
 % makes DevMouseGeneExpression.mat
