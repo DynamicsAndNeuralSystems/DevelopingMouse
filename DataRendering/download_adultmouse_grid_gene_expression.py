@@ -89,7 +89,7 @@ def downloadGridData(expID_list,age_list,geneID_list):
                 print('still %d grids left undownloaded'%(len(URL_list)-j))
                 # print(URL_list[-(len(URL_list)-j):])
                 continue
-        temp_list = [age_list[j],'_',str(geneID_list[j])]
+        temp_list = [age_list[j],'_',str(geneID_list[j]),'_',str(expID_list[j])]
         dirName=os.path.join(rel_dir,age_list[j],"".join(temp_list))
         try:
             z = zipfile.ZipFile(BytesIO(r.content))

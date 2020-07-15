@@ -1,12 +1,11 @@
 # Data retrieval and processing
-
-Navigate to the `DataRendering` directory.
-
+Navigate to the `DataRendering` directory
 #### Download the raw gene-expression grid data
+In the `DataRendering` directory:
 ```python
 python3 download_devmouse_grid_gene_expression.py
 ```
-Downloads to [[BF:]]___XXX___.
+Downloads `energy.raw` files to `Data/API/GridData`.
 
 #### Download the grid annotation data
 
@@ -24,6 +23,7 @@ Rename Supplemental Table S4, S5 and S6 to `Astrocyte_Cahoy_S4.xls`, `Oligodendr
 
 ___[[[WHY IS THIS NECESSARY? THIS DOWNLOADS ALL DATA AT THE STRUCTURE-AVERAGE LEVEL FOR A CUSTOM STRUCTURE LIST???]]]]___
 
+In the `DataRendering` directory:
 ```python
 python3 download_devmouse_unionizes_genes.py
 ```
@@ -45,18 +45,19 @@ Retrieves the structure information, and descendant structure IDs of each primar
 
 And saves `.csv` files to `Data/API/Structures`.
 
-___[[[SAVES DATA TO: XXX]]]___
-
 #### Process raw data into Matlab files
 ```matlab
 renderBaseData()
 ```
-This should only be run once ___[[BF: WHY?]]___.
-Creates processed Matlab data files for further analysis.
+This should only be run once ___[[BF: WHY?]]___.___[[GL: Because originally the second time that makeEnergyGrid is run, it will make a new energy grid with good gene subset only that will replace the original one created with the full gene set, but this problem is eliminated in a later version]]___
+
+Creates processed Matlab data files from raw data for further analysis.
 
 This includes:
-* `energyGrids_*.mat`: voxel-level expression energy across genes
-*
+* `energyGrids_*.mat`: voxel-level expression energy of genes at a certain time point
+* `voxelGeneExpression**_*.mat`: voxel x gene expression matrix
+* `geneID_gridExpression.mat`: ID of genes included in the expression energy of each time point
+* `goodGeneSubset.mat`: ID of genes with expression data in over 70% of voxels of all time points
 
 ```matlab
 renderData()
