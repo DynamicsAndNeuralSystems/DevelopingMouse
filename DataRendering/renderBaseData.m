@@ -32,7 +32,7 @@ makeGeneExpressionMatrix(procParams);
 
 % Assemble gene IDs at each time point:
 % -> geneID_gridExpression.mat
-makeGeneList_gridExpression();
+% makeGeneList_gridExpression();
 
 % create goodGeneSubset.mat
 makeVoxGeneMatStats_geneAcrossTime();

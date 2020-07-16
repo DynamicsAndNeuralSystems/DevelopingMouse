@@ -34,7 +34,7 @@ isAnnotated = myAnnotationGrid>0;
 % isIncluded = getIsIncluded(procParams.thisBrainDiv,timePointNow);
 voxelIncude = (isAnnotated & ~isSpinalCord); % label voxels to include
 numVoxels = sum(voxelIncude(:));
-numGenes = length(energyGrids)
+numGenes = length(energyGrids);
 
 %-------------------------------------------------------------------------------
 % Generate voxel x gene matrix
@@ -71,10 +71,14 @@ isDpall = ismember(voxStructIDs,brainDivision.Dpallidum.ID);
 voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall);
 
 %-------------------------------------------------------------------------------
+% Label columns as gene IDs:
+geneIDs = GetGeneIDs(timePointNow);
+
+%-------------------------------------------------------------------------------
 % Save to .mat file:
 fileName = fullfile('Matlab_variables','voxelExpression',...
                 sprintf('voxelGeneExpression_%s.mat',timePointNow));
-save(fileName,'voxGeneMat','coOrds','voxLabelTable','-v7.3');
+save(fileName,'voxGeneMat','coOrds','voxLabelTable','geneIDs','-v7.3');
 fprintf(1,'Saved processed gene-expression data to ''%s''\n',fileName);
 
 end
