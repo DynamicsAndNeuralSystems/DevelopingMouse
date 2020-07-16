@@ -13,10 +13,10 @@ A = dir(str);
 A = A(arrayfun(@(A) A.name(1), A) ~= '.');
 numGenes = length(A);
 
-geneIDs = cell(numGenes,1);
+geneIDs = nan(numGenes,1);
 for j = 1:numGenes
     infoStr = strsplit(A(j).name,'_');
-    geneIDs = str2double(infoStr{2});
+    geneIDs(j) = str2double(infoStr{2});
 end
 
 end
