@@ -72,9 +72,9 @@ voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall);
 
 %-------------------------------------------------------------------------------
 % Save to .mat file:
-fileName = fullfile('Matlab_variables','voxelExpression','voxLabelTable',...
-                sprintf('voxelGeneExpression_%s.mat',timePoints{i}));
-save(fileName,'voxGeneMat','coOrds','-v7.3');
+fileName = fullfile('Matlab_variables','voxelExpression',...
+                sprintf('voxelGeneExpression_%s.mat',timePointNow));
+save(fileName,'voxGeneMat','coOrds','voxLabelTable','-v7.3');
 fprintf(1,'Saved processed gene-expression data to ''%s''\n',fileName);
 
 end
