@@ -20,7 +20,7 @@ for j = 1:length(paths)
         % add path to a directory containing other raw data
         addpath(fullfile('Data','Others'));
         % Figshare data
-        addpath(fullfile('Data','Figshare'));
+        % addpath(fullfile('Data','Figshare'));
     else
         % add any nested subdirectories
         addpath(genpath(paths{j}));

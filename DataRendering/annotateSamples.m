@@ -17,10 +17,10 @@ sampleMidbrain = false(numVoxels,1);
 sampleHindbrain = false(numVoxels,1);
 sampleDpall = false(numVoxels,1);
 
-makeSample = @(xInd) randsample(length(xInd),min(length(xInd),procParams.numData));
+makeSample = @(xInd) xInd(randsample(length(xInd),min(length(xInd),procParams.numData)));
 
 % Define brain as forebrain/midbrain/hindbrain...?
-brainInd = find(voxLabelTable.isForebrain || voxLabelTable.isMidbrain || voxLabelTable.isHindbrain);
+brainInd = find(voxLabelTable.isForebrain | voxLabelTable.isMidbrain | voxLabelTable.isHindbrain);
 forebrainInd = find(voxLabelTable.isForebrain);
 midbrainInd = find(voxLabelTable.isMidbrain);
 hindbrainInd = find(voxLabelTable.isHindbrain);

@@ -16,13 +16,10 @@ timePoints = GiveMeParameter('timePoints');
 % (instead of all brain)
 
 %-------------------------------------------------------------------------------
-% Create gene expression matrix
+% Create gene expression matrix (for each time point)
 %-------------------------------------------------------------------------------
-% (for each time point according to current data-processing settings):
-brainStr = GiveMeFileName(procParams.thisBrainDiv);
-cellTypeStr = GiveMeFileName(procParams.thisCellType);
 for i = 1:length(timePoints)
-    fprintf(1,'Time point %s\n',timePoints{i});
+    fprintf(1,'Time point %s (%u/%u)\n',timePoints{i},i,length(timePoints));
     makeGridData(timePoints{i},procParams);
 end
 
