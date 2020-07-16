@@ -22,6 +22,7 @@ timePoints = GiveMeParameter('timePoints');
 brainStr = GiveMeFileName(procParams.thisBrainDiv);
 cellTypeStr = GiveMeFileName(procParams.thisCellType);
 for i = 1:length(timePoints)
+    fprintf(1,'Time point %s\n',timePoints{i});
     makeGridData(timePoints{i},procParams);
 end
 

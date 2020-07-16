@@ -12,12 +12,12 @@ timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chos
 
 %-------------------------------------------------------------------------------
 %% Load matlab variables
-cellTypeStr = GiveMeFileName(procParams.thisCellType);
-if procParams.useGoodGeneSubset
-    fileName = sprintf('energyGrids_goodGeneSubset%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
-else
-    fileName = sprintf('energyGrids_%s.mat',timePoints{timePointIndex});
-end
+% cellTypeStr = GiveMeFileName(procParams.thisCellType);
+% if procParams.useGoodGeneSubset
+%     fileName = sprintf('energyGrids_goodGeneSubset%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
+% else
+fileName = sprintf('energyGrids_%s.mat',timePoints{timePointIndex});
+% end
 load(fileName,'energyGrids')
 fprintf(1,'Loaded energy grid data from ''%s''.\n',fileName);
 
@@ -73,8 +73,7 @@ voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall);
 %-------------------------------------------------------------------------------
 % Save to .mat file:
 fileName = fullfile('Matlab_variables','voxelExpression','voxLabelTable',...
-                sprintf('voxelGeneExpression%s%s_%s.mat',...
-                    brainStr,cellTypeStr,timePoints{i}));
+                sprintf('voxelGeneExpression_%s.mat',timePoints{i}));
 save(fileName,'voxGeneMat','coOrds','-v7.3');
 fprintf(1,'Saved processed gene-expression data to ''%s''\n',fileName);
 
