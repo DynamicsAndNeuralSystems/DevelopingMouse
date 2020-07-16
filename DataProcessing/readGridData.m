@@ -90,7 +90,7 @@ else
 end
 fileName = fullfile('Matlab_variables',fileOut);
 save(fileName,'energyGrids','-v7.3')
-fprintf(1,'Saved processed energy grid information to %s\n',fileName);
+fprintf(1,'Saved processed energy grid information to ''%s''.\n',fileName);
 
 % % Gene ID for each grid:
 % if strcmp(thisCellType,'allCellTypes')

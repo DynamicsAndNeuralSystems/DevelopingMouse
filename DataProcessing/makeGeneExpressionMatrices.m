@@ -1,4 +1,5 @@
-function makeGeneExpressionMatrix(procParams)
+function makeGeneExpressionMatrices(procParams)
+% Loop through time points, running makeGridData
 
 if nargin < 1
     procParams = GiveMeDefaultProcessingParams();
@@ -21,11 +22,7 @@ timePoints = GiveMeParameter('timePoints');
 brainStr = GiveMeFileName(procParams.thisBrainDiv);
 cellTypeStr = GiveMeFileName(procParams.thisCellType);
 for i = 1:length(timePoints)
-    [voxGeneMat,coOrds] = makeGridData(timePoints{i},procParams);
-    fileName = fullfile('Matlab_variables',sprintf('voxelGeneExpression%s%s_%s.mat',...
-                    brainStr,cellTypeStr,timePoints{i}));
-    save(fileName,'voxGeneMat','coOrds','-v7.3');
-    fprintf(1,'Saved processed gene-expression data to %s\n',fileName);
+    makeGridData(timePoints{i},procParams);
 end
 
 end

@@ -12,21 +12,26 @@ end
 
 %-------------------------------------------------------------------------------
 % Create annotation grids
+% -> annotationGrids.mat
 makeAnnotationGrids();
 
 % makes DevMouseGeneExpression.mat
 % createDevMouseGeneExpression();
 
 % create matlab variable with IDs of brain subdivisions (forebrain, midbrain, hindbrain, Dpallidum, SpinalCord)
+% -> brainDivision.mat
 makeBrainDivision();
 
 % Create the energy grids across all time points
+% -> energyGrids_*.mat
 makeEnergyGrid(procParams);
 
 % Create gene-expression matrix across all time points:
+% voxelGeneExpression%s%s_%s.mat
 makeGeneExpressionMatrix(procParams);
 
-% create geneID_gridExpression.mat
+% Assemble gene IDs at each time point:
+% -> geneID_gridExpression.mat
 makeGeneList_gridExpression();
 
 % create goodGeneSubset.mat

@@ -8,15 +8,15 @@ load('brainDivision.mat','brainDivision')
 
 % Match to get annotation grid for current time point:
 timePoints = GiveMeParameter('timePoints');
-timePointIndex = find(strcmp(timePointNow,timePoints)); % match index to the chosen timepoint
+timePointIndex = find(strcmp(timePointNow,timePoints));
 myAnnotationGrid = annotationGrids{timePointIndex};
 
 %-------------------------------------------------------------------------------
 % Match by ID:
 switch thisBrainDiv
 case 'wholeBrain'
-    wholeBrainIDs = union([brainDivision.forebrain.ID,...
-                brainDivision.midbrain.ID,brainDivision.hindbrain.ID]);
+    wholeBrainIDs = unique([brainDivision.forebrain.ID;...
+                brainDivision.midbrain.ID;brainDivision.hindbrain.ID]);
     isIncluded = ismember(myAnnotationGrid,wholeBrainIDs);
 case 'forebrain'
     isIncluded = ismember(myAnnotationGrid,brainDivision.forebrain.ID);

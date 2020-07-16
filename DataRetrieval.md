@@ -54,8 +54,10 @@ This should only be run once ___[[BF: WHY?]]___.___[[GL: Because originally the 
 Creates processed Matlab data files from raw data for further analysis.
 
 This includes:
-* `energyGrids_*.mat`: voxel-level expression energy of genes at a certain time point
-* `voxelGeneExpression**_*.mat`: voxel x gene expression matrix
+* `makeAnnotationGrids`: annotation of each grid (to `annotationGrids.mat`)
+* `makeBrainDivision`: (to `brainDivision.mat`) contains IDs of brain subdivisions (forebrain, midbrain, hindbrain, Dpallidum, SpinalCord).
+* `energyGrids_*.mat`: voxel-level expression energy of genes at a certain time point.
+* `makeGeneExpressionMatrix` -> `voxelGeneExpression**_*.mat`: voxel x gene expression matrix for each time point.
 * `geneID_gridExpression.mat`: ID of genes included in the expression energy of each time point
 * `goodGeneSubset.mat`: ID of genes with expression data in over 70% of voxels of all time points
 

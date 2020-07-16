@@ -1,10 +1,14 @@
-function [distances,corrCoeff,angle_coronal,angle_axial,angle_sagittal,vecMat] = sampleGridData(voxGeneMat,coOrds,timePointNow,scaledDistance,whatNumData,withDirection)
+function sampleGridData(voxGeneMat,coOrds,timePointNow,procParams)
 % Create distance matrix from only voxels selected for gene-expression matrix
+%-------------------------------------------------------------------------------
 
 timePoints = GiveMeParameter('timePoints');
 resolutionGrid = GiveMeParameter('resolutionGrid');
 timePointIndex = find(strcmp(timePointNow,timePoints));
-[dataIndSelect,~] = datasample([1:size(voxGeneMat,1)],whatNumData,'replace',false);
+%-------------------------------------------------------------------------------
+
+[dataIndSelect,~] = datasample([1:size(voxGeneMat,1)],procParams.numData,'replace',false);
+
 distMat = squareform(pdist(coOrds(dataIndSelect,:),...
                     'euclidean')*resolutionGrid.(timePoints{timePointIndex}));
 
@@ -13,13 +17,13 @@ geneCorr = corrcoef(voxGeneMat(dataIndSelect,:)','rows','pairwise');
 corrCoeff = extractDistances(geneCorr);
 
 % Extract distances from distance matrix
-if scaledDistance
+if procParams.scaledDistance
     distances = extractDistances(distMat)/getMaxDistance('wholeBrain',timePointNow);
 else
     distances = extractDistances(distMat);
 end
 
-if withDirection
+if procParams.withDirection
     % shuffle the distances and corrCoeff
     % shuffledOrder = randperm(length(distances));
     % distances = distances(shuffledOrder);
