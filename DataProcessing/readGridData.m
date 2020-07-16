@@ -34,7 +34,8 @@ end
 
 % Initialize variables
 energyGrids = cell(numGenes,1);
-geneIDInfo = zeros(numGenes,1); % Stores IDs of each gene imported
+% Store IDs of each gene imported
+geneIDInfo = zeros(numGenes,1);
 
 % Store original directory and move to new directory (necessitated by
 % filepath problems)
@@ -44,7 +45,7 @@ cd(expression_loc);
 %-------------------------------------------------------------------------------
 h = waitbar(0,('Compiling energy grid for %s...',timePointNow));
 %-------------------------------------------------------------------------------
-for j=1:numGenes
+for j = 1:numGenes
     if procParams.useGoodGeneSubset
         if strcmp(procParams.thisCellType,'allCellTypes')
             fileStr = fullfile(sprintf('%s_%s',fileTimePoints{timePointIndex},...
@@ -89,7 +90,7 @@ else
     fileOut = sprintf('energyGrids%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
 end
 fileName = fullfile('Matlab_variables',fileOut);
-save(fileName,'energyGrids','-v7.3')
+save(fileName,'energyGrids','geneIDInfo','-v7.3')
 fprintf(1,'Saved processed energy grid information to ''%s''.\n',fileName);
 
 % % Gene ID for each grid:

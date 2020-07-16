@@ -1,14 +1,9 @@
-function sampleGridData(voxGeneMat,coOrds,timePointNow,procParams)
-% Create distance matrix from only voxels selected for gene-expression matrix
+function computeSampleDist()
+% Compute distance for a given samples
 %-------------------------------------------------------------------------------
 
-timePoints = GiveMeParameter('timePoints');
-resolutionGrid = GiveMeParameter('resolutionGrid');
 timePointIndex = find(strcmp(timePointNow,timePoints));
-%-------------------------------------------------------------------------------
-
-[dataIndSelect,~] = datasample([1:size(voxGeneMat,1)],procParams.numData,'replace',false);
-
+resolutionGrid = GiveMeParameter('resolutionGrid');
 distMat = squareform(pdist(coOrds(dataIndSelect,:),...
                     'euclidean')*resolutionGrid.(timePoints{timePointIndex}));
 

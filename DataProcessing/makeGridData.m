@@ -12,15 +12,18 @@ timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chos
 
 %-------------------------------------------------------------------------------
 %% Load matlab variables
-% cellTypeStr = GiveMeFileName(procParams.thisCellType);
-% if procParams.useGoodGeneSubset
-%     fileName = sprintf('energyGrids_goodGeneSubset%s_%s.mat',cellTypeStr,timePoints{timePointIndex});
-% else
+% Gene data and information:
 fileName = sprintf('energyGrids_%s.mat',timePoints{timePointIndex});
-% end
 load(fileName,'energyGrids')
 fprintf(1,'Loaded energy grid data from ''%s''.\n',fileName);
+% Label columns as gene IDs:
+try
+    load(fileName,'geneIDs')
+catch
+    geneIDs = GetGeneIDs(timePointNow);
+end
 
+% Annotation IDs for voxels:
 load('annotationGrids.mat','annotationGrids')
 myAnnotationGrid = annotationGrids{timePointIndex};
 load('brainDivision.mat','brainDivision')
@@ -69,10 +72,6 @@ isMidbrain = ismember(voxStructIDs,brainDivision.midbrain.ID);
 isHindbrain = ismember(voxStructIDs,brainDivision.hindbrain.ID);
 isDpall = ismember(voxStructIDs,brainDivision.Dpallidum.ID);
 voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall);
-
-%-------------------------------------------------------------------------------
-% Label columns as gene IDs:
-geneIDs = GetGeneIDs(timePointNow);
 
 %-------------------------------------------------------------------------------
 % Save to .mat file:
