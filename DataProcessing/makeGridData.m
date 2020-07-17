@@ -14,14 +14,15 @@ timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chos
 %% Load matlab variables
 % Gene data and information:
 fileName = sprintf('energyGrids_%s.mat',timePointNow);
-load(fileName,'energyGrids')
+load(fileName,'energyGrids','geneIDInfo')
 fprintf(1,'Loaded energy grid data from ''%s''.\n',fileName);
 % Label columns as gene IDs:
-try
-    load(fileName,'geneIDs')
-catch
-    geneIDs = GetGeneIDs(timePointNow);
-end
+geneIDs = geneIDInfo;
+% try
+%     load(fileName,'geneIDs')
+% catch
+%     geneIDs = GetGeneIDs(timePointNow);
+% end
 
 % Annotation IDs for voxels:
 load('annotationGrids.mat','annotationGrids')
