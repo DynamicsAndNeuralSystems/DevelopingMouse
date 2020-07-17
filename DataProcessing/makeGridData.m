@@ -13,8 +13,8 @@ timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chos
 %-------------------------------------------------------------------------------
 %% Load matlab variables
 % Gene data and information:
-fprintf(1,'Loading energy grid data from ''%s''...\n',fileName);
 fileName = sprintf('energyGrids_%s.mat',timePointNow);
+fprintf(1,'Loading energy grid data from ''%s''...\n',fileName);
 load(fileName,'energyGrids','geneIDInfo')
 % Label columns as gene IDs:
 geneIDs = geneIDInfo;
