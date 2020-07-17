@@ -28,7 +28,9 @@ makeEnergyGrid(procParams);
 
 % Create gene-expression matrix across all time points:
 % voxelGeneExpression%s%s_%s.mat
-makeGeneExpressionMatrix(procParams);
+makeGeneExpressionMatrices(procParams);
+AnnotateAllSamples(procParams);
+AnnotateAllGenes(procParams)
 
 % Assemble gene IDs at each time point:
 % -> geneID_gridExpression.mat
