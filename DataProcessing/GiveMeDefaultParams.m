@@ -2,7 +2,7 @@ function params = GiveMeDefaultParams()
 
 % Data:
 params.timePoints = GiveMeParameter('timePoints');
-params.thisBrainDiv = 'forebrain'; %'wholeBrain';
+params.thisBrainDiv = 'brain'; %'wholeBrain';
 params.doSubsample = true;
 params.thisCellType = 'allCellTypes';
 params.scaledDistance = false;

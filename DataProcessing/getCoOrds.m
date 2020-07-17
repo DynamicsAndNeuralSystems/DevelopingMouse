@@ -1,4 +1,4 @@
-function coOrds = getCoOrds(thisBrainDiv,timePointNow)
+function coOrds = getCoOrdsNO(thisBrainDiv,timePointNow)
 % getCoOrds Get coordinates for voxels in a given brain division
 %-------------------------------------------------------------------------------
 

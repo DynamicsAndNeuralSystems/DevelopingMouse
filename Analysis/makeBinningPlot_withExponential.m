@@ -10,13 +10,7 @@ timePointIndex = find(strcmp(timePointNow,params.timePoints));
 
 %-------------------------------------------------------------------------------
 % Load the distance, CGE data:
-[dist,CGE] = ComputeDistanceCGE(params,timePointNow);
-
-%-------------------------------------------------------------------------------
-% Take upper triangles as vectors:
-trueDat = true(size(dist));
-dist = dist(triu(trueDat,+1));
-CGE = CGE(triu(trueDat,+1));
+[dist,CGE] = ComputeDistanceCGE(params,timePointNow,true);
 
 %-------------------------------------------------------------------------------
 % Bin the data:

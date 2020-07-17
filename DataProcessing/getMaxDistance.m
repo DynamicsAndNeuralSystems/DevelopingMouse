@@ -1,15 +1,16 @@
 function maxDistance = getMaxDistance(thisBrainDiv,timePointNow)
 % Along x-axis
 
-load('annotationGrids.mat');
 timePoints = GiveMeParameter('timePoints');
 timePointIndex = find(strcmp(timePointNow,timePoints));
 resolutionGrid = GiveMeParameter('resolutionGrid');
 
 % Get the max extent along the (default x)-axis:
 dimension = 1; % x-axis
-coOrds = getCoOrds(thisBrainDiv,timePointNow);
-maxX = max(coOrds(:,dimension)) - min(coOrds(:,dimension));
+fileName = GiveMeFileName(timePointNow);
+load(fileName,'coOrds','voxLabelTable');
+brainVoxels = voxLabelTable.isBrain;
+maxX = max(coOrds(brainVoxels,dimension)) - min(coOrds(brainVoxels,dimension));
 maxDistance = maxX*resolutionGrid.(timePointNow);
 
 end

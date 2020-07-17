@@ -2,8 +2,9 @@ function f = makeConstantPlot(params)
 % Plot variation of fitted parameters over time
 %-------------------------------------------------------------------------------
 
-% Load the distance, CGE data:
-[dist,CGE] = LoadMyDistanceCGE(params);
+if nargin < 1
+    params = GiveMeDefaultParams();
+end
 
 %-------------------------------------------------------------------------------
 % Curve fitting
@@ -12,11 +13,14 @@ numTimePoints = length(params.timePoints);
 stats = cell(numTimePoints,1);
 fittedParams = cell(numTimePoints,1);
 for i = 1:numTimePoints
-  % Bin the data:
-  [xBinCenters,xThresholds,yMeans,yStds] = makeQuantiles(dist{i},CGE{i},params.numThresholds);
+    % Load the distance, CGE data:
+    [dist,CGE] = ComputeDistanceCGE(params,params.timePoints{i},true);
 
-  % Fit the binned data (on means):
-  [fitHandle,stats{i},fittedParams{i}] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
+    % Bin the data:
+    [xBinCenters,xThresholds,yMeans,yStds] = makeQuantiles(dist,CGE,params.numThresholds);
+
+    % Fit the binned data (on means):
+    [fitHandle,stats{i},fittedParams{i}] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
 end
 
 paramNames = coeffnames(fittedParams{1});
