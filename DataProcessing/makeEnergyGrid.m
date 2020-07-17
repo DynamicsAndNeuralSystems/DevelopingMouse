@@ -1,7 +1,7 @@
 function makeEnergyGrid(procParams)
 
 if nargin < 1
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 %-------------------------------------------------------------------------------
 

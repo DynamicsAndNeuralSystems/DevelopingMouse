@@ -2,7 +2,7 @@ function [voxGeneMat,coOrds] = makeGridData(timePointNow,procParams)
 % makeGridData   Creates a voxel x gene matrix with irrelevant voxels filtered out
 
 if nargin < 2
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 
 %-------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chos
 %-------------------------------------------------------------------------------
 %% Load matlab variables
 % Gene data and information:
-fileName = sprintf('energyGrids_%s.mat',timePoints{timePointIndex});
+fileName = sprintf('energyGrids_%s.mat',timePointNow);
 load(fileName,'energyGrids')
 fprintf(1,'Loaded energy grid data from ''%s''.\n',fileName);
 % Label columns as gene IDs:

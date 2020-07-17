@@ -2,7 +2,7 @@ function annotateSamples(timePointNow,procParams)
 % Load voxelGeneExpression_*.mat and annotate a random sample
 %-------------------------------------------------------------------------------
 if nargin < 2
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 
 % Load voxel label data for this time point:

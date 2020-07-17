@@ -4,7 +4,7 @@ function renderData(procParams)
 % thisBrainDiv: 'wholeBrain','forebrain','midbrain','hindbrain','Dpallidum'
 
 if nargin < 1
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 
 % repeat running this function to create gene expression matrix from

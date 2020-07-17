@@ -2,7 +2,7 @@ function makeGeneExpressionMatrices(procParams)
 % Loop through time points, running makeGridData
 
 if nargin < 1
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 
 % Initialize

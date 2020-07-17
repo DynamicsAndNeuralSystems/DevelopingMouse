@@ -2,7 +2,7 @@ function renderDataFromEnergyGrids(procParams)
 % renders raw data into mat variables which are saved in Matlab_variables (these take a long time)
 
 if nargin < 1
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 %-------------------------------------------------------------------------------
 % Loop over all brain divisions and cell types:

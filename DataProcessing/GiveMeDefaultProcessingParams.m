@@ -1,4 +1,4 @@
-function params = GiveMeDefaultProcessingParams()
+function params = GiveMeDefaultProcessingParams_delete()
 % Outputs a set of current default processing parameters:
 
 % whatNorm: must leave it as empty string ' ' if 'scaledSigmoid'; options:' ', 'zscore','log2';
@@ -11,9 +11,8 @@ params.thisCellType = 'allCellTypes';
 
 params.numData = GiveMeParameter('numData');
 
-params.whatVoxelThreshold = GiveMeParameter('whatVoxelThreshold');
-
-params.whatGeneThreshold = GiveMeParameter('whatGeneThreshold');
+params.whatVoxelThreshold = 0.3;
+params.whatGeneThreshold = 0.3;
 
 params.useGoodGeneSubset = false;
 

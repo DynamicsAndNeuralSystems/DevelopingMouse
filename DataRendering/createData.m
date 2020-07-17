@@ -6,7 +6,7 @@ if nargin < 1
     fromScratch = false;
 end
 if nargin < 2
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 %-------------------------------------------------------------------------------
 

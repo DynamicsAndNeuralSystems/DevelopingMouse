@@ -1,6 +1,10 @@
 function [voxelGeneExpression,coOrds,voxInfo,geneInfo] = LoadSubset(params,timePointNow)
 %-------------------------------------------------------------------------------
 
+if nargin < 1
+    params = GiveMeDefaultParams();
+end
+
 fprintf(1,'Loading voxelwise gene-expression data for %s\n',timePointNow);
 fprintf(1,'(%s voxels, %s genes)\n',params.thisBrainDiv,params.thisCellType);
 
@@ -41,7 +45,8 @@ end
 
 %-------------------------------------------------------------------------------
 % Simple filtering:
-[voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(keepMeVoxel,keepMeGene);
+[voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(keepMeVoxel,keepMeGene,...
+                                    voxGeneMat,coOrds,voxLabelTable,geneInfo);
 
 %-------------------------------------------------------------------------------
 % Data-based filtering:
@@ -49,26 +54,30 @@ end
 % get the proportion of NaN genes of each voxel
 % propNanGenes = sum(isnan(voxelGeneExpression),2)/size(voxelGeneExpression,2);
 %% only keep good voxels
-isGoodVoxel = (mean(isnan(voxelGeneExpression),2) < procParams.whatVoxelThreshold);
+isGoodVoxel = (mean(isnan(voxelGeneExpression),2) < params.whatVoxelThreshold);
 fprintf(1,'%u/%u voxels are good\n',sum(isGoodVoxel),length(isGoodVoxel));
 % genes that are not nan in at least a reasonable proportion of voxels:
-isGoodGene = (mean(isnan(voxelGeneExpression),1) < procParams.whatGeneThreshold);
+isGoodGene = (mean(isnan(voxelGeneExpression),1) < params.whatGeneThreshold);
 fprintf(1,'%u/%u genes are good\n',sum(isGoodGene),length(isGoodGene));
 
 %-------------------------------------------------------------------------------
 % Another subsetting:
-[voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(isGoodVoxel,isGoodGene);
+[voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(isGoodVoxel,isGoodGene,...
+                                    voxelGeneExpression,coOrds,voxInfo,geneInfo);
 
 %% normalize matrix
-voxelGeneExpression = BF_NormalizeMatrix(voxelGeneExpression,procParams.whatNorm); % 'scaledSigmoid' used in Monash analysis
+voxelGeneExpression = BF_NormalizeMatrix(voxelGeneExpression,params.whatNorm);
 
-% only keep good voxels
-coOrds = coOrds(isGoodVoxel,:);
+% Checks:
+assert(size(voxelGeneExpression,1)==height(voxInfo))
+assert(size(voxelGeneExpression,2)==height(geneInfo))
+assert(size(coOrds,1)==size(voxelGeneExpression,1))
 
 %-------------------------------------------------------------------------------
-function [voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(keepRow,keepColumn)
+function [voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(keepRow,keepColumn,...
+                                            voxelGeneExpression,coOrds,voxInfo,geneInfo)
     voxelGeneExpression = voxGeneMat(keepRow,keepColumn);
-    coOrds = coOrds(keepRow);
+    coOrds = coOrds(keepRow,:);
     voxInfo = voxLabelTable(keepRow,:);
     geneInfo = geneInfo(keepColumn,:);
 end

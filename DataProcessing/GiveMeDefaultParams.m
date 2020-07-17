@@ -12,11 +12,14 @@ params.doSubsample = true;
 params.constantTypes = GiveMeParameter('constantTypes');
 params.whatCorr = 'Pearson';
 
-% Normalization:
+% Filtering/normalization:
+params.useGoodGeneSubset = false;
 params.whatNorm = 'mixedSigmoid';
+params.whatVoxelThreshold = 0.3;
+params.whatGeneThreshold = 0.3;
 
 % Fitting:
-params.numThresholds = 21;
+params.numThresholds = 11;
 params.whatFit = 'exp';
 params.colors = BF_getcmap('dark2',7,0);
 

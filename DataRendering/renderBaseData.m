@@ -7,7 +7,7 @@ function renderBaseData(procParams)
 % Check inputs:
 %-------------------------------------------------------------------------------
 if nargin < 1
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 
 %-------------------------------------------------------------------------------

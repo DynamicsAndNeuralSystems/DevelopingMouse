@@ -30,6 +30,8 @@ xThresholds = arrayfun(@(x)quantile(xData,x),linspace(0,1,numThresholds));
 xThresholds(end) = xThresholds(end) + eps; % make sure all data included in final bin
 xBinCenters = mean([xThresholds(1:end-1);xThresholds(2:end)]);
 
+assert(length(unique(xThresholds))==length(xThresholds));
+
 % SUMMARIZE Y-DATA WITHIN EACH BIN:
 if ~isempty(yData)
     yMeans = arrayfun(@(x)mean(yData(xData>=xThresholds(x) & xData < xThresholds(x+1))),1:numThresholds-1);

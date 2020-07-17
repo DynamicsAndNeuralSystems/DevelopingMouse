@@ -1,7 +1,7 @@
 function readGridData(timePointNow,procParams)
 % Retrieve current default processing parameters:
 if nargin < 2
-    procParams = GiveMeDefaultProcessingParams();
+    procParams = GiveMeDefaultParams();
 end
 
 %-------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ currentFolder = pwd;
 cd(expression_loc);
 
 %-------------------------------------------------------------------------------
-h = waitbar(0,('Compiling energy grid for %s...',timePointNow));
+h = waitbar(0,sprintf('Compiling energy grid for %s...',timePointNow));
 %-------------------------------------------------------------------------------
 for j = 1:numGenes
     if procParams.useGoodGeneSubset
