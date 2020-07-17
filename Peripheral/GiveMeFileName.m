@@ -3,8 +3,11 @@ function theParameter = GiveMeFileName(whatParam)
 if nargin < 1
     error('Give me an input parameter please!');
 end
+%-------------------------------------------------------------------------------
 
 switch whatParam
+    case {'E11.5','E13pt5','E15pt5','E18pt5','P4','P14','P28'}
+        theParameter = sprintf('voxelGeneExpression_%s.mat',whatParam);
   case 'wholeBrain'
     theParameter = '';
   case 'forebrain'
@@ -40,4 +43,5 @@ switch whatParam
   case 'allDirections'
     theParameter = '';
 end
+
 end

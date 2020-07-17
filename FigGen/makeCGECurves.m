@@ -1,7 +1,9 @@
-function makeCGECurves()
+function makeCGECurves(params)
 
 % Set defaults:
-params = GiveMeDefaultParams();
+if nargin < 1
+    params = GiveMeDefaultParams();
+end
 
 %-------------------------------------------------------------------------------
 % First part of Fig. 2

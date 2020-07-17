@@ -15,6 +15,7 @@ oligodendrocyte(cellfun(@(x) ~isempty(x) && isnumeric(x) && isnan(x),oligodendro
 % neuron=neuron_importfile('Neuron_Cahoy_S6.xls','Sheet1','C3:C318');
 neuron=readcell('Neuron_Cahoy_S6.xls','Sheet','Sheet1','range','C3:C318');
 neuron(cellfun(@(x) ~isempty(x) && isnumeric(x) && isnan(x),neuron)) = {''};
+
 %%
 % load IDs of good gene subset
 load('goodGeneSubset.mat','goodGeneSubset');

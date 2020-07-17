@@ -8,6 +8,7 @@ params.scaledDistance = false;
 params.thisDirection = 'allDirections';
 params.distancesMM = false;
 params.numData = 1000;
+params.doSubsample = true;
 params.constantTypes = GiveMeParameter('constantTypes');
 
 % Fitting:
