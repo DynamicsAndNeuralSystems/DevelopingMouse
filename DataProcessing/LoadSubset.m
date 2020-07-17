@@ -100,12 +100,12 @@ assert(size(voxelGeneExpression,2)==height(geneInfo))
 assert(size(coOrds,1)==size(voxelGeneExpression,1))
 
 %-------------------------------------------------------------------------------
-function [voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(keepRow,keepColumn,...
-                                            voxelGeneExpression,coOrds,voxInfo,geneInfo)
-    voxelGeneExpression = voxGeneMat(keepRow,keepColumn);
-    coOrds = coOrds(keepRow,:);
-    voxInfo = voxLabelTable(keepRow,:);
-    geneInfo = geneInfo(keepColumn,:);
+function [OUTvoxelGeneExpression,OUTcoOrds,OUTvoxInfo,OUTgeneInfo] = ApplySubset(keepRow,keepColumn,...
+                                            INvoxelGeneExpression,INcoOrds,INvoxInfo,INgeneInfo)
+    OUTvoxelGeneExpression = INvoxelGeneExpression(keepRow,keepColumn);
+    OUTcoOrds = INcoOrds(keepRow,:);
+    OUTvoxInfo = INvoxInfo(keepRow,:);
+    OUTgeneInfo = INgeneInfo(keepColumn,:);
 end
 
 end
