@@ -1,4 +1,6 @@
 function annotateGenes(timePointNow)
+% Adds a geneInfo table to the matlab voxel expression data file for a given time point
+%-------------------------------------------------------------------------------
 
 %-------------------------------------------------------------------------------
 % Load gene IDs for this time point

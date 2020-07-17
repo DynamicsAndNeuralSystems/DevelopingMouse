@@ -2,12 +2,17 @@ function fitHandle = makeBinningPlot_withExponential(params,timePointNow,makeNew
 % Plot binned data with exponential fit
 %-------------------------------------------------------------------------------
 
+if nargin < 1
+    params = GiveMeDefaultParams();
+end
+
 % Retrieve the time point index:
 timePointIndex = find(strcmp(timePointNow,params.timePoints));
 
 %-------------------------------------------------------------------------------
 % Load the distance, CGE data:
-[dist,CGE] = LoadMyDistanceCGE(params);
+[dist,CGE] = ComputeDistanceCGE(params,timePointNow);
+
 % Only take for the time point of interest:
 dist = dist{timePointIndex};
 CGE = CGE{timePointIndex};

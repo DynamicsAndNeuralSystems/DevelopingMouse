@@ -10,6 +10,10 @@ params.distancesMM = false;
 params.numData = 1000;
 params.doSubsample = true;
 params.constantTypes = GiveMeParameter('constantTypes');
+params.whatCorr = 'Pearson';
+
+% Normalization:
+params.whatNorm = 'mixedSigmoid';
 
 % Fitting:
 params.numThresholds = 21;
