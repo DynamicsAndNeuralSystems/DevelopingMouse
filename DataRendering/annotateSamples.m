@@ -20,7 +20,8 @@ sampleDpall = false(numVoxels,1);
 makeSample = @(xInd) xInd(randsample(length(xInd),min(length(xInd),procParams.numData)));
 
 % Define brain as forebrain/midbrain/hindbrain...?
-brainInd = find(voxLabelTable.isForebrain | voxLabelTable.isMidbrain | voxLabelTable.isHindbrain);
+isBrain = (voxLabelTable.isForebrain | voxLabelTable.isMidbrain | voxLabelTable.isHindbrain);
+brainInd = find(isBrain);
 forebrainInd = find(voxLabelTable.isForebrain);
 midbrainInd = find(voxLabelTable.isMidbrain);
 hindbrainInd = find(voxLabelTable.isHindbrain);
@@ -34,6 +35,7 @@ sampleHindbrain(makeSample(hindbrainInd)) = true;
 sampleDpall(makeSample(DpallInd)) = true;
 
 % Add as columns:
+voxLabelTable.isBrain = isBrain;
 voxLabelTable.sampleBrain = sampleBrain;
 voxLabelTable.sampleForebrain = sampleForebrain;
 voxLabelTable.sampleMidbrain = sampleMidbrain;

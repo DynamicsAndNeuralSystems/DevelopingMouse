@@ -8,18 +8,18 @@ params.scaledDistance = false;
 params.thisDirection = 'allDirections';
 params.distancesMM = false;
 params.numData = 1000;
-params.doSubsample = true;
+params.doSubsample = false;
 params.constantTypes = GiveMeParameter('constantTypes');
 params.whatCorr = 'Pearson';
 
 % Filtering/normalization:
 params.useGoodGeneSubset = false;
-params.whatNorm = 'mixedSigmoid';
+params.whatNorm = 'scaledSigmoid';
 params.whatVoxelThreshold = 0.3;
 params.whatGeneThreshold = 0.3;
 
 % Fitting:
-params.numThresholds = 11;
+params.numThresholds = 21;
 params.whatFit = 'exp';
 params.colors = BF_getcmap('dark2',7,0);
 

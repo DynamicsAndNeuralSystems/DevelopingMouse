@@ -13,22 +13,43 @@ theFile = GiveMeFileName(timePointNow);
 load(theFile,'coOrds','voxGeneMat','voxLabelTable','geneInfo');
 
 % Take a voxel subset:
-if params.doSubsample
-    switch params.thisBrainDiv
-    case {'brain','wholeBrain'}
+
+switch params.thisBrainDiv
+case {'brain','wholeBrain'}
+    if params.doSubsample
         keepMeVoxel = voxLabelTable.sampleBrain;
-    case 'forebrain'
-        keepMeVoxel = voxLabelTable.sampleForebrain;
-    case 'midbrain'
-        keepMeVoxel = voxLabelTable.sampleMidbrain;
-    case 'hindbrain'
-        keepMeVoxel = voxLabelTable.sampleHindbrain;
-    case 'Dpall'
-        keepMeVoxel = voxLabelTable.sampleDpall;
+    else
+        keepMeVoxel = voxLabelTable.isBrain;
     end
-else
-    warning('need to implement non-sample as e.g., ''isHindbrain''')
+case 'forebrain'
+    if params.doSubsample
+        keepMeVoxel = voxLabelTable.sampleForebrain;
+    else
+        keepMeVoxel = voxLabelTable.isForebrain;
+    end
+case 'midbrain'
+    if params.doSubsample
+        keepMeVoxel = voxLabelTable.sampleMidbrain;
+    else
+        keepMeVoxel = voxLabelTable.isMidbrain;
+    end
+case 'hindbrain'
+    if params.doSubsample
+        keepMeVoxel = voxLabelTable.sampleHindbrain;
+    else
+        keepMeVoxel = voxLabelTable.isHindbrain;
+    end
+case 'Dpall'
+    if params.doSubsample
+        keepMeVoxel = voxLabelTable.sampleDpall;
+    else
+        keepMeVoxel = voxLabelTable.isDpall;
+    end
+otherwise
+    error('Unknown region, ''%s''',params.thisBrainDiv);
 end
+
+fprintf(1,'Keeping %u %s voxels\n',sum(keepMeVoxel),params.thisBrainDiv);
 
 %-------------------------------------------------------------------------------
 % Take a gene subset
@@ -42,6 +63,7 @@ case 'astrocyte'
 case 'oligodendrocyte'
     keepMeGene = geneInfo.isOligodendrocyteEnriched;
 end
+fprintf(1,'Keeping %u %s genes\n',sum(keepMeGene),params.thisCellType);
 
 %-------------------------------------------------------------------------------
 % Simple filtering:
@@ -66,6 +88,7 @@ fprintf(1,'%u/%u genes are good\n',sum(isGoodGene),length(isGoodGene));
                                     voxelGeneExpression,coOrds,voxInfo,geneInfo);
 
 %% normalize matrix
+fprintf(1,'Normalizing each gene''s expression as ''%s''\n',params.whatNorm);
 voxelGeneExpression = BF_NormalizeMatrix(voxelGeneExpression,params.whatNorm);
 
 % Checks:

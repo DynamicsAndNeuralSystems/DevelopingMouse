@@ -39,7 +39,6 @@ isAnnotated = myAnnotationGrid>0;
 voxelIncude = (isAnnotated & ~isSpinalCord); % label voxels to include
 numVoxels = sum(voxelIncude(:));
 numGenes = length(energyGrids);
-keyboard
 
 %-------------------------------------------------------------------------------
 % Generate voxel x gene matrix

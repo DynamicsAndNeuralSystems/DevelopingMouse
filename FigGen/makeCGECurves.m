@@ -25,19 +25,19 @@ fprintf(1,'Saved to %s\n',fileName);
 
 %-------------------------------------------------------------------------------
 % Second part of Fig. 2
-f = figure('color','w','Renderer','painters');
-subplot(2,1,1)
-params.scaledDistance = false;
-makeExponentialPlot(params)
-subplot(2,1,2)
-params.scaledDistance = true;
-makeExponentialPlot(params);
-
-f.Position = [1000        1003         292         335];
-
-% Save out:
-fileName = fullfile('Outs','figure2','figure2_part2.svg');
-saveas(f,fileName,'svg')
-fprintf(1,'Saved to %s\n',fileName);
+% f = figure('color','w','Renderer','painters');
+% subplot(2,1,1)
+% params.scaledDistance = false;
+% makeExponentialPlot(params)
+% subplot(2,1,2)
+% params.scaledDistance = true;
+% makeExponentialPlot(params);
+%
+% f.Position = [1000        1003         292         335];
+%
+% % Save out:
+% fileName = fullfile('Outs','figure2','figure2_part2.svg');
+% saveas(f,fileName,'svg')
+% fprintf(1,'Saved to %s\n',fileName);
 
 end

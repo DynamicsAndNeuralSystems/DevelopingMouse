@@ -3,7 +3,7 @@ function [distMat,cgeMat] = ComputeDistanceCGE(params,timePointNow)
 %-------------------------------------------------------------------------------
 
 %-------------------------------------------------------------------------------
-% Get components of the necessary filename:
+% Get components from the appropriate file:
 [voxelGeneExpression,coOrds,voxInfo,geneInfo] = LoadSubset(params,timePointNow);
 
 %-------------------------------------------------------------------------------
