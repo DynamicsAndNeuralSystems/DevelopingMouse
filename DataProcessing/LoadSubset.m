@@ -22,10 +22,11 @@ else
     warning('need to implement non-sample as e.g., ''isHindbrain''')
 end
 
+%-------------------------------------------------------------------------------
 % Take a gene subset
 switch params.thisCellType
 case 'allCellTypes'
-    
+
 end
 
 
