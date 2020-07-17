@@ -5,7 +5,7 @@ function R = BF_pdist(dataMatrix,distMetric,toVector,opts,beSilent,minPropGood)
 % calculated values using an overlapping range of good values.
 
 % ------------------------------------------------------------------------------
-% Copyright (C) 2018, Ben D. Fulcher <ben.d.fulcher@gmail.com>,
+% Copyright (C) 2020, Ben D. Fulcher <ben.d.fulcher@gmail.com>,
 % <http://www.benfulcher.com>
 %
 % If you use this code for your research, please cite the following two papers:
@@ -66,6 +66,38 @@ end
 % Compute pairwise distances
 % ------------------------------------------------------------------------------
 switch distMetric
+case 'mi'
+    % Mutual information distances: can't make use of the inbuilt pdist function
+    if ~isempty(opts)
+        nbins = opts; % for MI, extra argument specifies nbins
+    else
+        nbins = 10;
+    end
+    if ~beSilent, fprintf(1,'Using a histogram with %u bins\n',nbins); end
+
+    goodies = ~isnan(dataMatrix); % now we can deal with NaNs into design matrix
+
+    mis = zeros(n1);
+    mitimer = tic; % Way faster to not store the time taken for every iteration
+    for i = 1:n1
+        % tic
+        goodi = goodies(i,:);
+        for j = i:n1
+            goodj = goodies(j,:);
+            goodboth = (goodi & goodj);
+            % Using Information Dynamics Toolkit:
+            mis(i,j) = IN_MutualInfo(dataMatrix(i,goodboth),dataMatrix(j,goodboth),'gaussian');
+            % mis(i,j) = BF_MutualInformation(dataMatrix(i,goodboth),dataMatrix(j,goodboth),'quantile','quantile',nbins); % by quantile with nbins
+            mis(j,i) = mis(i,j);
+        end
+        if (mod(i,floor(n1/50)) == 0)
+            fprintf(1,'Approximately %s remaining! We''re at %u / %u\n', ...
+                        BF_TheTime(toc(mitimer)/i*(n1-i)),i,n1);
+        end
+    end
+    clear mitimer % stop timing
+    R = mis; clear mis; % not really an R but ok.
+
 
 case {'corr_fast','abscorr_fast'}
     % Try using fast approximation to correlation coefficients when data includes NaNs
@@ -78,7 +110,7 @@ case {'corr_fast','abscorr_fast'}
     end
     tic
     R = BF_NaNCov(dataMatrix',1,1);
-    if ~beSilent, fprintf(1,' Done in %s.\n',BF_thetime(toc)); end
+    if ~beSilent, fprintf(1,' Done in %s.\n',BF_TheTime(toc)); end
 
 
 case {'euclidean','Euclidean','corr','correlation','abscorr'}
@@ -94,7 +126,7 @@ case {'euclidean','Euclidean','corr','correlation','abscorr'}
     end
     R = squareform(R); % Make a matrix
     if ~beSilent
-        fprintf(1,' Done in %s.\n',BF_thetime(toc));
+        fprintf(1,' Done in %s.\n',BF_TheTime(toc));
     end
 
     % Now go through and fill in any NaNs
@@ -126,7 +158,7 @@ case {'euclidean','Euclidean','corr','correlation','abscorr'}
             % and then 5 more times...
             if ~beSilent && ((i==1000 && length(nani) > 10000) || (mod(i,floor(length(nani)/5))==0))
                 fprintf(1,'Approximately %s remaining! We''re at %u / %u.\n', ...
-                        BF_thetime(toc(NaNtimer)/i*(length(nani)-i)),i,length(nani));
+                        BF_TheTime(toc(NaNtimer)/i*(length(nani)-i)),i,length(nani));
             end
         end
         clear NaNtimer % stop the timer

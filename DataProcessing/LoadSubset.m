@@ -15,6 +15,9 @@ load(theFile,'coOrds','voxGeneMat','voxLabelTable','geneInfo');
 % Take a voxel subset:
 
 switch params.thisBrainDiv
+case 'all'
+    numVoxels = height(voxLabelTable);
+    keepMeVoxel = true(numVoxels,1);
 case {'brain','wholeBrain'}
     if params.doSubsample
         keepMeVoxel = voxLabelTable.sampleBrain;

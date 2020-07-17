@@ -21,7 +21,7 @@ function [ord,R,keepers] = BF_ClusterReorder(dataMatrix,distanceMetric,linkageMe
 % keepers, logical of rows kept (after filtering bad performers)
 
 % ------------------------------------------------------------------------------
-% Copyright (C) 2018, Ben D. Fulcher <ben.d.fulcher@gmail.com>,
+% Copyright (C) 2020, Ben D. Fulcher <ben.d.fulcher@gmail.com>,
 % <http://www.benfulcher.com>
 %
 % If you use this code for your research, please cite the following two papers:
@@ -56,14 +56,8 @@ end
 %% Do linkage:
 % ------------------------------------------------------------------------------
 if ischar(distanceMetric)
-    switch distanceMetric
-    case 'euclidean'
-        % Custom-NaN euclidean distances:
-        fprintf(1,'Computing custom-NaN euclidean distances\n');
-        R = pdist(dataMatrix,@BF_customDist);
-    otherwise
-        R = BF_pdist(dataMatrix,distanceMetric);
-    end
+    % Specify a distance metric as an input to BF_pdist
+    R = BF_pdist(dataMatrix,distanceMetric);
 else
     % Put the pre-computed distance matrix in the second input: distanceMetric
     R = distanceMetric;
@@ -93,7 +87,7 @@ links = linkage(R,linkageMethod);
 % ------------------------------------------------------------------------------
 f = figure('color','w');
 set(gcf,'Visible','off'); % suppress figure output
-ord = BF_linkageOrdering(R,links);
+ord = BF_LinkageOrdering(R,links);
 close(f); % close the invisible figure used for the dendrogram
 
 if ~all(keepers==1)

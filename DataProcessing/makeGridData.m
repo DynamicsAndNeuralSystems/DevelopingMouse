@@ -34,10 +34,13 @@ load('brainDivision.mat','brainDivision')
 %-------------------------------------------------------------------------------
 % Filter out spinal-cord voxels
 isSpinalCord = ismember(myAnnotationGrid,brainDivision.SpinalCord.ID);
+fprintf(1,'%u spinal cord voxels\n',sum(isSpinalCord(:)));
 isAnnotated = myAnnotationGrid>0;
+fprintf(1,'%u annotated voxels\n',sum(isAnnotated(:)));
 % isIncluded = getIsIncluded(procParams.thisBrainDiv,timePointNow);
-voxelIncude = (isAnnotated & ~isSpinalCord); % label voxels to include
-numVoxels = sum(voxelIncude(:));
+voxelInclude = (isAnnotated & ~isSpinalCord); % label voxels to include
+fprintf(1,'%u annotated, non-spinal cord voxels\n',sum(voxelInclude(:)));
+numVoxels = sum(voxelInclude(:));
 numGenes = length(energyGrids);
 
 %-------------------------------------------------------------------------------
@@ -48,7 +51,7 @@ h = waitbar(0,sprintf('Computing %u voxel x %u gene expression matrix...',numVox
 steps = length(energyGrids);
 for j = 1:numGenes
     energyGridsNow = energyGrids{j};
-    energyGridsNow = energyGridsNow(voxelIncude);
+    energyGridsNow = energyGridsNow(voxelInclude);
     for k = 1:numVoxels
         if energyGridsNow(k)>=0
             voxGeneMat(k,j) = energyGridsNow(k);
@@ -62,12 +65,12 @@ close(h)
 % Get all coordinates:
 % (replaces getCoOrds)
 sizeGrids = GiveMeParameter('sizeGrids');
-[a,b,c] = ind2sub(sizeGrids.(timePoints{timePointIndex}),find(voxelIncude));
+[a,b,c] = ind2sub(sizeGrids.(timePoints{timePointIndex}),find(voxelInclude));
 coOrds = horzcat(a,b,c);
 
 %-------------------------------------------------------------------------------
 % Label voxels by brain area:
-voxStructIDs = myAnnotationGrid(voxelIncude);
+voxStructIDs = myAnnotationGrid(voxelInclude);
 isForebrain = ismember(voxStructIDs,brainDivision.forebrain.ID);
 isMidbrain = ismember(voxStructIDs,brainDivision.midbrain.ID);
 isHindbrain = ismember(voxStructIDs,brainDivision.hindbrain.ID);
