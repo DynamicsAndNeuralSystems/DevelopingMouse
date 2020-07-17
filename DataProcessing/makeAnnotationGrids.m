@@ -7,8 +7,9 @@ sizeGrids = GiveMeParameter('sizeGrids');
 
 annotationGrids = cell(length(timePoints),1);
 for i = 1:length(timePoints) % for each time point%
-    theGridFile = fullfile(gridAnno_loc,sprintf('%s_DevMouse2012_annotation',timePoints{i}),...
+    theGridFile = fullfile(gridAnno_loc,sprintf('%s_DevMouse2012_gridAnnotation',timePoints{i}),...
                             'annotation.raw');
+    fprintf(1,'Loading data from %s\n',theGridFile);
     fid = fopen(theGridFile,'r','l');
     if fid==-1
         error('Grid annotation file: ''%s'' not found',theGridFile);

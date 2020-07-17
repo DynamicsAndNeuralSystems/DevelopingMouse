@@ -13,9 +13,9 @@ timePointIndex = find(strcmp(timePointNow,timePoints)); %match index to the chos
 %-------------------------------------------------------------------------------
 %% Load matlab variables
 % Gene data and information:
+fprintf(1,'Loading energy grid data from ''%s''...\n',fileName);
 fileName = sprintf('energyGrids_%s.mat',timePointNow);
 load(fileName,'energyGrids','geneIDInfo')
-fprintf(1,'Loaded energy grid data from ''%s''.\n',fileName);
 % Label columns as gene IDs:
 geneIDs = geneIDInfo;
 % try
@@ -39,12 +39,13 @@ isAnnotated = myAnnotationGrid>0;
 voxelIncude = (isAnnotated & ~isSpinalCord); % label voxels to include
 numVoxels = sum(voxelIncude(:));
 numGenes = length(energyGrids);
+keyboard
 
 %-------------------------------------------------------------------------------
 % Generate voxel x gene matrix
 voxGeneMat = nan(numVoxels,numGenes);
 
-h = waitbar(0,'Computing voxel x gene expression matrix...');
+h = waitbar(0,sprintf('Computing %u voxel x %u gene expression matrix...',numVoxels,numGenes));
 steps = length(energyGrids);
 for j = 1:numGenes
     energyGridsNow = energyGrids{j};
