@@ -15,6 +15,12 @@ end
 %-------------------------------------------------------------------------------
 % Get components from the appropriate file:
 [voxelGeneExpression,coOrds,voxInfo,geneInfo] = LoadSubset(params,timePointNow);
+if any(size(voxelGeneExpression)==0)
+    dist = NaN;
+    CGE = NaN;
+    warning('No good data at %s',timePointNow)
+    return
+end
 
 %-------------------------------------------------------------------------------
 % Compute pairwise distances:

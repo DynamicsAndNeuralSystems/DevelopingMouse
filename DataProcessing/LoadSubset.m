@@ -93,6 +93,9 @@ fprintf(1,'%u/%u voxels are good\n',sum(isGoodVoxel),length(isGoodVoxel));
 isGoodGene = (mean(isnan(voxelGeneExpression),1) < params.whatGeneThreshold);
 fprintf(1,'%u/%u genes are good\n',sum(isGoodGene),length(isGoodGene));
 
+if sum(isGoodVoxel)==0 || sum(isGoodGene)==0
+    warning('Not enough good data');
+end
 %-------------------------------------------------------------------------------
 % Another subsetting:
 [voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(isGoodVoxel,isGoodGene,...

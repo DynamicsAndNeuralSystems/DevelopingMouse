@@ -10,11 +10,17 @@ end
 % Curve fitting
 %-------------------------------------------------------------------------------
 numTimePoints = length(params.timePoints);
+goodTimePoint = false(numTimePoints,1);
 stats = cell(numTimePoints,1);
 fittedParams = cell(numTimePoints,1);
 for i = 1:numTimePoints
     % Load the distance, CGE data:
     [dist,CGE] = ComputeDistanceCGE(params,params.timePoints{i},true);
+    if isnan(dist)
+        continue
+    else
+        goodTimePoint(i) = true;
+    end
 
     % Bin the data:
     [xBinCenters,xThresholds,yMeans,yStds] = makeQuantiles(dist,CGE,params.numThresholds);
@@ -22,15 +28,16 @@ for i = 1:numTimePoints
     % Fit the binned data (on means):
     [fitHandle,stats{i},fittedParams{i}] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
 end
-
+goodTimeInd = find(goodTimePoint);
 paramNames = coeffnames(fittedParams{1});
 
 % Convert to confidence intervals:
-CIs = cellfun(@(x)confint(x),fittedParams,'UniformOutput',false);
+CIs = cellfun(@(x)confint(x),fittedParams(goodTimePoint),'UniformOutput',false);
 % ***Convert n -> inverses (hopefully valid to do nonlinear transformations of CIs)***
 nIndex = strcmp(paramNames,'n');
 for i = 1:numTimePoints
-    CIs{i}(:,nIndex) = 1./CIs{i}(:,nIndex);
+    ind = goodTimeInd(i);
+    CIs{ind}(:,nIndex) = 1./CIs{ind}(:,nIndex);
 end
 
 % Get max distances

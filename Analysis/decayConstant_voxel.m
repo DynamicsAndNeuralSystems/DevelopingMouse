@@ -43,6 +43,8 @@ ax.YScale = 'log';
 axis('square')
 xlabel('Brain size, d_{max}');
 ylabel('Spatial correlation length, \lambda');
+%-------------------------------------------------------------------------------
+% Linear fit in log-log:
 [f_handle,stats,c] = GiveMeFit(log10(maxDistances),log10(paramEstMean),'linear');
 if addHuman
     xRange = logspace(min(log10(maxDistances)),log10(dMaxHuman),50);
@@ -55,6 +57,10 @@ str = sprintf('lambda = %g d^{%f}',10^c.p2,c.p1);
 fprintf(1,'%s\n',str);
 text(mean(maxDistances),mean(paramEstMean),str);
 
+%-------------------------------------------------------------------------------
+% Linear fit in linear-linear:
+[f_handle,stats,c] = GiveMeFit(maxDistances,paramEstMean,'linear');
+plot(xRange,c.p1 + xRange*c.p1,'-','color',ones(1,3)*0.5);
 
 %-------------------------------------------------------------------------------
 % ADD HUMAN?
