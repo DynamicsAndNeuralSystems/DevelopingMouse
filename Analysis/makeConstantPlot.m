@@ -93,10 +93,10 @@ for i = 1:numParams
                             'Color',params.colors(t,:),'LineWidth',2)
         end
     case 'nLog'
-        decayConstant_voxel(params,false);
+        decayConstant_voxel(params,maxDistances,paramEstMean,errs,false);
         axis('square')
     case 'nLogHuman'
-        decayConstant_voxel(params,true);
+        decayConstant_voxel(params,maxDistances,paramEstMean,errs,true);
         axis('square')
     end
 end

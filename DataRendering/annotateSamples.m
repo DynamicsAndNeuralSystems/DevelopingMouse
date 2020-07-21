@@ -17,15 +17,19 @@ sampleMidbrain = false(numVoxels,1);
 sampleHindbrain = false(numVoxels,1);
 sampleDpall = false(numVoxels,1);
 
+
+%-------------------------------------------------------------------------------
+% VOXEL SUBSAMPLING
 makeSample = @(xInd) xInd(randsample(length(xInd),min(length(xInd),procParams.numData)));
 
 % Define brain as forebrain/midbrain/hindbrain...?
+isGoodVoxel = (mean(isnan(voxGeneMat),2) < procParams.whatVoxelThreshold);
 isBrain = (voxLabelTable.isForebrain | voxLabelTable.isMidbrain | voxLabelTable.isHindbrain);
-brainInd = find(isBrain);
-forebrainInd = find(voxLabelTable.isForebrain);
-midbrainInd = find(voxLabelTable.isMidbrain);
-hindbrainInd = find(voxLabelTable.isHindbrain);
-DpallInd = find(voxLabelTable.isDpall);
+brainInd = find(isBrain & isGoodVoxel);
+forebrainInd = find(voxLabelTable.isForebrain & isGoodVoxel);
+midbrainInd = find(voxLabelTable.isMidbrain & isGoodVoxel);
+hindbrainInd = find(voxLabelTable.isHindbrain & isGoodVoxel);
+DpallInd = find(voxLabelTable.isDpall & isGoodVoxel);
 
 % Assign to sample columns:
 sampleBrain(makeSample(brainInd)) = true;

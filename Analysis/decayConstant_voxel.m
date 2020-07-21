@@ -1,26 +1,27 @@
-function decayConstant_voxel(params,addHuman)
+function decayConstant_voxel(params,maxDistances,paramEstMean,errs,addHuman)
 
-if nargin < 1
-    params = GiveMeDefaultParams();
-end
-if nargin < 2
+% if nargin < 1
+%     params = GiveMeDefaultParams();
+% end
+if nargin < 5
     addHuman = false;
 end
 
 %-------------------------------------------------------------------------------
 % Load in what we need:
-maxDistances = makeMaxDistance(params);
-load('parameterFits.mat','paramMeanValues','paramErrValues');
-corrLengths = paramMeanValues(1,:);
+% maxDistances = makeMaxDistance(params);
+% load('parameterFits.mat','paramMeanValues','paramErrValues');
+% paramEstMean = paramEstMean(1,:);
 %-------------------------------------------------------------------------------
 doColorful = true;
 % addHuman = false;
 
 % f = figure('color','w');
-hold('on'); grid('on');
+hold('on');
+grid('on');
 if doColorful
     for t = 1:length(params.timePoints)
-        loglog(maxDistances(t),corrLengths(t),'o',...
+        loglog(maxDistances(t),paramEstMean(t),'o',...
                     'MarkerEdgeColor',brighten(params.colors(t,:),-0.5),...
                     'MarkerFaceColor',params.colors(t,:),'MarkerSize',7)
     end
@@ -33,7 +34,7 @@ if doColorful
                     'MarkerFaceColor',humanColor,'MarkerSize',7)
     end
 else
-    loglog(maxDistances,corrLengths,'ok')
+    loglog(maxDistances,paramEstMean,'ok')
 end
 
 ax = gca();
@@ -42,7 +43,7 @@ ax.YScale = 'log';
 axis('square')
 xlabel('Brain size, d_{max}');
 ylabel('Spatial correlation length, \lambda');
-[f_handle,stats,c] = GiveMeFit(log10(maxDistances),log10(corrLengths'),'linear');
+[f_handle,stats,c] = GiveMeFit(log10(maxDistances),log10(paramEstMean),'linear');
 if addHuman
     xRange = logspace(min(log10(maxDistances)),log10(dMaxHuman),50);
 else
@@ -52,7 +53,7 @@ plot(xRange,10.^c.p2*xRange.^c.p1,'--k');
 % Gradient = c.p1; Intercept = c.p2;
 str = sprintf('lambda = %g d^{%f}',10^c.p2,c.p1);
 fprintf(1,'%s\n',str);
-text(mean(maxDistances),mean(corrLengths),str);
+text(mean(maxDistances),mean(paramEstMean),str);
 
 
 %-------------------------------------------------------------------------------
