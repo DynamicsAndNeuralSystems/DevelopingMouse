@@ -70,6 +70,12 @@ case 'oligodendrocyte'
 end
 fprintf(1,'Keeping %u %s genes\n',sum(keepMeGene),params.thisCellType);
 
+% Check the usePersistentGenes flag:
+if params.usePersistentGenes
+    keepMeGene = keepMeGene & geneInfo.isPersistent;
+    fprintf(1,'Only keeping genes that are good across all time points\n');
+end
+
 %-------------------------------------------------------------------------------
 % Simple filtering:
 [voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(keepMeVoxel,keepMeGene,...
