@@ -3,12 +3,14 @@ function params = GiveMeDefaultParams()
 % Data:
 params.timePoints = GiveMeParameter('timePoints');
 params.thisBrainDiv = 'brain'; %'wholeBrain';
-params.doSubsample = false; % analyze just a subsample of numData voxels
+params.doSubsample = true; % analyze just a subsample of numData voxels
 params.thisCellType = 'allCellTypes';
 params.scaledDistance = false;
 params.thisDirection = 'allDirections';
 params.distancesMM = false;
-params.numData = 1000;
+
+%-------------------------------------------------------------------------------
+params.numData = 1000; % must re-run AnnotateAllSamples to re-sample
 params.constantTypes = GiveMeParameter('constantTypes');
 params.whatCorr = 'Pearson';
 

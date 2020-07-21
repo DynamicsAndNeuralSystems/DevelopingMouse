@@ -7,7 +7,7 @@ end
 
 % Load voxel label data for this time point:
 fileName = GiveMeFileName(timePointNow);
-load(fileName,'voxLabelTable')
+load(fileName,'voxLabelTable','voxGeneMat')
 numVoxels = height(voxLabelTable);
 
 % Filter by regions of interest

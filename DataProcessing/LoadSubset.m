@@ -72,7 +72,7 @@ fprintf(1,'Keeping %u %s genes\n',sum(keepMeGene),params.thisCellType);
 
 % Check the usePersistentGenes flag:
 if params.usePersistentGenes
-    keepMeGene = keepMeGene & geneInfo.isPersistent;
+    keepMeGene = (keepMeGene & geneInfo.isPersistent);
     fprintf(1,'Only keeping genes that are good across all time points\n');
 end
 
