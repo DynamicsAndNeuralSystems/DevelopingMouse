@@ -1,9 +1,9 @@
-function decayConstant_voxel(params,maxDistances,paramEstMean,errs,addHuman)
+function decayConstant_voxel(params,maxDistances,paramEstMean,errs,goodTimeInd,addHuman)
 
 % if nargin < 1
 %     params = GiveMeDefaultParams();
 % end
-if nargin < 5
+if nargin < 6
     addHuman = false;
 end
 
@@ -20,10 +20,10 @@ doColorful = true;
 hold('on');
 grid('on');
 if doColorful
-    for t = 1:length(params.timePoints)
+    for t = 1:length(goodTimeInd)
         loglog(maxDistances(t),paramEstMean(t),'o',...
-                    'MarkerEdgeColor',brighten(params.colors(t,:),-0.5),...
-                    'MarkerFaceColor',params.colors(t,:),'MarkerSize',7)
+                    'MarkerEdgeColor',brighten(params.colors(goodTimeInd(t),:),-0.5),...
+                    'MarkerFaceColor',params.colors(goodTimeInd(t),:),'MarkerSize',7)
     end
     if addHuman
         dMaxHuman = 148;
@@ -46,21 +46,35 @@ ylabel('Spatial correlation length, \lambda');
 %-------------------------------------------------------------------------------
 % Linear fit in log-log:
 [f_handle,stats,c] = GiveMeFit(log10(maxDistances),log10(paramEstMean),'linear');
+numIncrements = 50;
 if addHuman
-    xRange = logspace(min(log10(maxDistances)),log10(dMaxHuman),50);
+    xRange = logspace(min(log10(maxDistances)),log10(dMaxHuman),numIncrements);
 else
-    xRange = logspace(min(log10(maxDistances)),max(log10(maxDistances)),50);
+    xRange = logspace(min(log10(maxDistances)),max(log10(maxDistances)),numIncrements);
 end
-plot(xRange,10.^c.p2*xRange.^c.p1,'--k');
+f_handle = @(x) 10.^c.p2*x.^c.p1;
+plot(xRange,f_handle(xRange),'--k');
 % Gradient = c.p1; Intercept = c.p2;
 str = sprintf('lambda = %g d^{%f}',10^c.p2,c.p1);
 fprintf(1,'%s\n',str);
 text(mean(maxDistances),mean(paramEstMean),str);
 
+if addHuman
+    fprintf(1,'Mouse developmental prediction of human lambda (scaling): %.3g (measured = %.3g)\n',...
+                    f_handle(dMaxHuman),lambdaHuman);
+end
+
 %-------------------------------------------------------------------------------
-% Linear fit in linear-linear:
-[f_handle,stats,c] = GiveMeFit(maxDistances,paramEstMean,'linear');
-plot(xRange,c.p1 + xRange*c.p1,'-','color',ones(1,3)*0.5);
+% Proportional fit (in linear-linear):
+ft = fittype('c*x');
+[c,Stats] = fit(maxDistances,paramEstMean,ft);
+f_handle = @(x) c.c*x;
+plot(xRange,f_handle(xRange),'-','color',ones(1,3)*0.5);
+
+if addHuman
+    fprintf(1,'Mouse developmental prediction of human lambda (linear): %.3g (measured = %.3g)\n',...
+                    f_handle(dMaxHuman),lambdaHuman);
+end
 
 %-------------------------------------------------------------------------------
 % ADD HUMAN?

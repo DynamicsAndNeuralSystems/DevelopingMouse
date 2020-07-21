@@ -23,15 +23,27 @@ Before running analyses, add all repository paths using `startup`.
 
 ### CGE Curves
 
-`makeCGECurves()`
+```matlab
+makeCGECurves()
+```
 
 Yields Fig. 2:
 
 ![](img/Fig2.png)
 
-And Fig. 3:
+We can also modify the data used for these computations, including subsets of voxels and/or genes.
 
-![](img/Fig3.png)
+For example, to compute the same curves but only using forebrain voxels:
+
+```matlab
+params = GiveMeDefaultParams();
+params.thisBrainDiv = 'forebrain';
+makeCGECurves(params)
+```
+
+<!-- And Fig. 3:
+
+![](img/Fig3.png) -->
 
 ### Scaling relationships
 
