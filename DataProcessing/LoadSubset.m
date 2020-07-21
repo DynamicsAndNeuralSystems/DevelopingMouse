@@ -1,4 +1,6 @@
 function [voxelGeneExpression,coOrds,voxInfo,geneInfo] = LoadSubset(params,timePointNow)
+% Load voxel-wise gene expression data (and coordinates) according to the
+% criteria specified in params.
 %-------------------------------------------------------------------------------
 
 if nargin < 1

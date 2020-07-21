@@ -31,16 +31,14 @@ makeEnergyGrid(procParams);
 makeGeneExpressionMatrices(procParams);
 AnnotateAllSamples(procParams);
 AnnotateAllGenes(procParams);
+AnnotateGoodPersistentGenes(procParams);
+
 
 % Assemble gene IDs at each time point:
 % -> geneID_gridExpression.mat
 % makeGeneList_gridExpression();
-
-% create goodGeneSubset.mat
-makeVoxGeneMatStats_geneAcrossTime();
-
 % Create enrichedGenes.mat
-makeEnrichedGenes();
+% makeEnrichedGenes();
 
 % Create the energy grids using all good genes, genes enriched in neurons, ...
 % oligodendrocytes and astrocytes

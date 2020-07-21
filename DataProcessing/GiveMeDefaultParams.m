@@ -3,7 +3,7 @@ function params = GiveMeDefaultParams()
 % Data:
 params.timePoints = GiveMeParameter('timePoints');
 params.thisBrainDiv = 'brain'; %'wholeBrain';
-params.doSubsample = true;
+params.doSubsample = false; % analyze just a subsample of numData voxels
 params.thisCellType = 'allCellTypes';
 params.scaledDistance = false;
 params.thisDirection = 'allDirections';
@@ -14,7 +14,7 @@ params.whatCorr = 'Pearson';
 
 % Filtering/normalization:
 params.useGoodGeneSubset = false;
-params.whatNorm = 'mixedSigmoid';
+params.whatNorm = 'scaledRobustSigmoid';
 params.whatVoxelThreshold = 0.3;
 params.whatGeneThreshold = 0.3;
 
