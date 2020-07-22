@@ -74,17 +74,10 @@ end
 plot([1,numDivisions],ones(1,2)*lambdaHuman,'--','color',ones(1,3)*0.4,'LineWidth',1.5)
 ax.XTick = 1:numDivisions;
 ax.XTickLabel = makeXTickLabel();
-ax.YLim = [0,140];
-xlabel('Brain division (number of time points fit)')
+ax.YLim = [0,100];
+xlabel('Brain division (fit)')
 ylabel('\lambda_{human}^{(pred)}')
 
-%===============================================================================
-fileName = fullfile('Outs','PredictHuman.svg');
-saveas(f,fileName,'svg')
-fprintf(1,'Saved figure to %s\n',fileName);
-
-%-------------------------------------------------------------------------------
-%-------------------------------------------------------------------------------
 function theLabels = makeXTickLabel()
     theLabels = cell(numDivisions,1);
     for i = 1:numDivisions
