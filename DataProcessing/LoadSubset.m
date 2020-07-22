@@ -26,6 +26,8 @@ case {'brain','wholeBrain'}
     else
         keepMeVoxel = voxLabelTable.isBrain;
     end
+case 'fmhSample'
+    keepMeVoxel = (voxLabelTable.sampleForebrain|voxLabelTable.sampleMidbrain|voxLabelTable.sampleHindbrain);
 case 'forebrain'
     if params.doSubsample
         keepMeVoxel = voxLabelTable.sampleForebrain;

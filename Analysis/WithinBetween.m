@@ -10,8 +10,8 @@ if nargin < 2
     doSubsample = true;
 end
 
+params.thisBrainDiv = 'fmhSample';
 params.doSubsample = false;
-params.thisBrainDiv = 'brain'; %'wholeBrain';
 doUnified = false;
 
 %-------------------------------------------------------------------------------
