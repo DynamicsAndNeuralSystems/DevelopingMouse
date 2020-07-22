@@ -1,4 +1,4 @@
-function WithinBetween(params)
+function WithinBetween(params,doSubsample)
 % Compare CGE curves within/between major brain divisions
 % (hindbrain/midbrain/forebrain)
 %-------------------------------------------------------------------------------
@@ -6,7 +6,9 @@ function WithinBetween(params)
 if nargin < 1
     params = GiveMeDefaultParams();
 end
-
+if nargin < 2
+    doSubsample = true;
+end
 params.thisBrainDiv = 'brain'; %'wholeBrain';
 doUnified = false;
 
@@ -19,12 +21,21 @@ for i = 1:numTimePoints
 
     % Now we want different subsets:
     numVoxels = height(voxInfo);
-    isFF = MakeMeMask(numVoxels,voxInfo.isForebrain,voxInfo.isForebrain);
-    isMM = MakeMeMask(numVoxels,voxInfo.isMidbrain,voxInfo.isMidbrain);
-    isHH = MakeMeMask(numVoxels,voxInfo.isHindbrain,voxInfo.isHindbrain);
-    isFH = MakeMeMask(numVoxels,voxInfo.isForebrain,voxInfo.isHindbrain);
-    isFM = MakeMeMask(numVoxels,voxInfo.isForebrain,voxInfo.isMidbrain);
-    isMH = MakeMeMask(numVoxels,voxInfo.isMidbrain,voxInfo.isHindbrain);
+    if doSubsample
+        isFF = MakeMeMask(numVoxels,voxInfo.sampleForebrain,voxInfo.sampleForebrain);
+        isMM = MakeMeMask(numVoxels,voxInfo.sampleMidbrain,voxInfo.sampleMidbrain);
+        isHH = MakeMeMask(numVoxels,voxInfo.sampleHindbrain,voxInfo.sampleHindbrain);
+        isFH = MakeMeMask(numVoxels,voxInfo.sampleForebrain,voxInfo.sampleHindbrain);
+        isFM = MakeMeMask(numVoxels,voxInfo.sampleForebrain,voxInfo.sampleMidbrain);
+        isMH = MakeMeMask(numVoxels,voxInfo.sampleMidbrain,voxInfo.sampleHindbrain);
+    else
+        isFF = MakeMeMask(numVoxels,voxInfo.isForebrain,voxInfo.isForebrain);
+        isMM = MakeMeMask(numVoxels,voxInfo.isMidbrain,voxInfo.isMidbrain);
+        isHH = MakeMeMask(numVoxels,voxInfo.isHindbrain,voxInfo.isHindbrain);
+        isFH = MakeMeMask(numVoxels,voxInfo.isForebrain,voxInfo.isHindbrain);
+        isFM = MakeMeMask(numVoxels,voxInfo.isForebrain,voxInfo.isMidbrain);
+        isMH = MakeMeMask(numVoxels,voxInfo.isMidbrain,voxInfo.isHindbrain);
+    end
 
     % Get plottin'
     f = figure('color','w');
