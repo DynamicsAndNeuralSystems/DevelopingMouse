@@ -118,22 +118,27 @@ end
 f.Position(3:4) = [1291,420];
 
 %-------------------------------------------------------------------------------
-if ~(exist('parameterFits.mat','file')==0)
+if ~params.doSubsample
+    theFileName = 'parameterFits.mat';
+else
+    theFileName = 'parameterFits_subsampled.mat';
+end
+if ~(exist(theFileName,'file')==0)
     paramFitStruct = struct();
 else
-    load('parameterFits.mat','paramFitStruct')
+    load(theFileName,'paramFitStruct')
 end
 
 theField = sprintf('%s_%s',params.thisBrainDiv,params.thisCellType);
 paramFitStruct.(theField).params = params;
 paramFitStruct.(theField).paramMeanValues = paramMeanValues;
 paramFitStruct.(theField).paramMeanValues = paramMeanValues;
-fprintf(1,'Saving fitted info back to %s\n','parameterFits.mat');
+fprintf(1,'Saving fitted info back to %s\n',theFileName);
 
-if ~(exist('parameterFits.mat','file')==0)
-    save('parameterFits.mat','paramFitStruct','-append');
+if ~(exist(theFileName,'file')==0)
+    save(theFileName,'paramFitStruct','-append');
 else
-    save('parameterFits.mat','paramFitStruct');
+    save(theFileName,'paramFitStruct');
 end
 
 end
