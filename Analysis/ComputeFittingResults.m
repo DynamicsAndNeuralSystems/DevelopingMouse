@@ -13,6 +13,7 @@ numBrainDivs = length(brainDivs);
 
 for b = 1:numBrainDivs
     params.thisBrainDiv = brainDivs{b};
+    fprintf(1,'\n===[[%u/%u]] %s\n\n',b,numBrainDivs,params.thisBrainDiv);
 
     %-------------------------------------------------------------------------------
     % Curve fitting
@@ -22,6 +23,7 @@ for b = 1:numBrainDivs
     stats = cell(numTimePoints,1);
     fittedParams = cell(numTimePoints,1);
     for i = 1:numTimePoints
+        fprintf(1,'---[[%u/%u]] %s\n',i,numTimePoints,params.timePoints{i});
         % Load the distance, CGE data:
         [dist,CGE] = ComputeDistanceCGE(params,params.timePoints{i},true);
         if isnan(dist)
@@ -42,7 +44,7 @@ for b = 1:numBrainDivs
     %-------------------------------------------------------------------------------
     % Convert to confidence intervals:
     paramNames = coeffnames(fittedParams{goodTimeInd(1)});
-    CIs = cellfun(@(x)confint(x),fittedParams,'UniformOutput',false);
+    CIs = cellfun(@(x)confint(x),fittedParams(goodTimePoint),'UniformOutput',false);
     % ***Convert n -> inverses (hopefully valid to do nonlinear transformations of CIs)***
     nIndex = strcmp(paramNames,'n');
     for i = 1:length(CIs)
