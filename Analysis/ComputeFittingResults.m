@@ -37,8 +37,11 @@ for b = 1:numBrainDivs
         [fitHandle,stats{i},fittedParams{i}] = GiveMeFit(xBinCenters,yMeans,params.whatFit,true);
     end
 
+    goodTimeInd = find(goodTimePoint);
+    
     %-------------------------------------------------------------------------------
     % Convert to confidence intervals:
+    paramNames = coeffnames(fittedParams{goodTimeInd(1)});
     CIs = cellfun(@(x)confint(x),fittedParams,'UniformOutput',false);
     % ***Convert n -> inverses (hopefully valid to do nonlinear transformations of CIs)***
     nIndex = strcmp(paramNames,'n');
