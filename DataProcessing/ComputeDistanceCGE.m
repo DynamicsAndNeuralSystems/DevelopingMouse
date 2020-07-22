@@ -1,4 +1,4 @@
-function [dist,CGE] = ComputeDistanceCGE(params,timePointNow,makeVector)
+function [dist,CGE,voxInfo,geneInfo] = ComputeDistanceCGE(params,timePointNow,makeVector)
 % Load distances and pre-computed CGE values for a given set of parameters
 %-------------------------------------------------------------------------------
 
@@ -45,9 +45,8 @@ CGE = corr(voxelGeneExpression','type',params.whatCorr,'rows','pairwise');
 % Take upper triangles as vectors:
 if makeVector
     fprintf(1,'Converting to vectors on upper diagonal\n');
-    trueDat = true(size(dist));
-    dist = dist(triu(trueDat,+1));
-    CGE = CGE(triu(trueDat,+1));
+    dist = triu(dist,+1);
+    CGE = triu(CGE,+1);
 end
 
 end
