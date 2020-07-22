@@ -38,7 +38,7 @@ for b = 1:numBrainDivs
     end
 
     goodTimeInd = find(goodTimePoint);
-    
+
     %-------------------------------------------------------------------------------
     % Convert to confidence intervals:
     paramNames = coeffnames(fittedParams{goodTimeInd(1)});
@@ -56,7 +56,7 @@ for b = 1:numBrainDivs
     else
         theFileName = 'parameterFits_subsampled.mat';
     end
-    if ~(exist(theFileName,'file')==0)
+    if exist(theFileName,'file')==0
         paramFitStruct = struct();
     else
         load(theFileName,'paramFitStruct')
