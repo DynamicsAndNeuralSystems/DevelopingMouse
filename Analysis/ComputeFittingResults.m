@@ -23,7 +23,7 @@ for b = 1:numBrainDivs
     stats = cell(numTimePoints,1);
     fittedParams = cell(numTimePoints,1);
     for i = 1:numTimePoints
-        fprintf(1,'---[[%u/%u]] %s\n',i,numTimePoints,params.timePoints{i});
+        fprintf(1,'---((%u/%u))[[%u/%u]] %s\n',b,numBrainDivs,i,numTimePoints,params.timePoints{i});
         % Load the distance, CGE data:
         [dist,CGE] = ComputeDistanceCGE(params,params.timePoints{i},true);
         if isnan(dist)

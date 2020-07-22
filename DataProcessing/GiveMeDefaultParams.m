@@ -3,7 +3,7 @@ function params = GiveMeDefaultParams()
 % Data:
 params.timePoints = GiveMeParameter('timePoints');
 params.thisBrainDiv = 'brain'; %'wholeBrain';
-params.doSubsample = false; % analyze just a subsample of numData voxels
+params.doSubsample = true; % analyze just a subsample of numData voxels
 params.thisCellType = 'allCellTypes';
 params.scaledDistance = false;
 params.thisDirection = 'allDirections';

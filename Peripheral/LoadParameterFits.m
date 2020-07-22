@@ -8,6 +8,9 @@ end
 
 load(theFileName,'paramFitStruct')
 theField = sprintf('%s_%s',params.thisBrainDiv,params.thisCellType);
+if ~isfield(paramFitStruct,theField)
+    error('Incomplete computation in %s: missing %s',theFileName,theField);
+end
 
 % Overwrite params with the stored values from the fit:
 params = paramFitStruct.(theField).params;
