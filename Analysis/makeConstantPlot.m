@@ -9,21 +9,9 @@ end
 %-------------------------------------------------------------------------------
 % Load in the fitted parameters (ComputeFittingResults)
 %-------------------------------------------------------------------------------
+[params,fittedParams,CIs,goodTimePoint] = LoadParameterFits(params);
 
-if ~params.doSubsample
-    theFileName = 'parameterFits.mat';
-else
-    theFileName = 'parameterFits_subsampled.mat';
-end
-load(theFileName,'paramFitStruct')
-theField = sprintf('%s_%s',params.thisBrainDiv,params.thisCellType);
-% Overwrite params with the stored values from the fit:
-params = paramFitStruct.(theField).params;
-fittedParams = paramFitStruct.(theField).fittedParams;
-% paramFitStruct.(theField).paramMeanValues = paramMeanValues;
-CIs = paramFitStruct.(theField).CIs;
 %-------------------------------------------------------------------------------
-
 goodTimeInd = find(goodTimePoint);
 numTimePoints = length(goodTimeInd);
 paramNames = coeffnames(fittedParams{goodTimeInd(1)});

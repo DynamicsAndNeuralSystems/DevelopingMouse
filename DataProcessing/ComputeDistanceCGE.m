@@ -45,8 +45,9 @@ CGE = corr(voxelGeneExpression','type',params.whatCorr,'rows','pairwise');
 % Take upper triangles as vectors:
 if makeVector
     fprintf(1,'Converting to vectors on upper diagonal\n');
-    dist = triu(dist,+1);
-    CGE = triu(CGE,+1);
+    trueDat = true(size(dist));
+    dist = dist(triu(trueDat,+1));
+    CGE = CGE(triu(trueDat,+1));
 end
 
 end
