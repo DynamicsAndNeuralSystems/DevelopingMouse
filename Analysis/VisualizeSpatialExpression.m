@@ -1,23 +1,28 @@
-function VisualizeSpatialExpression(timePointNow,params)
+function VisualizeSpatialExpression(timePointNow,params,colorHow)
 
 if nargin < 1
     timePointNow = 'E11pt5';
 end
-if nargin < 2
+if nargin < 2 || isempty(params)
     params = GiveMeDefaultParams();
+end
+if nargin < 3
+    colorHow = 'turboOne'; %'separate'; % 'turboOne'
 end
 %-------------------------------------------------------------------------------
 
 params.thisBrainDiv = 'brain';
+
+% Be more stringent on missing data:
 params.whatVoxelThreshold = 0.1;
 params.whatGeneThreshold = 0.05;
 [voxelGeneExpression,coOrds,voxInfo,geneInfo] = LoadSubset(params,timePointNow);
 
 zScoredExpression = BF_NormalizeMatrix(voxelGeneExpression,'zscore');
 
-
 % Compute PCA of expression:
 [pcCoeff,Y,~,~,percVar] = pca(zScoredExpression,'algorithm','als','NumComponents',2);
+
 % [pcCoeff,Y,~,~,percVar] = pca(zScoredExpression,'Rows','pairwise','NumComponents',2);
 %
 % if ~any(isnan(voxelGeneExpression))
@@ -34,21 +39,51 @@ zScoredExpression = BF_NormalizeMatrix(voxelGeneExpression,'zscore');
 % end
 
 %-------------------------------------------------------------------------------
-markerSize = zeros(length(coOrds),1);
-markerSize(voxInfo.isForebrain)=30;
-markerSize(voxInfo.isMidbrain)=20;
-markerSize(voxInfo.isHindbrain)=10;
+% markerSize = zeros(length(coOrds),1);
+% markerSize(voxInfo.isForebrain)=30;
+% markerSize(voxInfo.isMidbrain)=20;
+% markerSize(voxInfo.isHindbrain)=10;
 
+%-------------------------------------------------------------------------------
+switch colorHow
+case 'separate'
+    % Normalize seperately:
+    YNorm = Y;
+    almostOne = 1-1e-5;
+    YNorm(voxInfo.isForebrain,:) = almostOne*BF_NormalizeMatrix(Y(voxInfo.isForebrain,:),'scaledSigmoid');
+    YNorm(voxInfo.isMidbrain,:) = 1 + almostOne*BF_NormalizeMatrix(Y(voxInfo.isMidbrain,:),'scaledSigmoid');
+    YNorm(voxInfo.isHindbrain,:) = 2 + almostOne*BF_NormalizeMatrix(Y(voxInfo.isHindbrain,:),'scaledSigmoid');
+case 'turboOne'
+    YNorm = Y;
+end
+
+markerSize = 80;
 f = figure('color','w');
 for i = 1:2
     subplot(1,2,i)
-    title(sprintf('Gene expression: PC%u',i))
-    scatter3(coOrds(:,1),coOrds(:,2),coOrds(:,3),markerSize,Y(:,i),'filled')
+    scatter3(coOrds(:,1),coOrds(:,2),coOrds(:,3),markerSize,YNorm(:,i),'filled','MarkerFaceAlpha',0.8)
     xlabel('x')
     ylabel('y')
     zlabel('z')
+    title(sprintf('%s: gene expression PC%u',timePointNow,i))
+    % Add colorbar:
+    cB = colorbar();
+    switch colorHow
+    case 'separate'
+        cB.Ticks = [0.5,1.5,2.5];
+        cB.TickLabels = {'forebrain','midbrain','hindbrain'};
+    case 'turboOne'
+    end
+    cB.Location = 'southoutside';
 end
-giveMeTurboMap()
-colorbar()
+switch colorHow
+case 'separate'
+    colormap([BF_getcmap('oranges',9,0);BF_getcmap('purples',9,0);BF_getcmap('reds',9,0)])
+    caxis([0,3])
+case 'turboOne'
+    giveMeTurboMap()
+end
+f.Position(3:4) = [1303,528];
+
 
 end
