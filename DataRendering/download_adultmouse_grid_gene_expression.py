@@ -9,14 +9,14 @@ api = RmaApi()
 
 # specify the directories
 abs_dir = os.path.dirname(__file__)
-rel_dir = os.path.join(abs_dir, '..','Data','API','GridData_Adult')
+rel_dir = os.path.join(abs_dir, '..','Data','API','GridData')
 
 # age_name = 'P56'
 
 criteria=['[failed$eqfalse],',
            'products[abbreviation$eqMouse],',
            # 'specimen(donor(age[name$eq%s])),' %age_name,
-           'plane_of_section[name$eqsagittal]',
+           'plane_of_section[name$eqcoronal]',
            ]
 
 def downloadBasicData(experiment):
@@ -90,6 +90,7 @@ def downloadGridData(expID_list,age_list,geneID_list):
                 # print(URL_list[-(len(URL_list)-j):])
                 continue
         temp_list = [age_list[j],'_',str(geneID_list[j]),'_',str(expID_list[j])]
+        # temp_list = [age_list[j],'_',str(geneID_list[j])]
         dirName=os.path.join(rel_dir,age_list[j],"".join(temp_list))
         try:
             z = zipfile.ZipFile(BytesIO(r.content))
@@ -104,9 +105,7 @@ def main():
                                 include='probes(gene),specimen(donor(age))',
                                 start_row=0,
                                 num_rows='all')
-    print('3')
     expID_list, age_list, geneID_list = downloadBasicData(experiment)
-    print('4')
     downloadGridData(expID_list,age_list,geneID_list)
 
 if __name__ == '__main__':

@@ -15,7 +15,7 @@ params.constantTypes = GiveMeParameter('constantTypes');
 params.whatCorr = 'Pearson';
 
 % Filtering/normalization:
-params.usePersistentGenes = true;
+params.usePersistentGenes = false;
 params.whatNorm = 'scaledRobustSigmoid';
 params.whatVoxelThreshold = 0.3;
 params.whatGeneThreshold = 0.3;
