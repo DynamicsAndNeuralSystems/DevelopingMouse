@@ -83,7 +83,7 @@ case 'subDivision'
     labels = labels/3; % for colorbaring
 
     f = figure('color','w');
-    f.Position(3:4) = [796   397];
+    f.Position(3:4) = [600   397];
     ax = gca();
     hold('on');
     if addPC
@@ -104,8 +104,8 @@ case 'subDivision'
 
     % imagesc(voxelGeneExpression(ix,ord_col)) % as a check for consistent labeling
     colormap(flipud(BF_getcmap('redyellowblue',11,0)))
-    plot([1,numGenes],(firstPoints(2))*ones(1,2),'-k','LineWidth',1.5)
-    plot([1,numGenes],(firstPoints(3))*ones(1,2),'-k','LineWidth',1.5)
+    plot([1,numGenes],(firstPoints(2))*ones(1,2),'-k','LineWidth',1)
+    plot([1,numGenes],(firstPoints(3))*ones(1,2),'-k','LineWidth',1)
     ax.XLim = [1,numGenes];
     ax.YLim = [1,numVoxels];
     ax.XTick = [50];
