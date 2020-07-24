@@ -8,7 +8,7 @@ end
 timePoints = GiveMeParameter('timePoints');
 numTimePoints = length(timePoints);
 
-if procParams.useGoodGeneSubset
+if procParams.usePersistentGenes
     error('I don''t think this should ever happen (can always filter by gene/cell-type during analysis)');
     % Let's also make the energy grids for the custom cell types
     cellTypes = GiveMeParameter('cellTypes');
