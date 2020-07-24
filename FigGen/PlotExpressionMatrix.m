@@ -1,4 +1,4 @@
-function PlotExpressionMatrix(timePointNow,params,whatPlot)
+function PlotExpressionMatrix(timePointNow,params,whatPlot,addPC,doSave)
 % Plot voxelwise gene-expression matrix from file (processed according to parameters
 % specified in params)
 %-------------------------------------------------------------------------------
@@ -10,6 +10,9 @@ if nargin < 2
 end
 if nargin < 3
     whatPlot = 'subDivision';
+end
+if nargin < 4
+    addPC = false;
 end
 
 %-------------------------------------------------------------------------------
@@ -56,6 +59,13 @@ case 'subDivision'
     ord_col = BF_ClusterReorder(voxelGeneExpression','corr_fast','average');
     [numVoxels,numGenes] = size(voxelGeneExpression);
 
+    if addPC
+        fprintf(1,'Computing PCA of gene-expression maps...\n');
+        zScoredExpression = BF_NormalizeMatrix(voxelGeneExpression,'zscore');
+        [~,Y] = pca(zScoredExpression,'algorithm','als',...
+                                    'NumComponents',1);
+    end
+
     voxelGeneExpressionFore = voxelGeneExpression(voxInfo.isForebrain,:);
     ord_rowFore = BF_ClusterReorder(voxelGeneExpressionFore,'corr_fast','average');
     voxelGeneExpressionMid = voxelGeneExpression(voxInfo.isMidbrain,:);
@@ -73,29 +83,48 @@ case 'subDivision'
     labels = labels/3; % for colorbaring
 
     f = figure('color','w');
-    f.Position(3:4) = [796   397];
-    ax_labels = subplot(1,15,1);
-    imagesc(labels)
-    ax_labels.YTick = midPoints;
-    ax_labels.YTickLabel = {'hindbrain','midbrain','forebrain'};
-    ax_labels.XTick = [];
-    ax_gene = subplot(1,15,2:15);
+    f.Position(3:4) = [600   397];
+    ax = gca();
     hold('on');
-    imagesc([voxelGeneExpressionHind(ord_rowHind,ord_col);...
-                voxelGeneExpressionMid(ord_rowMid,ord_col);...
-                    voxelGeneExpressionFore(ord_rowFore,ord_col)])
+    if addPC
+        YNorm = BF_NormalizeMatrix(Y,'scaledSigmoid');
+        Y_hind =YNorm(voxInfo.isHindbrain);
+        Y_mid = YNorm(voxInfo.isMidbrain);
+        Y_fore = YNorm(voxInfo.isForebrain);
+        YTogether = [Y_hind(ord_rowHind);Y_mid(ord_rowMid);Y_fore(ord_rowFore)];
+        imagesc([repmat(YTogether,1,100),[voxelGeneExpressionHind(ord_rowHind,ord_col);...
+                            voxelGeneExpressionMid(ord_rowMid,ord_col);...
+                            voxelGeneExpressionFore(ord_rowFore,ord_col)]])
+        plot(100*ones(2,1),[1,numVoxels],'-k','LineWidth',1)
+    else
+        imagesc([repmat(labels,1,50),[voxelGeneExpressionHind(ord_rowHind,ord_col);...
+                            voxelGeneExpressionMid(ord_rowMid,ord_col);...
+                            voxelGeneExpressionFore(ord_rowFore,ord_col)]])
+    end
+
     % imagesc(voxelGeneExpression(ix,ord_col)) % as a check for consistent labeling
     colormap(flipud(BF_getcmap('redyellowblue',11,0)))
-    plot([1,numGenes],(numVoxels-firstPoints(2))*ones(1,2),':k','LineWidth',2)
-    plot([1,numGenes],(numVoxels-firstPoints(3))*ones(1,2),':k','LineWidth',2)
-    ax_gene.XLim = [1,numGenes];
-    ax_gene.YLim = [1,numVoxels];
-    ax_gene.XTick = [];
-    ax_gene.YTick = [];
+    plot([1,numGenes],(firstPoints(2))*ones(1,2),'-k','LineWidth',1)
+    plot([1,numGenes],(firstPoints(3))*ones(1,2),'-k','LineWidth',1)
+    ax.XLim = [1,numGenes];
+    ax.YLim = [1,numVoxels];
+    ax.XTick = [50];
+    ax.XTickLabel = 'PC1';
+    ax.YTick = midPoints;
+    ax.YTickLabel = {'hindbrain','midbrain','forebrain'};
+    xlabel('Genes')
+    ylabel('Voxels')
 
     cB = colorbar();
     cB.Label.String = 'Normalized Expression';
     title(sprintf('%s (%u x %u)',timePointNow,numVoxels,numGenes))
 end
+
+%-------------------------------------------------------------------------------
+% Save to file:
+fileName = fullfile('Outs',sprintf('ExpressionMatrix_%s.png',timePointNow));
+saveas(f,fileName,'png')
+fprintf(1,'Saved to %s\n',fileName);
+close(f);
 
 end

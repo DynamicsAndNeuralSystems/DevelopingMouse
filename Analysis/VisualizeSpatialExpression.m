@@ -1,4 +1,4 @@
-function VisualizeSpatialExpression(timePointNow,params,colorHow)
+function VisualizeSpatialExpression(timePointNow,params,colorHow,customSample)
 
 if nargin < 1
     timePointNow = 'E11pt5';
@@ -9,18 +9,34 @@ end
 if nargin < 3
     colorHow = 'turboOne'; %'separate'; % 'turboOne'
 end
+if nargin < 4
+    customSample = [];
+end
 %-------------------------------------------------------------------------------
 
 params.thisBrainDiv = 'brain';
+params.doSubsample = false;
 
 % Be more stringent on missing data:
 params.whatVoxelThreshold = 0.1;
 params.whatGeneThreshold = 0.05;
 [voxelGeneExpression,coOrds,voxInfo,geneInfo] = LoadSubset(params,timePointNow);
+numVoxels = height(voxInfo);
+
+makeSample = @(xInd) xInd(randsample(length(xInd),min(length(xInd),procParams.numData)));
+if ~isempty(customSample) && (numVoxels > customSample)
+    keepVoxel = randsample(numVoxels,customSample);
+    fprintf(1,'Subsampling down to %u -> %u random voxels for visualization\n',numVoxels,customSample);
+    voxelGeneExpression = voxelGeneExpression(keepVoxel,:);
+    voxInfo = voxInfo(keepVoxel,:);
+    coOrds = coOrds(keepVoxel,:);
+    numVoxels = height(voxInfo);
+end
 
 zScoredExpression = BF_NormalizeMatrix(voxelGeneExpression,'zscore');
 
 % Compute PCA of expression:
+fprintf(1,'Computing PCA of gene-expression maps...\n');
 [pcCoeff,Y,~,~,percVar] = pca(zScoredExpression,'algorithm','als','NumComponents',2);
 
 % [pcCoeff,Y,~,~,percVar] = pca(zScoredExpression,'Rows','pairwise','NumComponents',2);
@@ -48,20 +64,22 @@ zScoredExpression = BF_NormalizeMatrix(voxelGeneExpression,'zscore');
 switch colorHow
 case 'separate'
     % Normalize seperately:
-    YNorm = Y;
     almostOne = 1-1e-5;
-    YNorm(voxInfo.isForebrain,:) = almostOne*BF_NormalizeMatrix(Y(voxInfo.isForebrain,:),'scaledSigmoid');
-    YNorm(voxInfo.isMidbrain,:) = 1 + almostOne*BF_NormalizeMatrix(Y(voxInfo.isMidbrain,:),'scaledSigmoid');
-    YNorm(voxInfo.isHindbrain,:) = 2 + almostOne*BF_NormalizeMatrix(Y(voxInfo.isHindbrain,:),'scaledSigmoid');
+    YNorm = almostOne*BF_NormalizeMatrix(Y,'scaledSigmoid');
+    YNorm(voxInfo.isMidbrain,:) = 1 + YNorm(voxInfo.isMidbrain,:);
+    YNorm(voxInfo.isHindbrain,:) = 2 + YNorm(voxInfo.isHindbrain,:);
 case 'turboOne'
     YNorm = Y;
 end
 
-markerSize = 80;
+markerSize = 60;
+markerAlpha = 0.7;
 f = figure('color','w');
+ax = cell(2,1);
 for i = 1:2
-    subplot(1,2,i)
-    scatter3(coOrds(:,1),coOrds(:,2),coOrds(:,3),markerSize,YNorm(:,i),'filled','MarkerFaceAlpha',0.8)
+    ax{i} = subplot(1,2,i);
+    scatter3(coOrds(:,1),coOrds(:,2),coOrds(:,3),markerSize,YNorm(:,i),'filled',...
+                    'MarkerFaceAlpha',markerAlpha)
     xlabel('x')
     ylabel('y')
     zlabel('z')
@@ -81,9 +99,13 @@ case 'separate'
     colormap([BF_getcmap('oranges',9,0);BF_getcmap('purples',9,0);BF_getcmap('reds',9,0)])
     caxis([0,3])
 case 'turboOne'
-    giveMeTurboMap()
+    colormap(flipud(BF_getcmap('redyellowblue',11,0)))
+    % giveMeTurboMap()
 end
 f.Position(3:4) = [1303,528];
 
+Link = linkprop([ax{:}],{'CameraUpVector', 'CameraPosition', ...
+    'CameraTarget', 'XLim', 'YLim', 'ZLim'});
+setappdata(f, 'StoreTheLink', Link);
 
 end
