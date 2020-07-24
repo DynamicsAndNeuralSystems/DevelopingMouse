@@ -104,13 +104,16 @@ case 'subDivision'
 
     % imagesc(voxelGeneExpression(ix,ord_col)) % as a check for consistent labeling
     colormap(flipud(BF_getcmap('redyellowblue',11,0)))
-    plot([1,numGenes],(firstPoints(2))*ones(1,2),':k','LineWidth',1.5)
-    plot([1,numGenes],(firstPoints(3))*ones(1,2),':k','LineWidth',1.5)
+    plot([1,numGenes],(firstPoints(2))*ones(1,2),'-k','LineWidth',1.5)
+    plot([1,numGenes],(firstPoints(3))*ones(1,2),'-k','LineWidth',1.5)
     ax.XLim = [1,numGenes];
     ax.YLim = [1,numVoxels];
-    ax.XTick = [];
+    ax.XTick = [50];
+    ax.XTickLabel = 'PC1';
     ax.YTick = midPoints;
     ax.YTickLabel = {'hindbrain','midbrain','forebrain'};
+    xlabel('Genes')
+    ylabel('Voxels')
 
     cB = colorbar();
     cB.Label.String = 'Normalized Expression';
