@@ -1,4 +1,4 @@
-function PlotExpressionMatrix(timePointNow,params,whatPlot)
+function PlotExpressionMatrix(timePointNow,params,whatPlot,addPC)
 % Plot voxelwise gene-expression matrix from file (processed according to parameters
 % specified in params)
 %-------------------------------------------------------------------------------
@@ -10,6 +10,9 @@ if nargin < 2
 end
 if nargin < 3
     whatPlot = 'subDivision';
+end
+if nargin < 4
+    addPC = false;
 end
 
 %-------------------------------------------------------------------------------
@@ -56,6 +59,13 @@ case 'subDivision'
     ord_col = BF_ClusterReorder(voxelGeneExpression','corr_fast','average');
     [numVoxels,numGenes] = size(voxelGeneExpression);
 
+    if addPC
+        fprintf(1,'Computing PCA of gene-expression maps...\n');
+        zScoredExpression = BF_NormalizeMatrix(voxelGeneExpression,'zscore');
+        [~,Y] = pca(zScoredExpression,'algorithm','als',...
+                                    'NumComponents',1);
+    end
+
     voxelGeneExpressionFore = voxelGeneExpression(voxInfo.isForebrain,:);
     ord_rowFore = BF_ClusterReorder(voxelGeneExpressionFore,'corr_fast','average');
     voxelGeneExpressionMid = voxelGeneExpression(voxInfo.isMidbrain,:);
@@ -79,7 +89,17 @@ case 'subDivision'
     ax_labels.YTick = midPoints;
     ax_labels.YTickLabel = {'hindbrain','midbrain','forebrain'};
     ax_labels.XTick = [];
-    ax_gene = subplot(1,15,2:15);
+    if addPC
+        ax_PC = subplot(1,15,2);
+        YNorm = BF_NormalizeMatrix(Y,'scaledSigmoid');
+        Y_hind = Y(voxInfo.isHindbrain);
+        Y_mid = Y(voxInfo.isMidbrain);
+        Y_fore = Y(voxInfo.isForebrain);
+        imagesc([Y_hind(ord_rowHind);Y_mid(ord_rowMid);Y_fore(ord_rowFore)]);
+        ax_gene = subplot(1,15,3:15);
+    else
+        ax_gene = subplot(1,15,2:15);
+    end
     hold('on');
     imagesc([voxelGeneExpressionHind(ord_rowHind,ord_col);...
                 voxelGeneExpressionMid(ord_rowMid,ord_col);...
