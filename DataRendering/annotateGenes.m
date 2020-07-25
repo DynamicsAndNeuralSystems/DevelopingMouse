@@ -14,8 +14,8 @@ if strcmp(timePointNow,'P56')
   geneEntrezAll = dlmread('Adult_geneEntrez.csv');
   fid = fopen('Adult_geneAbbreviation.csv','r');
 else
-  geneEntrezAll = dlmread('SDK_geneEntrez.csv')';
-  fid = fopen('SDK_geneAbbreviations.csv','r');
+  geneEntrezAll = dlmread('Dev_geneEntrez.csv')';
+  fid = fopen('Dev_geneAbbreviation.csv','r');
 end
 geneAbbreviationsAll = textscan(fid,'%s','Delimiter',',','CollectOutput',true);
 fclose(fid);

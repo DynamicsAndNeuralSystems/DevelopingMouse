@@ -20,16 +20,31 @@ Rename Supplemental Table S4, S5 and S6 to `Astrocyte_Cahoy_S4.xls`, `Oligodendr
 
 
 #### Obtain gene entrez IDs and abbreviations
+Developing mouse gene entrez ID:
+1. Download the csv from the following:
+http://api.brain-map.org/api/v2/data/query.csv?criteria=model::Gene,rma::criteria,products[abbreviation$eq%27Mouse%27],rma::options,[tabular$eq%27genes.entrez_id+as+entrez_gene_id%27],[order$eq%27genes.entrez_id%27]&num_rows=all&start_row=0
+2. Manually delete the first row
+3. Rename the file to "Adult_geneEntrez" and save it in "Data/API/Genes"
 
-___[[[WHY IS THIS NECESSARY? THIS DOWNLOADS ALL DATA AT THE STRUCTURE-AVERAGE LEVEL FOR A CUSTOM STRUCTURE LIST???]]]]___
+Developing mouse gene abbreviation:
+1. Download the csv from the following:
+http://api.brain-map.org/api/v2/data/query.csv?criteria=model::Gene,rma::criteria,products[abbreviation$eq%27DevMouse%27],rma::options,[tabular$eq%27genes.acronym+as+gene_symbol%27],[order$eq%27genes.entrez_id%27]&num_rows=all&start_row=0
+2. Manually delete row 2108 first
+3. Then manually delete the first row
+4. Rename the file to "Dev_geneAbbreviation" and save it in "Data/API/Genes"
 
-In the `DataRendering` directory:
-```python
-python3 download_devmouse_unionizes_genes.py
-```
-Saves output to two files: `SDK_geneEntrez.csv` and `SDK_geneAbbreviations.csv`.
+Adult mouse gene entrez ID:
+1. Download the csv from the following:
+http://api.brain-map.org/api/v2/data/query.csv?criteria=model::Gene,rma::criteria,products[abbreviation$eq%27Mouse%27],rma::options,[tabular$eq%27genes.entrez_id+as+entrez_gene_id%27],[order$eq%27genes.entrez_id%27]&num_rows=all&start_row=0
+2. Manually delete the first row
+3. Rename the file to "Adult_geneEntrez" and save it in "Data/API/Genes"
 
-[A partial version was replicated by uncommenting line 69 # if `len(rows) == 4000:` and commenting out line 68 "`if numRows == 0 or numRows < blockSize:`]
+Adult mouse gene abbreviation:
+1. Download the csv from the following:
+http://api.brain-map.org/api/v2/data/query.csv?criteria=model::Gene,rma::criteria,products[abbreviation$eq%27Mouse%27],rma::options,[tabular$eq%27genes.acronym+as+gene_symbol%27],[order$eq%27genes.entrez_id%27]&num_rows=all&start_row=0
+2. Manually delete the rows after 19470 (i.e. starting from row 19471) first
+3. Then manually delete the first row
+4. Rename the file to "Adult_geneAbbreviation" and save it in "Data/API/Genes"
 
 #### Retrieve descendant IDs of each structure
 In the `DataRendering` directory:
@@ -49,7 +64,6 @@ And saves `.csv` files to `Data/API/Structures`.
 ```matlab
 renderBaseData()
 ```
-This should only be run once ___[[BF: WHY?]]___.___[[GL: Because originally the second time that makeEnergyGrid is run, it will make a new energy grid with good gene subset only that will replace the original one created with the full gene set, but this problem is eliminated in a later version]]___
 
 Creates processed Matlab data files from raw data for further analysis.
 
