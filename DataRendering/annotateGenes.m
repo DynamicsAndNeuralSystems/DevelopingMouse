@@ -10,8 +10,13 @@ numGenes = length(geneIDs);
 
 %-------------------------------------------------------------------------------
 % Map genes to entrez
-geneEntrezAll = dlmread('SDK_geneEntrez.csv')';
-fid = fopen('SDK_geneAbbreviations.csv','r');
+if strcmp(timePointNow,'P56')
+  geneEntrezAll = dlmread('Adult_geneEntrez.csv');
+  fid = fopen('Adult_geneAbbreviation.csv','r');
+else
+  geneEntrezAll = dlmread('Dev_geneEntrez.csv')';
+  fid = fopen('Dev_geneAbbreviation.csv','r');
+end
 geneAbbreviationsAll = textscan(fid,'%s','Delimiter',',','CollectOutput',true);
 fclose(fid);
 geneAbbreviationsAll = geneAbbreviationsAll{1};

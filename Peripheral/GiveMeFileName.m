@@ -6,7 +6,7 @@ end
 %-------------------------------------------------------------------------------
 
 switch whatParam
-    case {'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'}
+case {'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28','P56'}
         theParameter = sprintf('voxelGeneExpression_%s.mat',whatParam);
   case 'wholeBrain'
     theParameter = '';

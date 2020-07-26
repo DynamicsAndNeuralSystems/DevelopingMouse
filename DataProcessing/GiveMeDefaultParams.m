@@ -15,7 +15,7 @@ params.constantTypes = GiveMeParameter('constantTypes');
 params.whatCorr = 'Pearson';
 
 % Filtering/normalization:
-params.usePersistentGenes = true;
+params.usePersistentGenes = false;
 params.whatNorm = 'scaledRobustSigmoid';
 params.whatVoxelThreshold = 0.3;
 params.whatGeneThreshold = 0.3;
@@ -23,7 +23,7 @@ params.whatGeneThreshold = 0.3;
 % Fitting:
 params.numThresholds = 21;
 params.whatFit = 'exp';
-params.colors = BF_getcmap('dark2',7,0);
+params.colors = BF_getcmap('dark2',8,0);
 
 % Info:
 params.timePoints = GiveMeParameter('timePoints');

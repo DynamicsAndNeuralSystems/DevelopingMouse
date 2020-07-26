@@ -1,4 +1,8 @@
-function AnnotateAllGenes()
+function AnnotateAllGenes(procParams)
+
+if nargin < 1
+    procParams = GiveMeDefaultParams();
+end
 
 timePoints = GiveMeParameter('timePoints');
 numTimePoints = length(timePoints);
