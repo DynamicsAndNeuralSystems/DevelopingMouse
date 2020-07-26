@@ -1,4 +1,4 @@
-function VisualizeSpatialExpression(timePointNow,params,colorHow,customSample)
+function VisualizeSpatialExpression(timePointNow,params,colorHow,customSample,numPCs)
 
 if nargin < 1
     timePointNow = 'E11pt5';
@@ -11,6 +11,9 @@ if nargin < 3
 end
 if nargin < 4
     customSample = [];
+end
+if nargin < 5
+    numPCs = 2;
 end
 %-------------------------------------------------------------------------------
 
@@ -37,7 +40,7 @@ zScoredExpression = BF_NormalizeMatrix(voxelGeneExpression,'zscore');
 
 % Compute PCA of expression:
 fprintf(1,'Computing PCA of gene-expression maps...\n');
-[pcCoeff,Y,~,~,percVar] = pca(zScoredExpression,'algorithm','als','NumComponents',2);
+[pcCoeff,Y,~,~,percVar] = pca(zScoredExpression,'algorithm','als','NumComponents',numPCs);
 
 % [pcCoeff,Y,~,~,percVar] = pca(zScoredExpression,'Rows','pairwise','NumComponents',2);
 %
@@ -75,9 +78,9 @@ end
 markerSize = 60;
 markerAlpha = 0.7;
 f = figure('color','w');
-ax = cell(2,1);
-for i = 1:2
-    ax{i} = subplot(1,2,i);
+ax = cell(numPCs,1);
+for i = 1:numPCs
+    ax{i} = subplot(1,numPCs,i);
     scatter3(coOrds(:,1),coOrds(:,2),coOrds(:,3),markerSize,YNorm(:,i),'filled',...
                     'MarkerFaceAlpha',markerAlpha)
     xlabel('x')
@@ -104,8 +107,10 @@ case 'turboOne'
 end
 f.Position(3:4) = [1303,528];
 
-Link = linkprop([ax{:}],{'CameraUpVector', 'CameraPosition', ...
-    'CameraTarget', 'XLim', 'YLim', 'ZLim'});
-setappdata(f, 'StoreTheLink', Link);
+if numPCs > 1
+    Link = linkprop([ax{:}],{'CameraUpVector', 'CameraPosition', ...
+        'CameraTarget', 'XLim', 'YLim', 'ZLim'});
+    setappdata(f, 'StoreTheLink', Link);
+end
 
 end
