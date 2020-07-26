@@ -21,6 +21,27 @@ Processed data is available from [this figshare repository](https://figshare.com
 
 Before running analyses, add all repository paths using `startup`.
 
+### Plotting
+
+You can get the clustered gene-expression plots as:
+```matlab
+PlotAllExpressionMatrices
+```
+Or for each individual one, as, e.g., `PlotExpressionMatrix('E11pt5')`.
+
+
+And for the three-dimensional voxel plots:
+```matlab
+PlotAll3dSpatial
+```
+And individual time points as `VisualizeSpatialExpression`.
+
+For example, taking E18.5 (without distinguishing fore/mid/hindbrain) and subsampling to 5000 voxels:
+```matlab
+VisualizeSpatialExpression('E18pt5','','turboOne',5000)
+```
+
+
 ### CGE Curves
 
 ```matlab

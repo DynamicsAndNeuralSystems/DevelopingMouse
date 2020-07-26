@@ -1,4 +1,4 @@
-% For visualizing what's going on
+% PlotAll3dSpatial For visualizing what's going on
 
 params = GiveMeDefaultParams();
 

@@ -1,4 +1,4 @@
-% For visualizing what's going on
+% PlotAllExpressionMatrices For visualizing what's going on
 
 params = GiveMeDefaultParams();
 

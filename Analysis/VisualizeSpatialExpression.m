@@ -20,10 +20,13 @@ end
 params.thisBrainDiv = 'brain';
 params.doSubsample = false;
 
-% Be more stringent on missing data:
+% Be more stringent on missing data for the purposes of this visualization:
 params.whatVoxelThreshold = 0.1;
 params.whatGeneThreshold = 0.05;
 [voxelGeneExpression,coOrds,voxInfo,geneInfo] = LoadSubset(params,timePointNow);
+% Rescale to real space:
+resolutionGrid = GiveMeParameter('resolutionGrid');
+coOrds = coOrds*resolutionGrid.(timePointNow);
 numVoxels = height(voxInfo);
 
 makeSample = @(xInd) xInd(randsample(length(xInd),min(length(xInd),procParams.numData)));
@@ -75,18 +78,27 @@ case 'turboOne'
     YNorm = Y;
 end
 
+%-------------------------------------------------------------------------------
 markerSize = 60;
 markerAlpha = 0.7;
 f = figure('color','w');
 ax = cell(numPCs,1);
 for i = 1:numPCs
     ax{i} = subplot(1,numPCs,i);
+    % Redefine map to conventional coordinates:
+    myX = coOrds(:,1); % anterior–posterior
+    myY = coOrds(:,3); % left-right
+    myZ = -coOrds(:,2); % inferior–superior
     scatter3(coOrds(:,1),coOrds(:,2),coOrds(:,3),markerSize,YNorm(:,i),'filled',...
                     'MarkerFaceAlpha',markerAlpha)
-    xlabel('x')
-    ylabel('y')
-    zlabel('z')
+
+    xlabel('anterior-posterior (mm)')
+    ylabel('left-right (mm)')
+    zlabel('inferior-superior (mm)')
+    axis('equal') % make it better represent real space
+
     title(sprintf('%s: gene expression PC%u',timePointNow,i))
+
     % Add colorbar:
     cB = colorbar();
     switch colorHow
@@ -94,9 +106,11 @@ for i = 1:numPCs
         cB.Ticks = [0.5,1.5,2.5];
         cB.TickLabels = {'forebrain','midbrain','hindbrain'};
     case 'turboOne'
+        %
     end
     cB.Location = 'southoutside';
 end
+
 switch colorHow
 case 'separate'
     colormap([BF_getcmap('oranges',9,0);BF_getcmap('purples',9,0);BF_getcmap('reds',9,0)])
@@ -106,6 +120,8 @@ case 'turboOne'
     % giveMeTurboMap()
 end
 f.Position(3:4) = [1303,528];
+
+
 
 if numPCs > 1
     Link = linkprop([ax{:}],{'CameraUpVector', 'CameraPosition', ...
