@@ -56,7 +56,7 @@ for i = 1:numTimePoints
         f.Position(3:4) = [852   328];
         ax = subplot(1,2,1);
     else
-        subplot(numTimePoints,2,(i-1)*2+1);
+        ax = subplot(numTimePoints,2,(i-1)*2+1);
     end
     hold('on')
     title(params.timePoints{i})

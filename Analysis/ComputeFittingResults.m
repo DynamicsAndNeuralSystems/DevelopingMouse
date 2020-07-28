@@ -90,7 +90,7 @@ for b = 1:numBrainDivs
     else
         save(theFileName,'paramFitStruct');
     end
-    fprintf(1,'Saved parameter fitting results to %s:%s\n',theFileName,theField);
+    fprintf(1,'Saved parameter fitting results to %s: %s\n',theFileName,theField);
 end
 
 end

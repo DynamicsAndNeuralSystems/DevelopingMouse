@@ -8,7 +8,7 @@ numTimePoints = length(params.timePoints);
 
 maxDistances = zeros(numTimePoints,1);
 for i = 1:numTimePoints
-    maxDistances(i) = getMaxDistance(params.thisBrainDiv,params.timePoints{i});
+    maxDistances(i) = getMaxDistance(params.timePoints{i});
 end
 
 end

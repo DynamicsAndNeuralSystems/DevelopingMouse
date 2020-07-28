@@ -69,7 +69,7 @@ end
 ft = fittype('c*x');
 [c,Stats] = fit(maxDistances,paramEstMean,ft);
 f_handle = @(x) c.c*x;
-plot(xRange,f_handle(xRange),'-','color',ones(1,3)*0.5);
+plot(xRange,f_handle(xRange),'--','color',ones(1,3)*0.5);
 
 if addHuman
     fprintf(1,'Mouse developmental prediction of human lambda (linear): %.3g (measured = %.3g)\n',...

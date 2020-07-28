@@ -2,7 +2,7 @@ function f = makeConstantPlot(params,doSave)
 % Plot variation of fitted parameters over time
 %-------------------------------------------------------------------------------
 
-if nargin < 1
+if nargin < 1 || isempty(params)
     params = GiveMeDefaultParams();
 end
 if nargin < 2

@@ -1,5 +1,6 @@
-function maxDistance = getMaxDistance(thisBrainDiv,timePointNow)
+function maxDistance = getMaxDistance(timePointNow)
 % Along x-axis
+%-------------------------------------------------------------------------------
 
 timePoints = GiveMeParameter('timePoints');
 timePointIndex = find(strcmp(timePointNow,timePoints));

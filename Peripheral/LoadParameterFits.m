@@ -20,9 +20,6 @@ if ~isfield(paramFitStruct,theField)
     error('Incomplete computation in %s: missing %s',theFileName,theField);
 end
 
-% Overwrite params with the stored values from the fit:
-params = paramFitStruct.(theField).params;
-
 % Get fitted Params:
 fittedParams = paramFitStruct.(theField).fittedParams;
 
@@ -31,5 +28,14 @@ CIs = paramFitStruct.(theField).CIs;
 
 % Good time points
 goodTimePoint = paramFitStruct.(theField).goodTimePoint;
+
+if ~params.includeAdult & (length(fittedParams)==8)
+    fittedParams = fittedParams(1:end-1);
+    CIs = CIs(1:end-1);
+    goodTimePoint = goodTimePoint(1:end-1);
+end
+
+% Overwrite params with the stored values from the fit:
+params = paramFitStruct.(theField).params;
 
 end

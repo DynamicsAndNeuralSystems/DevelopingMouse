@@ -1,15 +1,11 @@
-function PredictHuman(params,addP56)
+function PredictHuman(params,doSave)
 % Results for predicting human gene-expression variation from
-
+%-------------------------------------------------------------------------------
 if nargin < 1
     params = GiveMeDefaultParams();
 end
 if nargin < 2
-    addP56 = false;
-end
-% Reset the time points:
-if addP56
-    params.timePoints = GiveMeParameter('timePoints');
+    doSave = true;
 end
 
 %-------------------------------------------------------------------------------
@@ -68,8 +64,8 @@ for b = 1:numDivisions
 end
 
 %-------------------------------------------------------------------------------
-f = figure('color','w');
-f.Position(3:4) = [665   246];
+fig = figure('color','w');
+fig.Position(3:4) = [390   167];
 ourColors = [82,190,152;208,84,61;110,198,84;180,135,52;198,201,76]/255;
 ax = gca();
 hold('on');
@@ -93,6 +89,15 @@ ax.YLim = [0,100];
 xlabel('Brain division (fit)')
 ylabel('\lambda_{human}^{(pred)}')
 
+%-------------------------------------------------------------------------------
+if doSave
+    % Save to file:
+    fileName = fullfile('Outs','HumanPrediction.svg');
+    saveas(fig,fileName,'svg')
+    fprintf(1,'Saved to %s\n',fileName);
+end
+
+%-------------------------------------------------------------------------------
 function theLabels = makeXTickLabel()
     theLabels = cell(numDivisions,1);
     for i = 1:numDivisions
