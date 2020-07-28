@@ -1,9 +1,17 @@
-function PredictHuman(params)
+function PredictHuman(params,addP56)
 % Results for predicting human gene-expression variation from
 
 if nargin < 1
     params = GiveMeDefaultParams();
 end
+if nargin < 2
+    addP56 = false;
+end
+% Reset the time points:
+if addP56
+    params.timePoints = GiveMeParameter('timePoints');
+end
+
 %-------------------------------------------------------------------------------
 
 whatFits = {'scaling','propLinear'}; %'scaling'; % 'propLinear', ...
@@ -11,6 +19,7 @@ whatBrainDivisions = {'brain','Dpall','forebrain','midbrain','hindbrain',};
 
 dMaxHuman = 148;
 lambdaHuman = 61.4;
+humanCI = [54.1,71.0];
 
 numDivisions = length(whatBrainDivisions);
 maxDistances = makeMaxDistance(params);
@@ -72,9 +81,14 @@ for f = 1:2
     plot((1:numDivisions)+inc(f),thePred(:,f),'o','MarkerFaceColor',ourColors(f,:),...
                                             'MarkerEdgeColor',ourColors(f,:));
 end
-plot([1,numDivisions],ones(1,2)*lambdaHuman,'--','color',ones(1,3)*0.4,'LineWidth',1.5)
+% Human value (+CI)
+extraOffset = 0.5;
+plot([1-extraOffset,numDivisions+extraOffset],ones(1,2)*lambdaHuman,'--','color',ones(1,3)*0.4,'LineWidth',1.5)
+plot([1-extraOffset,numDivisions+extraOffset],ones(1,2)*(humanCI(1)),':','color',ones(1,3)*0.8,'LineWidth',1)
+plot([1-extraOffset,numDivisions+extraOffset],ones(1,2)*(humanCI(2)),':','color',ones(1,3)*0.8,'LineWidth',1)
 ax.XTick = 1:numDivisions;
 ax.XTickLabel = makeXTickLabel();
+ax.XLim = [1-extraOffset,numDivisions+extraOffset];
 ax.YLim = [0,100];
 xlabel('Brain division (fit)')
 ylabel('\lambda_{human}^{(pred)}')

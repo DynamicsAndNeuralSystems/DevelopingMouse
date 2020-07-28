@@ -1,16 +1,24 @@
 function ComputeFittingResults(params,doSubsample)
 % Do the exponential parameter fitting
+%-------------------------------------------------------------------------------
 
 if nargin < 1
     params = GiveMeDefaultParams();
 end
+if nargin < 2
+    doSubsample = true;
+end
 
 %-------------------------------------------------------------------------------
+% Overwrite the doSubsample---this is the key parameter (needs lots of memory/
+% time to do full voxel space CGE):
 params.doSubsample = doSubsample;
 params.thisCellType = 'allCellTypes';
+% Make sure we include P56 result (just in case we need it):
+params.timePoints = GiveMeParameter('timePoints');
 
 %-------------------------------------------------------------------------------
-% Vary over brain divisions
+% Vary over brain divisions:
 brainDivs = {'brain','forebrain','midbrain','hindbrain','Dpall'};
 numBrainDivs = length(brainDivs);
 %-------------------------------------------------------------------------------

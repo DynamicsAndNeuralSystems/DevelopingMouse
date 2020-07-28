@@ -70,7 +70,7 @@ for i = 1:numParams
             ft = fittype('c*x');
             [c,Stats] = fit(maxDistances,paramEstMean,ft);
             f_handle = @(x) c.c*x;
-            plot(xRange,f_handle(xRange),'-','color',ones(1,3)*0.5)
+            plot(xRange,f_handle(xRange),'--','color',ones(1,3)*0.5)
         else
             [c,Stats] = fit(maxDistances,paramEstMean,'poly1');
             Gradient = c.p1; Intercept = c.p2;

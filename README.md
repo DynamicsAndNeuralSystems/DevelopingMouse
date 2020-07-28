@@ -83,26 +83,28 @@ WithinBetween(params,true,true,true);
 
 ![](img/WithinBetween.png)
 
+You can get clearer individual figures by saving each individual time point to a separate figure as: `WithinBetween(params,true,false,true);`.
+
 ### Scaling relationships
 
 First compute the exponential fitting results using `ComputeFittingResults`.
 
-Then you can plot the results as:
+Then you can visualize the results as:
 ```matlab
-makeConstantPlot()
+makeConstantPlot();
 ```
 
 Produces the plots of parameter scaling:
 
 ![](img/Fig4.png)
 
-### Voxel sampling
+### Human prediction
+You can use mouse data to make predictions about the spatial transcriptional correlation length in human:
 
-Supplementary Fig. S1:
+```matlab
+PredictHuman();
+```
 
-`makeFigureS1()`
-
-![FigureS1](Outs/figureS1/figureS1.png)
 
 ## Data
 

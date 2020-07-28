@@ -101,6 +101,7 @@ for i = 1:numTimePoints
     end
     xlabel('Distance (mm)')
     ylabel('CGE')
+    ax.XLim = [0,max(dist(:))];
 
     % Coarser:
     if ~allInOne
@@ -123,6 +124,7 @@ for i = 1:numTimePoints
     legend([ph_coarse{:}],{'within','between'})
 
     xlabel('Distance (mm)')
+    ax.XLim = [0,max(dist(:))];
     ylabel('CGE')
 
     if ~allInOne & doSave
