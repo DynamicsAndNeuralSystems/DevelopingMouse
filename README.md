@@ -21,7 +21,9 @@ Processed data is available from [this figshare repository](https://figshare.com
 
 Before running analyses, add all repository paths using `startup`.
 
-### Plotting
+### Plotting voxel expression data
+
+#### Clustered gene-expression matrices
 
 You can get the clustered gene-expression plots as:
 ```matlab
@@ -32,7 +34,8 @@ Saves to `Outs/ExpressionMatrix_E11pt5.png`:
 
 ![](img/ExpressionMatrix_E11pt5.png)
 
-And for the three-dimensional voxel plots:
+#### Three-dimensional voxel principal components
+
 ```matlab
 PlotAll3dSpatial
 ```
@@ -55,6 +58,8 @@ Yields Fig. 3:
 
 ![](img/Fig2.png)
 
+#### Dependence on anatomical subdivisions:
+
 We can also modify the data used for these computations, including subsets of voxels and/or genes.
 
 For example, to compute the same curves but only using forebrain voxels:
@@ -65,15 +70,18 @@ params.thisBrainDiv = 'forebrain';
 makeCGECurves(params)
 ```
 
-We can also investigate the contribution of pairs of voxels within and between major anatomical divisions:
+![](img/forebrainCGEd.png)
+
+#### Contributions from voxels within or between major anatomical subdivisions
+
+We can also investigate the contribution of pairs of voxels within and between major anatomical divisions in one go:
 
 ```matlab
-WithinBetween()
+params = GiveMeDefaultParams();
+WithinBetween(params,true,true,true);
 ```
 
-<!-- And Fig. 3:
-
-![](img/Fig3.png) -->
+![](img/WithinBetween.png)
 
 ### Scaling relationships
 

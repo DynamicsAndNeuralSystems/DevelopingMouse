@@ -2,7 +2,7 @@ function WithinBetween(params,doSubsample,allInOne,doSave)
 % Compare CGE curves within/between major brain divisions
 % (hindbrain/midbrain/forebrain)
 %-------------------------------------------------------------------------------
-if nargin < 1
+if nargin < 1 || isempty(params)
     params = GiveMeDefaultParams();
 end
 if nargin < 2
