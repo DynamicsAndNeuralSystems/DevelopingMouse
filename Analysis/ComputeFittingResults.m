@@ -19,7 +19,7 @@ params.timePoints = GiveMeParameter('timePoints');
 
 %-------------------------------------------------------------------------------
 % Vary over brain divisions:
-brainDivs = {'brain','forebrain','midbrain','hindbrain','Dpall'};
+brainDivs = {'Dpall','brain','forebrain','midbrain','hindbrain'};
 numBrainDivs = length(brainDivs);
 %-------------------------------------------------------------------------------
 

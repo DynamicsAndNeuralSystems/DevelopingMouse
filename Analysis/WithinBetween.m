@@ -54,7 +54,7 @@ for i = 1:numTimePoints
     if ~allInOne
         f = figure('color','w');
         f.Position(3:4) = [852   328];
-        subplot(1,2,1);
+        ax = subplot(1,2,1);
     else
         subplot(numTimePoints,2,(i-1)*2+1);
     end
@@ -105,9 +105,9 @@ for i = 1:numTimePoints
 
     % Coarser:
     if ~allInOne
-        subplot(1,2,2);
+        ax = subplot(1,2,2);
     else
-        subplot(numTimePoints,2,(i-1)*2+2);
+        ax = subplot(numTimePoints,2,(i-1)*2+2);
     end
     hold('on');
     title(params.timePoints{i})

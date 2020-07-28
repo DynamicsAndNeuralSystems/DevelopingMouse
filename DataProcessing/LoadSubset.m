@@ -84,10 +84,7 @@ end
                                     voxGeneMat,coOrds,voxLabelTable,geneInfo);
 
 %-------------------------------------------------------------------------------
-% Data-based filtering:
-
-% get the proportion of NaN genes of each voxel
-% propNanGenes = sum(isnan(voxelGeneExpression),2)/size(voxelGeneExpression,2);
+% Data-based quality filtering:
 %% only keep good voxels
 isGoodVoxel = (mean(isnan(voxelGeneExpression),2) < params.whatVoxelThreshold);
 fprintf(1,'%u/%u voxels are good\n',sum(isGoodVoxel),length(isGoodVoxel));
@@ -98,19 +95,22 @@ fprintf(1,'%u/%u genes are good\n',sum(isGoodGene),length(isGoodGene));
 if sum(isGoodVoxel)==0 || sum(isGoodGene)==0
     warning('Not enough good data');
 end
-%-------------------------------------------------------------------------------
-% Another subsetting:
+
+% Perform the subsetting:
 [voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(isGoodVoxel,isGoodGene,...
                                     voxelGeneExpression,coOrds,voxInfo,geneInfo);
 
-%% normalize matrix
-fprintf(1,'Normalizing each gene''s expression as ''%s''\n',params.whatNorm);
-voxelGeneExpression = BF_NormalizeMatrix(voxelGeneExpression,params.whatNorm);
+%-------------------------------------------------------------------------------
+%% Normalize the expression data
+if ~any(size(voxelGeneExpression)==0)
+    fprintf(1,'Normalizing each gene''s expression as ''%s''\n',params.whatNorm);
+    voxelGeneExpression = BF_NormalizeMatrix(voxelGeneExpression,params.whatNorm);
 
-% Checks:
-assert(size(voxelGeneExpression,1)==height(voxInfo))
-assert(size(voxelGeneExpression,2)==height(geneInfo))
-assert(size(coOrds,1)==size(voxelGeneExpression,1))
+    % Checks:
+    assert(size(voxelGeneExpression,1)==height(voxInfo))
+    assert(size(voxelGeneExpression,2)==height(geneInfo))
+    assert(size(coOrds,1)==size(voxelGeneExpression,1))
+end
 
 %-------------------------------------------------------------------------------
 function [OUTvoxelGeneExpression,OUTcoOrds,OUTvoxInfo,OUTgeneInfo] = ApplySubset(keepRow,keepColumn,...
