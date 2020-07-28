@@ -12,7 +12,7 @@ if nargin < 3
     whatPlot = 'subDivision';
 end
 if nargin < 4
-    addPC = false;
+    addPC = true;
 end
 
 %-------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ case 'subDivision'
     voxelGeneExpressionHind = voxelGeneExpression(voxInfo.isHindbrain,:);
     ord_rowHind = BF_ClusterReorder(voxelGeneExpressionHind,'corr_fast','average');
 
-    labels = zeros(numGenes,1);
+    labels = zeros(numVoxels,1);
     labels(voxInfo.isHindbrain) = 1;
     labels(voxInfo.isMidbrain) = 2;
     labels(voxInfo.isForebrain) = 3;
@@ -97,7 +97,7 @@ case 'subDivision'
                             voxelGeneExpressionFore(ord_rowFore,ord_col)]])
         plot(100*ones(2,1),[1,numVoxels],'-k','LineWidth',1)
     else
-        imagesc([repmat(labels,1,50),[voxelGeneExpressionHind(ord_rowHind,ord_col);...
+        imagesc([repmat(labels,1,100),[voxelGeneExpressionHind(ord_rowHind,ord_col);...
                             voxelGeneExpressionMid(ord_rowMid,ord_col);...
                             voxelGeneExpressionFore(ord_rowFore,ord_col)]])
     end
@@ -108,8 +108,13 @@ case 'subDivision'
     plot([1,numGenes],(firstPoints(3))*ones(1,2),'-k','LineWidth',1)
     ax.XLim = [1,numGenes];
     ax.YLim = [1,numVoxels];
-    ax.XTick = [50];
-    ax.XTickLabel = 'PC1';
+    if addPC
+        ax.XTick = 50;
+        ax.XTickLabel = 'PC1';
+    else
+        ax.XTick = 50;
+        ax.XTickLabel = 'label';
+    end
     ax.YTick = midPoints;
     ax.YTickLabel = {'hindbrain','midbrain','forebrain'};
     xlabel('Genes')

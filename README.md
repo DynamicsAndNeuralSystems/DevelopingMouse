@@ -28,7 +28,9 @@ You can get the clustered gene-expression plots as:
 PlotAllExpressionMatrices
 ```
 Or for each individual one, as, e.g., `PlotExpressionMatrix('E11pt5')`.
+Saves to `Outs/ExpressionMatrix_E11pt5.png`:
 
+![](img/ExpressionMatrix_E11pt5.png)
 
 And for the three-dimensional voxel plots:
 ```matlab
@@ -36,19 +38,20 @@ PlotAll3dSpatial
 ```
 And individual time points as `VisualizeSpatialExpression`.
 
-For example, taking E18.5 (without distinguishing fore/mid/hindbrain) and subsampling to 5000 voxels:
+For example, taking E18.5 (without distinguishing fore/mid/hindbrain) and subsampling to 5000 voxels we can see the two gene-expression PCs for the left hemisphere in three-dimensional space:
 ```matlab
 VisualizeSpatialExpression('E18pt5','','turboOne',5000)
 ```
 
+![](img/ExampleOutput3d.png)
 
-### CGE Curves
+### CGE(_d_) Curves
 
 ```matlab
 makeCGECurves()
 ```
 
-Yields Fig. 2:
+Yields Fig. 3:
 
 ![](img/Fig2.png)
 
@@ -60,6 +63,12 @@ For example, to compute the same curves but only using forebrain voxels:
 params = GiveMeDefaultParams();
 params.thisBrainDiv = 'forebrain';
 makeCGECurves(params)
+```
+
+We can also investigate the contribution of pairs of voxels within and between major anatomical divisions:
+
+```matlab
+WithinBetween()
 ```
 
 <!-- And Fig. 3:

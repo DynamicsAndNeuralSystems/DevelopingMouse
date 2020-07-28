@@ -1,21 +1,31 @@
-function WithinBetween(params,doSubsample)
+function WithinBetween(params,doSubsample,allInOne,doSave)
 % Compare CGE curves within/between major brain divisions
 % (hindbrain/midbrain/forebrain)
 %-------------------------------------------------------------------------------
-
 if nargin < 1
     params = GiveMeDefaultParams();
 end
 if nargin < 2
+    % This is a different subsampling?
     doSubsample = true;
 end
+if nargin < 3
+    allInOne = true;
+end
+if nargin < 4
+    doSave = true;
+end
 
+% Sample 1000 voxels from each of the three major anatomical subdivisions (fmh):
 params.thisBrainDiv = 'fmhSample';
 params.doSubsample = false;
 doUnified = false;
 
 %-------------------------------------------------------------------------------
 % Load the distance, CGE data:
+if allInOne
+    f = figure('color','w');
+end
 numTimePoints = length(params.timePoints);
 for i = 1:numTimePoints
     % Extract the d-CGE curve:
@@ -40,9 +50,13 @@ for i = 1:numTimePoints
     end
 
     % Get plottin'
-    f = figure('color','w');
-    f.Position(3:4) = [852   328];
-    subplot(1,2,1);
+    if ~allInOne
+        f = figure('color','w');
+        f.Position(3:4) = [852   328];
+        subplot(1,2,1);
+    else
+        subplot(numTimePoints,2,(i-1)*2+1);
+    end
     hold('on')
     title(params.timePoints{i})
 
@@ -86,7 +100,12 @@ for i = 1:numTimePoints
     ylabel('CGE')
 
     % Coarser:
-    subplot(1,2,2); hold('on');
+    if ~allInOne
+        subplot(1,2,2);
+    else
+        subplot(numTimePoints,2,(i-1)*2+2);
+    end
+    hold('on');
     title(params.timePoints{i})
     isWithin = (isFF | isMM | isHH);
     isBetween = (isFH | isFM | isMH);
@@ -103,11 +122,18 @@ for i = 1:numTimePoints
     xlabel('Distance (mm)')
     ylabel('CGE')
 
-    fileName = fullfile('Outs',sprintf('CGE_within_between%s.svg',params.timePoints{i}));
-    saveas(f,fileName,'svg')
-    fprintf(1,'Saved figure to %s\n',fileName);
+    if ~allInOne & doSave
+        fileName = fullfile('Outs',sprintf('CGE_within_between%s.svg',params.timePoints{i}));
+        saveas(f,fileName,'svg')
+        fprintf(1,'Saved figure to %s\n',fileName);
+    end
 end
 
 %-------------------------------------------------------------------------------
+if allInOne & doSave
+    fileName = fullfile('Outs',sprintf('CGE_within_between_AllTime.svg'));
+    saveas(f,fileName,'svg')
+    fprintf(1,'Saved figure to %s\n',fileName);
+end
 
 end

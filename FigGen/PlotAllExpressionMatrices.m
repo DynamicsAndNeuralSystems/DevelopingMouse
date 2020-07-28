@@ -1,4 +1,5 @@
-% PlotAllExpressionMatrices For visualizing what's going on
+% PlotAllExpressionMatrices
+% For visualizing what's going on in the matrices, mate
 
 params = GiveMeDefaultParams();
 

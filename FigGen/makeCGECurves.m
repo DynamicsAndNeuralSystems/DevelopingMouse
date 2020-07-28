@@ -1,8 +1,13 @@
-function makeCGECurves(params)
+function makeCGECurves(params,doSave)
+% Make a CGE(d) curve for each developmental time point
+%-------------------------------------------------------------------------------
 
 % Set defaults:
 if nargin < 1
     params = GiveMeDefaultParams();
+end
+if nargin < 2
+    doSave = true;
 end
 
 %-------------------------------------------------------------------------------
@@ -11,6 +16,7 @@ f = figure('color','w','Renderer','painters');
 hold('on')
 numTimePoints = length(params.timePoints);
 for j = 1:numTimePoints
+    fprintf(1,'%u/%u: %s\n',i,numTimePoints,param.timePoints{j});
     subplot(2,4,j)
     makeBinningPlot_withExponential(params,params.timePoints{j},false);
     ylabel('CGE')
@@ -19,9 +25,11 @@ end
 f.Position = [607   797   779   325];
 
 % Save out:
-fileName = fullfile('Outs','figure2','figure2_part1.svg');
-saveas(f,fileName,'svg')
-fprintf(1,'Saved to %s\n',fileName);
+if doSave
+    fileName = fullfile('Outs','All_CGE_curves.svg');
+    saveas(f,fileName,'svg')
+    fprintf(1,'Saved to %s\n',fileName);
+end
 
 %-------------------------------------------------------------------------------
 % Second part of Fig. 2

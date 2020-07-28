@@ -89,7 +89,7 @@ for i = 1:numPCs
     myX = coOrds(:,1); % anterior–posterior
     myY = coOrds(:,3); % left-right
     myZ = -coOrds(:,2); % inferior–superior
-    scatter3(coOrds(:,1),coOrds(:,2),coOrds(:,3),markerSize,YNorm(:,i),'filled',...
+    scatter3(myX,myY,myZ,markerSize,YNorm(:,i),'filled',...
                     'MarkerFaceAlpha',markerAlpha)
 
     xlabel('anterior-posterior (mm)')
@@ -120,8 +120,6 @@ case 'turboOne'
     % giveMeTurboMap()
 end
 f.Position(3:4) = [1303,528];
-
-
 
 if numPCs > 1
     Link = linkprop([ax{:}],{'CameraUpVector', 'CameraPosition', ...
