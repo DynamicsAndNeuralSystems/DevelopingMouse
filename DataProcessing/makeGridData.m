@@ -75,7 +75,12 @@ isForebrain = ismember(voxStructIDs,brainDivision.forebrain.ID);
 isMidbrain = ismember(voxStructIDs,brainDivision.midbrain.ID);
 isHindbrain = ismember(voxStructIDs,brainDivision.hindbrain.ID);
 isDpall = ismember(voxStructIDs,brainDivision.Dpallidum.ID);
-voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall);
+if strcmp(timePointNow,'P56') & procParams.adultCoronal
+  isLeft = find(coOrds(:,3) < max(coOrds(:,3))/2);
+  voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall,isLeft);
+else
+  voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall);
+end
 
 %-------------------------------------------------------------------------------
 % Save to .mat file:
