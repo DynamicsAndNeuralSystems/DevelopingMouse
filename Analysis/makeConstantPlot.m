@@ -1,9 +1,12 @@
-function f = makeConstantPlot(params)
+function f = makeConstantPlot(params,doSave)
 % Plot variation of fitted parameters over time
 %-------------------------------------------------------------------------------
 
 if nargin < 1
     params = GiveMeDefaultParams();
+end
+if nargin < 2
+    doSave = true;
 end
 
 %-------------------------------------------------------------------------------
@@ -76,7 +79,11 @@ for i = 1:numParams
         end
         [r,pVal] = corr(maxDistances,paramEstMean);
         fprintf(1,'%s: r = %g, p = %g\n',theParameter{i},r,pVal);
-        ylabel(theParameter{i})
+        if strcmp(theParameter{i},'n')
+            ylabel('Spatial correlation length, \lambda');
+        else
+            ylabel(theParameter{i})
+        end
         xlabel('Brain size, d_{max} (mm)')
         % Color by time point:
         for t = 1:numTimePoints
@@ -92,5 +99,13 @@ for i = 1:numParams
     end
 end
 f.Position(3:4) = [1291,420];
+
+%-------------------------------------------------------------------------------
+if doSave
+    % Save to file:
+    fileName = fullfile('Outs','ParameterScaling.svg');
+    saveas(f,fileName,'svg')
+    fprintf(1,'Saved to %s\n',fileName);
+end
 
 end

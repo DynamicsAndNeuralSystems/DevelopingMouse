@@ -56,7 +56,7 @@ makeCGECurves()
 
 Yields Fig. 3:
 
-![](img/Fig2.png)
+![](img/allCGEd.png)
 
 #### Dependence on anatomical subdivisions:
 
@@ -85,9 +85,14 @@ WithinBetween(params,true,true,true);
 
 ### Scaling relationships
 
-`makeParameterScalingFig()`
+First compute the exponential fitting results using `ComputeFittingResults`.
 
-Produces the plots of parameter scaling in Fig. 4:
+Then you can plot the results as:
+```matlab
+makeConstantPlot()
+```
+
+Produces the plots of parameter scaling:
 
 ![](img/Fig4.png)
 

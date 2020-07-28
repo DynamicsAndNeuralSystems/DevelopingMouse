@@ -25,6 +25,7 @@ doUnified = false;
 % Load the distance, CGE data:
 if allInOne
     f = figure('color','w');
+    f.Position(3:4) = [481,759];
 end
 numTimePoints = length(params.timePoints);
 for i = 1:numTimePoints
@@ -95,7 +96,9 @@ for i = 1:numTimePoints
             ph{j}.LineStyle = '--';
         end
     end
-    legend([ph{:}],{'fh','fm','mh','ff','mm','hh'})
+    if ~allInOne || i==1
+        legend([ph{:}],{'fh','fm','mh','ff','mm','hh'})
+    end
     xlabel('Distance (mm)')
     ylabel('CGE')
 

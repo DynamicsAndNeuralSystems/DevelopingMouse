@@ -1,10 +1,14 @@
-function ComputeFittingResults(doSubsample)
+function ComputeFittingResults(params,doSubsample)
 % Do the exponential parameter fitting
 
+if nargin < 1
+    params = GiveMeDefaultParams();
+end
+
 %-------------------------------------------------------------------------------
-params = GiveMeDefaultParams();
 params.doSubsample = doSubsample;
 params.thisCellType = 'allCellTypes';
+
 %-------------------------------------------------------------------------------
 % Vary over brain divisions
 brainDivs = {'brain','forebrain','midbrain','hindbrain','Dpall'};

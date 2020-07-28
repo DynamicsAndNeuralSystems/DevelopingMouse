@@ -12,7 +12,7 @@ params.distancesMM = false; % rescale distances by a factor of 1000
 params.includeAdult = false;
 params.timePoints = GiveMeParameter('timePoints');
 if ~params.includeAdult
-    fprintf(1,'Only looking at developmental data (up to P28)\n');
+    fprintf(1,'Looking at developmental data (up to P28)\n');
     params.timePoints = params.timePoints(1:end-1);
 end
 
