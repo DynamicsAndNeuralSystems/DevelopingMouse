@@ -101,6 +101,19 @@ end
                                     voxelGeneExpression,coOrds,voxInfo,geneInfo);
 
 %-------------------------------------------------------------------------------
+% Additional max-voxel filtering (to test dependence on subsampling)
+if ~isempty(params.maxVoxels)
+    numVoxels = height(voxInfo);
+    if numVoxels > params.maxVoxels
+        fprintf(1,'~~~+++^^^Additionally subsampling to %u voxels\n',params.maxVoxels);
+        isSampled = randsample(numVoxels,params.maxVoxels);
+        isGoodGene = true(height(geneInfo),1);
+        [voxelGeneExpression,coOrds,voxInfo,geneInfo] = ApplySubset(isSampled,isGoodGene,...
+                                            voxelGeneExpression,coOrds,voxInfo,geneInfo);
+    end
+end
+
+%-------------------------------------------------------------------------------
 %% Normalize the expression data
 if ~any(size(voxelGeneExpression)==0)
     fprintf(1,'Normalizing each gene''s expression as ''%s''\n',params.whatNorm);

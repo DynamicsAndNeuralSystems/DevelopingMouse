@@ -2,6 +2,10 @@ function makeExponentialPlot(params)
 % Plots all exponential curves from different time points on the same graph
 %-------------------------------------------------------------------------------
 
+if nargin < 1
+    params = GiveMeDefaultParams();
+end
+
 % Load the distance, CGE data:
 [dist,CGE] = LoadMyDistanceCGE(params);
 

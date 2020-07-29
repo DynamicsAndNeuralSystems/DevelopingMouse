@@ -62,11 +62,12 @@ Yields Fig. 3:
 
 We can also modify the data used for these computations, including subsets of voxels and/or genes.
 
-For example, to compute the same curves but only using forebrain voxels:
+For example, to compute the same curves but only using forebrain voxels and neuron-enriched genes:
 
 ```matlab
 params = GiveMeDefaultParams();
 params.thisBrainDiv = 'forebrain';
+params.thisCellType = 'neuron';
 makeCGECurves(params)
 ```
 
@@ -96,7 +97,7 @@ makeConstantPlot();
 
 Produces the plots of parameter scaling:
 
-![](img/Fig4.png)
+![](img/constantScalingPlot.png)
 
 ### Human prediction
 You can use mouse data to make predictions about the spatial transcriptional correlation length in human:
@@ -105,6 +106,16 @@ You can use mouse data to make predictions about the spatial transcriptional cor
 PredictHuman();
 ```
 
+![](img/PredictHuman.png)
+
+
+The dependence of lambda estimates on voxel subsampling can be assessed as:
+
+```matlab
+VoxelSamplingDependence()
+```
+
+![](img/voxelSampling.png)
 
 ## Data
 

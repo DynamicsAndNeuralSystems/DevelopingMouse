@@ -80,7 +80,7 @@ for i = 1:numParams
         [r,pVal] = corr(maxDistances,paramEstMean);
         fprintf(1,'%s: r = %g, p = %g\n',theParameter{i},r,pVal);
         if strcmp(theParameter{i},'n')
-            ylabel('Spatial correlation length, \lambda');
+            ylabel('Spatial correlation length, \lambda (mm)');
         else
             ylabel(theParameter{i})
         end

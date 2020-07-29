@@ -3,7 +3,7 @@ function params = GiveMeDefaultParams()
 % Data:
 params.thisBrainDiv = 'brain'; %'wholeBrain';
 params.doSubsample = true; % analyze just a subsample of numData voxels
-params.thisCellType = 'allCellTypes';
+params.thisCellType = 'allCellTypes'; % 'neuron', 'astrocyte', 'oligodendrocyte'
 params.scaledDistance = false;
 params.thisDirection = 'allDirections';
 params.distancesMM = false; % rescale distances by a factor of 1000
@@ -31,5 +31,8 @@ params.whatGeneThreshold = 0.3;
 params.numThresholds = 21;
 params.whatFit = 'exp';
 params.colors = BF_getcmap('dark2',8,0);
+
+% For checking dependence on number of voxels:
+params.maxVoxels = [];
 
 end

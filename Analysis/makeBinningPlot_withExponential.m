@@ -1,4 +1,4 @@
-function fitHandle = makeBinningPlot_withExponential(params,timePointNow,makeNewFigure)
+function [fitHandle,maxDist] = makeBinningPlot_withExponential(params,timePointNow,makeNewFigure)
 % Plot binned data with exponential fit
 %-------------------------------------------------------------------------------
 if nargin < 1
@@ -33,6 +33,7 @@ PlotQuantiles(xThresholds,yMeans,yStds,theColor);
 % Add an exponential fit:
 xRange = linspace(min(dist),max(dist),100);
 plot(xRange,fitHandle(xRange),'-','Color',theColor,'MarkerEdgeColor',theColor,'LineWidth',2);
+maxDist = max(dist);
 
 %-------------------------------------------------------------------------------
 % Label axes:
