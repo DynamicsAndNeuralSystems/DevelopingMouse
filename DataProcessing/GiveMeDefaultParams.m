@@ -9,7 +9,7 @@ params.thisDirection = 'allDirections';
 params.distancesMM = false; % rescale distances by a factor of 1000
 
 % Info:
-params.includeAdult = true;
+params.includeAdult = false;
 params.timePoints = GiveMeParameter('timePoints');
 params.adultCoronal = true; % Adult coronal data used: true; Adult sagittal data used: false
 if ~params.includeAdult

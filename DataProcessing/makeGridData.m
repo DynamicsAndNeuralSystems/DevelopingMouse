@@ -76,7 +76,7 @@ isMidbrain = ismember(voxStructIDs,brainDivision.midbrain.ID);
 isHindbrain = ismember(voxStructIDs,brainDivision.hindbrain.ID);
 isDpall = ismember(voxStructIDs,brainDivision.Dpallidum.ID);
 if strcmp(timePointNow,'P56') & procParams.adultCoronal
-  isLeft = find(coOrds(:,3) < max(coOrds(:,3))/2);
+  isLeft = coOrds(:,3) < max(coOrds(:,3))/2;
   voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall,isLeft);
 else
   voxLabelTable = table(voxStructIDs,isForebrain,isMidbrain,isHindbrain,isDpall);

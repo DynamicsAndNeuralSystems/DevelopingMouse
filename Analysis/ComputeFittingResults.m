@@ -14,8 +14,6 @@ end
 % time to do full voxel space CGE):
 params.doSubsample = doSubsample;
 params.thisCellType = 'allCellTypes';
-% Make sure we include P56 result (just in case we need it):
-params.timePoints = GiveMeParameter('timePoints');
 
 %-------------------------------------------------------------------------------
 % Vary over brain divisions:
