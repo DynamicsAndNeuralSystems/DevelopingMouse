@@ -19,7 +19,6 @@ end
 
 params.thisBrainDiv = 'brain';
 params.doSubsample = false;
-
 % Be more stringent on missing data for the purposes of this visualization:
 params.whatVoxelThreshold = 0.1;
 params.whatGeneThreshold = 0.05;
@@ -126,5 +125,10 @@ if numPCs > 1
         'CameraTarget', 'XLim', 'YLim', 'ZLim'});
     setappdata(f, 'StoreTheLink', Link);
 end
+
+% Save out:
+    fileName = fullfile('Outs',sprintf('VisualizeSpatialExpression%s.svg',timePointNow));
+    saveas(f,fileName,'svg')
+    fprintf(1,'Saved to %s\n',fileName);
 
 end
