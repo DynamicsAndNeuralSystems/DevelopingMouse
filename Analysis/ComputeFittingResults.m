@@ -13,9 +13,6 @@ end
 % Overwrite the doSubsample---this is the key parameter (needs lots of memory/
 % time to do full voxel space CGE):
 params.doSubsample = doSubsample;
-% params.thisCellType = 'allCellTypes';
-% Make sure we include P56 result (just in case we need it):
-params.timePoints = GiveMeParameter('timePoints');
 
 %-------------------------------------------------------------------------------
 % Vary over gene subsets

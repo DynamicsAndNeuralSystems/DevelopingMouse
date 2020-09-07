@@ -11,6 +11,7 @@ params.distancesMM = false; % rescale distances by a factor of 1000
 % Info:
 params.includeAdult = false;
 params.timePoints = GiveMeParameter('timePoints');
+params.adultCoronal = true; % Adult coronal data used: true; Adult sagittal data used: false
 if ~params.includeAdult
     fprintf(1,'Looking at developmental data (up to P28)\n');
     params.timePoints = params.timePoints(1:end-1);

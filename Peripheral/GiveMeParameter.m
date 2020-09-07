@@ -12,9 +12,9 @@ case 'sizeGrids'
                     'E15pt5',[94,132,65],'E18pt5',[67,43,40],'P4',[77,43,50],...
                     'P14',[68,40,50],'P28',[73,41,53],'P56',[67,41,58]);
 case 'timePoints'
-    theParameter = {'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28','P56'};
+    theParameter = {'E11pt5','E13pt5','E15pt5','E18pt5','P4','P14','P28'};
 case 'fileTimePoints'
-    theParameter = {'E11.5','E13.5','E15.5','E18.5','P4','P14','P28','P56'};
+    theParameter = {'E11.5','E13.5','E15.5','E18.5','P4','P14','P28'};
 case 'resolutionGrid'
     theParameter = struct('E11pt5',0.08,'E13pt5',0.1,'E15pt5',0.12,'E18pt5',0.14,'P4',0.16,'P14',0.2,'P28',0.2,'P56',0.2);
 case 'brainDivisions'
