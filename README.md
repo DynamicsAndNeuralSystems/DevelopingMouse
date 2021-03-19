@@ -1,7 +1,7 @@
 # Analysing the spatial embedding of gene expression across mouse brain development
 
 Code for reproducing analyses presented in:
-H.Y.G. Lau, B.D. Fulcher, A. Fornito. [Scaling of gene transcriptional gradients with brain size across mouse development](https://doi.org/10.1016/j.neuroimage.2020.117395), _NeuroImage_ (2021).
+H.Y.G. Lau, A. Fornito, B.D. Fulcher. [Scaling of gene transcriptional gradients with brain size across mouse development](https://doi.org/10.1016/j.neuroimage.2020.117395), _NeuroImage_ (2021).
 
 Data analysis is here; code for the simple physical model is in [this repo](https://github.com/NeuralSystemsAndSignals/DevelopmentalExpressionModeling).
 
