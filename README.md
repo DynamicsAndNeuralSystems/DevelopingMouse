@@ -5,7 +5,7 @@ This repository contains Matlab and python code for reproducing analyses present
 &#x1F4D7;
 H.Y.G. Lau, A. Fornito, B.D. Fulcher. [Scaling of gene transcriptional gradients with brain size across mouse development](https://doi.org/10.1016/j.neuroimage.2020.117395), _NeuroImage_ __224__: 117395 (2021).
 
-Additional code to reproduce simulations of a simple physical model is in [this GitHub repo](https://github.com/ DynamicsAndNeuralSystems /DevelopmentalExpressionModeling).
+Additional code to reproduce simulations of a simple physical model is in [this GitHub repo](https://github.com/ DynamicsAndNeuralSystems/DevelopmentalExpressionModeling).
 
 Data was taken from the Allen Institute's [Developing Mouse Brain Atlas](https://developingmouse.brain-map.org/) using python scripts that call the [AllenSDK](https://allensdk.readthedocs.io/) (in `DataRendering`).
 
