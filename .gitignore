@@ -5,10 +5,10 @@ Data
 *.mhd
 *.json
 *.svg
-*.png
 *.jpeg
 *.svg
 *.psd
 *.pdf
 *.jpg
 *.fig
+Outs/*
