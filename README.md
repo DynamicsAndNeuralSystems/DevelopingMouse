@@ -133,7 +133,9 @@ Code is available in this repository:
 
 ### Processing of raw data
 
-The processed data files were obtained by running `createData(false)`, which creates data files starting from `energyGrids.mat` variables (downloaded from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328).
+The processed data files were obtained by running `createData(false)`, which creates data files starting from `energyGrids.mat` variables from [this work's associated Zenodo data repository](https://doi.org/10.5281/zenodo.4620135).
+
+(FYI, previously [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328)).
 
 The full pipeline from raw data (downloaded via the Allen SDK) can be reproduced using `createData(true)`.
 
