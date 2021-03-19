@@ -1,9 +1,11 @@
-# Analysing the spatial embedding of gene expression across mouse brain development
+# Scaling of gene transcriptional gradients with brain size across mouse development
 
-Code for reproducing analyses presented in:
-H.Y.G. Lau, A. Fornito, B.D. Fulcher. [Scaling of gene transcriptional gradients with brain size across mouse development](https://doi.org/10.1016/j.neuroimage.2020.117395), _NeuroImage_ (2021).
+This repository contains Matlab and python code for reproducing analyses presented in the open-access journal article:
 
-Data analysis is here; code for the simple physical model is in [this repo](https://github.com/NeuralSystemsAndSignals/DevelopmentalExpressionModeling).
+&#x1F4D7;
+H.Y.G. Lau, A. Fornito, B.D. Fulcher. [Scaling of gene transcriptional gradients with brain size across mouse development](https://doi.org/10.1016/j.neuroimage.2020.117395), _NeuroImage_ __224__: 117395 (2021).
+
+Additional code to reproduce simulations of a simple physical model is in [this GitHub repo](https://github.com/ DynamicsAndNeuralSystems /DevelopmentalExpressionModeling).
 
 Data was taken from the Allen Institute's [Developing Mouse Brain Atlas](https://developingmouse.brain-map.org/) using python scripts that call the [AllenSDK](https://allensdk.readthedocs.io/) (in `DataRendering`).
 
@@ -18,7 +20,7 @@ Processed data is available from [this Zenodo data repository](https://doi.org/1
 ![Figure1_part2](Outs/figure1/figure1_part2.png)
 ![Figure1_part3](Outs/figure1/figure1_part3.png) -->
 
-## Analysis Results
+## Results
 
 Before running analyses, add all repository paths using `startup`.
 
