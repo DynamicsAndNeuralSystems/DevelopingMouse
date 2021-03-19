@@ -1,7 +1,7 @@
 # Analysing the spatial embedding of gene expression across mouse brain development
 
 Code for reproducing analyses presented in:
-H.Y.G. Lau, B.D. Fulcher, A. Fornito. [Scaling of gene transcriptional gradients with brain size across mouse development](https://doi.org/10.1101/2020.06.04.135525), _bioRxiv_ (2020).
+H.Y.G. Lau, B.D. Fulcher, A. Fornito. [Scaling of gene transcriptional gradients with brain size across mouse development](https://doi.org/10.1016/j.neuroimage.2020.117395), _NeuroImage_ (2021).
 
 Data analysis is here; code for the simple physical model is in [this repo](https://github.com/NeuralSystemsAndSignals/DevelopmentalExpressionModeling).
 
@@ -9,7 +9,8 @@ Data was taken from the Allen Institute's [Developing Mouse Brain Atlas](https:/
 
 A description of the raw data retrieval via the Allen SDK is at the bottom of this document.
 
-Processed data is available from [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328), and can be downloaded to reproduce the results presented in our paper (using the functions outlined below).
+Processed data is available from [this Zenodo data repository](https://doi.org/10.5281/zenodo.4620135), and can be downloaded to reproduce the results presented in our paper (using the functions outlined below).
+(FYI: a previous related dataset was uploaded to [this figshare repository](https://figshare.com/projects/Developing_Mouse/64328)).
 
 <!-- ### Figure 1
 `makeFigure1()`
@@ -107,7 +108,6 @@ PredictHuman();
 ```
 
 ![](img/PredictHuman.png)
-
 
 The dependence of lambda estimates on voxel subsampling can be assessed as:
 

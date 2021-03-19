@@ -13,8 +13,8 @@ end
 renderDataFromEnergyGrids(procParams);
 
 % if fromScratch
-    % renderData(procParams);
-    % makeGeneExpressionMatrix(procParams);
+%     renderData(procParams);
+%     makeGeneExpressionMatrix(procParams);
 % else
 % end
 
